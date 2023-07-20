@@ -39,7 +39,7 @@ tags: [linux,kernel]
 
 #### Linux内核的特点：结合了unix操作系统的一些基础概念
 
-![Relationship]({{site.url}}/{{site.baseurl}}/assets/linux/kernel/relationship.jpg)
+![Relationship](/assets/img/commons/linux/kernel/relationship.jpg)
 
 #### Linux内核的任务：
 

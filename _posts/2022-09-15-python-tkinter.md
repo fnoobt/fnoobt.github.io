@@ -258,7 +258,7 @@ root.mainloop()
 
 ![tkinter_entry](tkinter_entry.png)
 
-### Label控件 （最最最最常用）
+### Label控件 （最常用）
 Python Tkinter 标签控件（Label）指定的窗口中显示的文本和图像。  
 标签控件（Label）指定的窗口中显示的文本和图像。  
 你如果需要显示一行或多行文本且不允许用户修改，你可以使用Label控件。
@@ -291,7 +291,7 @@ root.mainloop()
 ![tkinter_label](tkinter_label.png)
 
 
-### Tkinter 练习：
+### Tkinter 练习
 制作一个GUI程序，可以让使用者输入账号和密码。密码以` * `的 形式显示。在使用者点下确定后，程序会和提前存在txt中的密码和账号匹配。如果不存在该账号或者密码错误，提示并且询问是否需要创建新账户。如果是，将新的账号和密码存在text中。
 
 代码：
