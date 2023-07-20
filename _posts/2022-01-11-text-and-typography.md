@@ -1,12 +1,13 @@
 ---
-title: Markdown文本和排版
-author: 从小白开始
+title: 文本和排版
+author: fnoobt
 date: 2022-01-11 00:34:00 +0800
 categories: [博客,演示]
-tags: [排版]
+tags: [排版,Markdown]
 pin: true
 math: true
 mermaid: true
+#img_path: '/assets/img/commons/demo/'
 image:
   path: /assets/img/commons/demo/devices-mockup.png
   lqip: data:image/webp;base64,UklGRpoAAABXRUJQVlA4WAoAAAAQAAAADwAABwAAQUxQSDIAAAARL0AmbZurmr57yyIiqE8oiG0bejIYEQTgqiDA9vqnsUSI6H+oAERp2HZ65qP/VIAWAFZQOCBCAAAA8AEAnQEqEAAIAAVAfCWkAALp8sF8rgRgAP7o9FDvMCkMde9PK7euH5M1m6VWoDXf2FkP3BqV0ZYbO6NA/VFIAAAA
@@ -26,7 +27,7 @@ image:
 #### 4级标题
 ```
 
-将呈现为：
+_将呈现为：_
 
 # 1级标题
 ## 2级标题
@@ -63,7 +64,7 @@ ___粗斜体字 >>也可以在字的前后各添加三个下划线___
 ~~不可用文字 >>就是在字的前后各添加两个波浪号~~
 ```
 
-将呈现为：
+_将呈现为：_
 
 *斜体字 >>就是在字的前后各添加一个星号*  
 _斜体字 >>也可以在字的前后各添加一个下划线_  
@@ -83,7 +84,7 @@ ___粗斜体字 >>也可以在字的前后各添加三个下划线___
 ***
 ```
 
-将呈现为：
+_将呈现为：_
 
 ---
 
@@ -102,7 +103,7 @@ ___粗斜体字 >>也可以在字的前后各添加三个下划线___
 3. 最后
 ```
 
-将呈现为：
+_将呈现为：_
 
 1. 首先，书写时"."后有一个空格
 2. 其次，呈现时"."后没有空格
@@ -119,7 +120,7 @@ ___粗斜体字 >>也可以在字的前后各添加三个下划线___
     + 段
 ```
 
-将呈现为：
+_将呈现为：_
 
 - 章
   + 部分(键入4个空格或制表符）
@@ -135,7 +136,7 @@ ___粗斜体字 >>也可以在字的前后各添加三个下划线___
   + [ ] 步骤 3
 ```
 
-将呈现为：
+_将呈现为：_
 
 - [ ] 工作
   + [x] 步骤 1
@@ -152,7 +153,7 @@ ___粗斜体字 >>也可以在字的前后各添加三个下划线___
 : 地球的天然卫星，通过太阳反射光可见
 ```
 
-将呈现为：
+_将呈现为：_
 
 太阳
 : 地球绕其运行的恒星
@@ -171,7 +172,7 @@ ___粗斜体字 >>也可以在字的前后各添加三个下划线___
 >>> 此行显示**区块引用嵌套**。
 ```
 
-将呈现为：
+_将呈现为：_
 
 > 此行显示**区块引用**。
 >> 此行显示**区块引用嵌套**。  
@@ -179,6 +180,22 @@ ___粗斜体字 >>也可以在字的前后各添加三个下划线___
 >>> 此行显示**区块引用嵌套**。
 
 ## 提示
+
+```markdown
+> 显示`tip`类型提示的示例。
+{: .prompt-tip }
+
+> 显示`info`类型提示的示例。
+{: .prompt-info }
+
+> 显示`warning`类型提示的示例。
+{: .prompt-warning }
+
+> 显示`danger`类型提示的示例。
+{: .prompt-danger }
+```
+
+_将呈现为：_
 
 > 显示`tip`类型提示的示例。
 {: .prompt-tip }
@@ -197,19 +214,19 @@ ___粗斜体字 >>也可以在字的前后各添加三个下划线___
 要添加表格，请使用三个或以上连字符 `—` 创建每列的标题，并使用竖线 `|` 分隔每列。
 
 ```markdown
-|不指定对齐| 左对齐 | 中间对齐| 右对齐| 
-|---|:------------|:-------:|------:|
-|四大名楼| 湖南    | 岳阳    | 岳阳楼 |
-|四大名楼| 江西    | 南昌    | 滕王阁 |
-|四大名楼| 湖北    | 武汉    | 黄鹤楼 |
+|不指定对齐|左对齐| 中间对齐| 右对齐 | 
+|---|:-----------|:------:|------:|
+|123456| 123456  | 123456 | 123456|
+|12345 | 12345   | 12345  | 12345 |
+|123   | 123     | 123    | 123   |
 ```
-将呈现为：
+_将呈现为：_
 
-|不指定对齐| 左对齐 | 中间对齐| 右对齐| 
-|---|:------------|:-------:|------:|
-|四大名楼| 湖南    | 岳阳    | 岳阳楼 |
-|四大名楼| 江西    | 南昌    | 滕王阁 |
-|四大名楼| 湖北    | 武汉    | 黄鹤楼 |
+|不指定对齐|左对齐| 中间对齐| 右对齐 | 
+|---|:-----------|:------:|------:|
+|123456| 123456  | 123456 | 123456|
+|12345 | 12345   | 12345  | 12345 |
+|123   | 123     | 123    | 123   |
 
 ### 使用图形界面创建表格
 
@@ -223,7 +240,7 @@ ___粗斜体字 >>也可以在字的前后各添加三个下划线___
 我常用的搜索引擎是[百度](https://www.baidu.com/)
 ```
 
-将呈现为：
+_将呈现为：_
 
 我常用的搜索引擎是[百度](https://www.baidu.com/)
 
@@ -235,7 +252,7 @@ ___粗斜体字 >>也可以在字的前后各添加三个下划线___
 我常用的搜索引擎是[百度](https://www.baidu.com/ "众里寻他千百度")。
 ```
 
-将呈现为：
+_将呈现为：_
 
 我常用的搜索引擎是[百度](https://www.baidu.com/ "众里寻他千百度")。
 
@@ -247,7 +264,7 @@ ___粗斜体字 >>也可以在字的前后各添加三个下划线___
 <http://127.0.0.1:4000>
 ```
 
-将呈现为：
+_将呈现为：_
 
 <http://127.0.0.1:4000>
 
@@ -260,7 +277,7 @@ ___粗斜体字 >>也可以在字的前后各添加三个下划线___
 点击钩子将找到脚注[^footnote]，这是数字脚注[^2].
 ```
 
-将呈现为：
+_将呈现为：_
 
 点击钩子将找到脚注[^footnote]，这是数字脚注[^2].
 
@@ -269,6 +286,12 @@ ___粗斜体字 >>也可以在字的前后各添加三个下划线___
 这是一个`内联代码`的示例。
 
 ## 文件路径
+
+```
+这是 `/path/to/the/file.extend`{: .filepath}.
+```
+
+_将呈现为：_
 
 这是 `/path/to/the/file.extend`{: .filepath}.
 
@@ -293,7 +316,7 @@ fi;
 ```
 ````
 
-将呈现为：
+_将呈现为：_
 
 ```bash
 if [ $? -ne 0 ]; then
@@ -303,6 +326,17 @@ fi;
 ```
 
 ### 特定文件名
+
+````markdown
+```sass
+@import
+  "colors/light-typography",
+  "colors/dark-typography";
+```
+{: file='_sass/jekyll-theme-chirpy.scss'}
+````
+
+_将呈现为：_
 
 ```sass
 @import
@@ -323,7 +357,7 @@ $$ \sum_{n=1}^\infty 1/n^2 = \frac{\pi^2}{6} $$
 $$ x = {-b \pm \sqrt{b^2-4ac} \over 2a} $$
 ```
 
-将呈现为：
+_将呈现为：_
 
 $$ \sum_{n=1}^\infty 1/n^2 = \frac{\pi^2}{6} $$
 
@@ -332,6 +366,19 @@ $$ \sum_{n=1}^\infty 1/n^2 = \frac{\pi^2}{6} $$
 $$ x = {-b \pm \sqrt{b^2-4ac} \over 2a} $$
 
 ## Mermaid SVG
+
+
+````markdown
+```mermaid
+ gantt
+  title  为Mermaid添加甘特图（GANTT）功能
+  apple :a, 2017-07-20, 1w
+  banana :crit, b, 2017-07-23, 1d
+  cherry :active, c, after b a, 1d
+```
+````
+
+_将呈现为：_
 
 ```mermaid
  gantt
@@ -347,19 +394,36 @@ $$ x = {-b \pm \sqrt{b^2-4ac} \over 2a} $$
 
 ### 默认（带标题）
 
-![Desktop View](/assets/img/commons/mockup.png){: width="972" height="589" }
+```markdown
+![Desktop View](/assets/img/commons/demo/mockup.png){: width="972" height="589" }
+_全屏宽度和中心对齐_
+```
+
+![Desktop View](/assets/img/commons/demo/mockup.png){: width="972" height="589" }
 _全屏宽度和中心对齐_
 
 ### 左对齐
+
+```markdown
+![Desktop View](/assets/img/commons/demo/mockup.png){: width="972" height="589" .w-75 .normal}
+```
 
 ![Desktop View](/assets/img/commons/demo/mockup.png){: width="972" height="589" .w-75 .normal}
 
 ### 向左浮动
 
+```markdown
+![Desktop View](/assets/img/commons/demo/mockup.png){: width="972" height="589" .w-50 .left}
+```
+
 ![Desktop View](/assets/img/commons/demo/mockup.png){: width="972" height="589" .w-50 .left}
 有些人非常明智。但是，给拍卖商除尘也无妨。你可以选择一个大湖，你可以闻到猫的味道。为了装饰车轮，钻石谷将是那样的。Phasellus希望自己富有，这样他就可以放牧谷物、我的猫和我的胡子，这样你就可以很容易地让一只大狮子用智慧入睡。这辆车不需要时间驾驶。任何身体都没有最大的自由。所有的紫罗兰都希望它是不同的凸起。你根本没有家具，根本没有家具。没有智慧就没有什么可喝的，但生命是一片被诅咒的树叶。
 
 ### 向右浮动
+
+```markdown
+![Desktop View](/assets/img/commons/demo/mockup.png){: width="972" height="589" .w-50 .right}
+```
 
 ![Desktop View](/assets/img/commons/demo/mockup.png){: width="972" height="589" .w-50 .right}
 Praesent maximus aliquam sapien. Sed vel neque in dolor pulvinar auctor. Maecenas pharetra, sem sit amet interdum posuere, tellus lacus eleifend magna, ac lobortis felis ipsum id sapien. Proin ornare rutrum metus, ac convallis diam volutpat sit amet. Phasellus volutpat, elit sit amet tincidunt mollis, felis mi scelerisque mauris, ut facilisis leo magna accumsan sapien. In rutrum vehicula nisl eget tempor. Nullam maximus ullamcorper libero non maximus. Integer ultricies velit id convallis varius. Praesent eu nisl eu urna finibus ultrices id nec ex. Mauris ac mattis quam. Fusce aliquam est nec sapien bibendum, vitae malesuada ligula condimentum.
@@ -367,6 +431,11 @@ Praesent maximus aliquam sapien. Sed vel neque in dolor pulvinar auctor. Maecena
 ### 暗/亮模式和阴影
 
 下图将根据主题偏好切换暗/亮模式，请注意它有阴影。
+
+```markdown
+![light mode only](/assets/img/commons/demo/devtools-light.png){: .light .w-75 .shadow .rounded-10 w='1212' h='668' }
+![dark mode only](/assets/img/commons/demo/devtools-dark.png){: .dark .w-75 .shadow .rounded-10 w='1212' h='668' }
+```
 
 ![light mode only](/assets/img/commons/demo/devtools-light.png){: .light .w-75 .shadow .rounded-10 w='1212' h='668' }
 ![dark mode only](/assets/img/commons/demo/devtools-dark.png){: .dark .w-75 .shadow .rounded-10 w='1212' h='668' }
@@ -384,7 +453,7 @@ Markdown使用很多字符表示特定的意思，要显示原义字符，请在
 \#### 使用反斜杠，这就是4个#号
 ```
 
-将呈现为：
+_将呈现为：_
 
 #### 没有使用反斜杠，这是4级标题
 \#### 使用反斜杠，这就是4个#号

@@ -1,9 +1,9 @@
 ---
-title: V2Ray自定义路由
-author: 从小白开始
+title: V2Ray自定义路由设置规则的写法
+author: fnoobt
 date: 2022-09-16 00:34:00 +0800
-categories: [V2ray,自定义路由]
-tags: [V2Ray自定义路由]
+categories: [V2ray,路由规则]
+tags: [V2ray,路由规则]
 ---
 
 目前，主流的V2Ray手机、电脑客户端都移除了对PAC模式的支持，这是因为通过功能强大的“（高级）路由设置”功能，同样可以实现PAC模式自动代理功能。

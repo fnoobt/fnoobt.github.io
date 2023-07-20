@@ -20,7 +20,7 @@ layout: compress
       "type": "image/png"
     }],
   "start_url": "{{ '/index.html' | relative_url }}",
-  "theme_color": "#ffffff,", //#ffffff 白色,#2a1e6b 亮绿色
+  "theme_color": "#ffffff,", 
   "background_color": "#ffffff",
-  "display": "fullscreen" //standalone 独立,fullscreen 全屏
+  "display": "fullscreen"
 

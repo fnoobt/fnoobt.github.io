@@ -1,12 +1,12 @@
 ---
 title: Linux内核
-author: 从小白开始
+author: fnoobt
 date: 2022-07-17 00:34:00 +0800
 categories: [Linux,kernel]
-tags: [Linux kernel]
+tags: [Linux,kernel]
 ---
 
-## 一、前
+## 一、前言
 
 ### 1.1内核在操作系统中的位置
 

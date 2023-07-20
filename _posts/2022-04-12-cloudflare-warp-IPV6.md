@@ -1,9 +1,9 @@
 ---
-title: Cloudflare WARP教程
-author: 从小白开始
+title: Cloudflare WARP 教程：给 VPS 额外添加“原生” IPv4/IPv6 双栈网络出口
+author: fnoobt
 date: 2022-04-12 00:34:00 +0800
-categories: [Cloudflare,教程]
-tags: [Cloudflare WARP]
+categories: [Cloudflare,WARP]
+tags: [Cloudflare,WARP,VPS,IPV6]
 ---
 
 ## 前言
@@ -257,13 +257,13 @@ Cloud­flare 一直以来为广大人民群众免费提供优秀的网络服务�
 [原文出处](https://p3terx.com/archives/use-cloudflare-warp-to-add-extra-ipv4-or-ipv6-network-support-to-vps-servers-for-free.html)
 
 
-[CloudflareWARP]:(https://developers.cloudflare.com/cloudflare-one/connections/connect-devices/warp/)
-[p3terx]:(https://p3terx.com/archives/use-cloudflare-warp-to-add-extra-ipv4-or-ipv6-network-support-to-vps-servers-for-free.html)
-[warp]:(https://github.com/P3TERX/warp.sh)
-[unlock-netflix]:(https://p3terx.com/archives/why-is-it-getting-harder-to-unlock-netflix-with-warp.html)
-[tunnel-broker]:(https://p3terx.com/archives/use-he-tunnel-broker-to-add-public-network-ipv6-support-to-ipv4-vps-for-free.html)
-[debian-wireguard]:(https://p3terx.com/archives/debian-linux-vps-server-wireguard-installation-tutorial.html)
-[wireguard]:(https://www.wireguard.com/install/)
-[ViRb3]:(https://github.com/ViRb3/wgcf)
-[outbounds]:(https://toutyrater.github.io/app/netflix.html#%E6%8C%87%E5%AE%9A%E5%87%BA%E7%AB%99-ip)
-[speedtest]:(https://www.speedtest.net/apps/cli)
+[CloudflareWARP]:https://developers.cloudflare.com/cloudflare-one/connections/connect-devices/warp/
+[p3terx]:https://p3terx.com/archives/use-cloudflare-warp-to-add-extra-ipv4-or-ipv6-network-support-to-vps-servers-for-free.html
+[warp]:https://github.com/P3TERX/warp.sh
+[unlock-netflix]:https://p3terx.com/archives/why-is-it-getting-harder-to-unlock-netflix-with-warp.html
+[tunnel-broker]:https://p3terx.com/archives/use-he-tunnel-broker-to-add-public-network-ipv6-support-to-ipv4-vps-for-free.html
+[debian-wireguard]:https://p3terx.com/archives/debian-linux-vps-server-wireguard-installation-tutorial.html
+[wireguard]:https://www.wireguard.com/install/
+[ViRb3]:https://github.com/ViRb3/wgcf
+[outbounds]:https://toutyrater.github.io/app/netflix.html#%E6%8C%87%E5%AE%9A%E5%87%BA%E7%AB%99-ip
+[speedtest]:https://www.speedtest.net/apps/cli

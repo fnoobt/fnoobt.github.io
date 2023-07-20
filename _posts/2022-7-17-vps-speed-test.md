@@ -1,9 +1,9 @@
 ---
 title: VPS性能测试脚本
-author: 从小白开始
+author: fnoobt
 date: 2022-07-17 00:34:00 +0800
-categories: [VPS,测试]
-tags: [VPS测试]
+categories: [VPS,脚本]
+tags: [VPS,脚本]
 img_path: '/assets/img/commons/vps'
 ---
 
