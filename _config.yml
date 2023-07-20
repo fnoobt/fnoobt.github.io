@@ -18,12 +18,12 @@ timezone: Asia/Shanghai
 # jekyll-seo-tag settings › https://github.com/jekyll/jekyll-seo-tag/blob/master/docs/usage.md
 # ↓ --------------------------
 
-title: 日常博客 # the main title
+title: 小白的博客 # the main title
 
 tagline: 日常学习记录 # it will display as the sub-title
 
 description: >- # used by seo meta and the atom feed
-  一个小小的学习博客.
+  一个小小的学习记录博客.
 
 # fill in the protocol & hostname for your site, e.g., 'https://username.github.io'
 url: ""

@@ -1,8 +1,8 @@
 <div align="center">
 
-  # Chirpy 启动器
+  # 小白的博客
 
-  一个Jekyll主题，记录学习博客。
+  一个Jekyll主题博客，记录学习。
 
   [![Gem Version](https://img.shields.io/gem/v/jekyll-theme-chirpy)](https://rubygems.org/gems/jekyll-theme-chirpy) [![GitHub license](https://img.shields.io/github/license/cotes2020/chirpy-starter.svg?color=blue)][mit]
 
