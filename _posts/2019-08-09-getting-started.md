@@ -2,10 +2,10 @@
 title: 开始
 author: cotes
 date: 2019-08-09 20:55:00 +0800
-categories: [开始]
+categories: [博客,开始]
 tags: [开始]
 pin: true
-img_path: '/posts/20180809'
+img_path: '/assets/img/commons/demo'
 ---
 
 ## 环境要求

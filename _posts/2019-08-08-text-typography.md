@@ -2,13 +2,13 @@
 title: 文本和排版
 author: cotes
 date: 2019-08-08 11:33:00 +0800
-categories: [博客，演示]
+categories: [博客,演示]
 tags: [排版]
 pin: true
 math: true
 mermaid: true
 image:
-  path: /commons/devices-mockup.png
+  path: /assets/img/commons/demo/devices-mockup.png
   lqip: data:image/webp;base64,UklGRpoAAABXRUJQVlA4WAoAAAAQAAAADwAABwAAQUxQSDIAAAARL0AmbZurmr57yyIiqE8oiG0bejIYEQTgqiDA9vqnsUSI6H+oAERp2HZ65qP/VIAWAFZQOCBCAAAA8AEAnQEqEAAIAAVAfCWkAALp8sF8rgRgAP7o9FDvMCkMde9PK7euH5M1m6VWoDXf2FkP3BqV0ZYbO6NA/VFIAAAA
   alt: Chirpy 主题在多个设备上的响应式渲染.
 ---
@@ -150,29 +150,29 @@ $$ x = {-b \pm \sqrt{b^2-4ac} \over 2a} $$
 
 ### 默认（带标题）
 
-![Desktop View](/posts/20190808/mockup.png){: width="972" height="589" }
+![Desktop View](/assets/img/commons/mockup.png){: width="972" height="589" }
 _全屏宽度和中心对齐_
 
 ### 左对齐
 
-![Desktop View](/posts/20190808/mockup.png){: width="972" height="589" .w-75 .normal}
+![Desktop View](/assets/img/commons/demo/mockup.png){: width="972" height="589" .w-75 .normal}
 
 ### 向左浮动
 
-![Desktop View](/posts/20190808/mockup.png){: width="972" height="589" .w-50 .left}
+![Desktop View](/assets/img/commons/demo/mockup.png){: width="972" height="589" .w-50 .left}
 有些人非常明智。但是，给拍卖商除尘也无妨。你可以选择一个大湖，你可以闻到猫的味道。为了装饰车轮，钻石谷将是那样的。Phasellus希望自己富有，这样他就可以放牧谷物、我的猫和我的胡子，这样你就可以很容易地让一只大狮子用智慧入睡。这辆车不需要时间驾驶。任何身体都没有最大的自由。所有的紫罗兰都希望它是不同的凸起。你根本没有家具，根本没有家具。没有智慧就没有什么可喝的，但生命是一片被诅咒的树叶。
 
 ### 向右浮动
 
-![Desktop View](/posts/20190808/mockup.png){: width="972" height="589" .w-50 .right}
+![Desktop View](/assets/img/commons/demo/mockup.png){: width="972" height="589" .w-50 .right}
 Praesent maximus aliquam sapien. Sed vel neque in dolor pulvinar auctor. Maecenas pharetra, sem sit amet interdum posuere, tellus lacus eleifend magna, ac lobortis felis ipsum id sapien. Proin ornare rutrum metus, ac convallis diam volutpat sit amet. Phasellus volutpat, elit sit amet tincidunt mollis, felis mi scelerisque mauris, ut facilisis leo magna accumsan sapien. In rutrum vehicula nisl eget tempor. Nullam maximus ullamcorper libero non maximus. Integer ultricies velit id convallis varius. Praesent eu nisl eu urna finibus ultrices id nec ex. Mauris ac mattis quam. Fusce aliquam est nec sapien bibendum, vitae malesuada ligula condimentum.
 
 ### 暗/亮模式和阴影
 
 下图将根据主题偏好切换暗/亮模式，请注意它有阴影。
 
-![light mode only](/posts/20190808/devtools-light.png){: .light .w-75 .shadow .rounded-10 w='1212' h='668' }
-![dark mode only](/posts/20190808/devtools-dark.png){: .dark .w-75 .shadow .rounded-10 w='1212' h='668' }
+![light mode only](/assets/img/commons/demo/devtools-light.png){: .light .w-75 .shadow .rounded-10 w='1212' h='668' }
+![dark mode only](/assets/img/commons/demo/devtools-dark.png){: .dark .w-75 .shadow .rounded-10 w='1212' h='668' }
 
 ## 视频
 

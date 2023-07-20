@@ -76,7 +76,7 @@ theme_mode: # [light|dark]
 img_cdn: "https://fnoobt.github.io"
 
 # the avatar on sidebar, support local or CORS resources
-avatar: 
+avatar: "/assets/img/commons/baymin.png"
 
 # boolean type, the global switch for TOC in posts.
 toc: true
