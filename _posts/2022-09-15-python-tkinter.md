@@ -3,7 +3,7 @@ title: Python Tkinter详解
 author: fnoobt
 date: 2022-09-15 11:34:00 +0800
 categories: [Python,Tkinter]
-tags: [Python,Tkinter]
+tags: [python,tkinter]
 img_path: '/assets/img/commons/python'
 ---
 
