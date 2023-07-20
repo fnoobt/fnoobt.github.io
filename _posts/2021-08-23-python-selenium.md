@@ -4,7 +4,7 @@ author: fnoobt
 date: 2021-08-23 09:34:00 +0800
 categories: [Python,selenium]
 tags: [python,selenium]
-img_path: '/assets/img/commons/pyhton'
+img_path: '/assets/img/commons/python'
 ---
 
 ## 一、Python Selenium 简介和环境配置
