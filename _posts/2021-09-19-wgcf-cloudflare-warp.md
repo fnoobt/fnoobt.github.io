@@ -40,7 +40,7 @@ chmod +x wgcf
 
 修改`wgcf-profile.conf`配置文件：
 
-![wgcf-profile-conf](/Blog/assets/img/commons/vps/wgcf_config.png)
+![Wgcf Conf](/assets/img/commons/vps/wgcf_config.png)
 
 >**注意：**WG连接后是内核层级的软件，会建立自己的虚拟网卡，且WARP客户端均为内网NAT地址，当双栈流量均被WG接管后我们就无法再从原有的IP连接到服务器了。因此在IPv4与IPv6之间我们必须做一个取舍，以防这样的情况发生。
 {: .prompt-danger }
@@ -166,8 +166,8 @@ routing路由NETFLIX数据到IPV6出口:
 
 本文参考
 
-[ZJ's Blog](https://www.zhangjun.sh.cn/linux/centos_wgcf_cf_ipv6.html)  
-[loukky](https://loukky.com/archives/1440#gsc.tab=0)
+1. [ZJ's Blog](https://www.zhangjun.sh.cn/linux/centos_wgcf_cf_ipv6.html)  
+2. [loukky](https://loukky.com/archives/1440#gsc.tab=0)
 
 
 [wgcf]:https://github.com/ViRb3/wgcf
