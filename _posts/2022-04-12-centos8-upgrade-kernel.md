@@ -1,9 +1,9 @@
 ---
 title: Centos 8升级内核
 author: fnoobt
-date: 2022-05-09 00:34:00 +0800
+date: 2022-04-12 00:34:00 +0800
 categories: [Linux,kernel]
-tags: [Linux,kernel]
+tags: [linux,kernel]
 ---
 
 1. 查看当前内核版本

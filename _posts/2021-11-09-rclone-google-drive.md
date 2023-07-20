@@ -1,9 +1,9 @@
 ---
-title: Rclone挂载Google云盘
+title: Debian10使用Rclone挂载Google云盘
 author: fnoobt
-date: 2022-05-09 00:34:00 +0800
+date: 2021-11-09 00:34:00 +0800
 categories: [Rclone,挂载]
-tags: [Rclone,Google Drive]
+tags: [rclone,google drive,linux]
 ---
 
 通过Rclone挂载Google Drive无限容量的团队盘，也可以方便地将独服里下载的影片，传输到GD盘，此处简单记录下Rclone的设置挂载过程

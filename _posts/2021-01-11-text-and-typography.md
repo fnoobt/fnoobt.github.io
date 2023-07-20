@@ -1,9 +1,9 @@
 ---
 title: 文本和排版
 author: fnoobt
-date: 2022-01-11 00:34:00 +0800
+date: 2021-01-11 00:34:00 +0800
 categories: [博客,演示]
-tags: [排版,Markdown]
+tags: [排版,markdown]
 pin: true
 math: true
 mermaid: true

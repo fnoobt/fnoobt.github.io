@@ -1,9 +1,9 @@
 ---
 title: Cloudflare WARP 教程：给 VPS 额外添加“原生” IPv4/IPv6 双栈网络出口
 author: fnoobt
-date: 2022-04-12 00:34:00 +0800
+date: 2021-09-12 00:34:00 +0800
 categories: [Cloudflare,WARP]
-tags: [Cloudflare,WARP,VPS,IPV6]
+tags: [cloudflare,warp,vps,ipv6,linux]
 ---
 
 ## 前言
