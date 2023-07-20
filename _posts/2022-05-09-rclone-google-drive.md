@@ -2,8 +2,8 @@
 title: Rclone挂载Google云盘
 author: 从小白开始
 date: 2022-05-09 00:34:00 +0800
-categories: [博客,教程]
-tags: [Rclone]
+categories: [Rclone,教程]
+tags: [Rclone挂载]
 ---
 
 通过Rclone挂载Google Drive无限容量的团队盘，也可以方便地将独服里下载的影片，传输到GD盘，此处简单记录下Rclone的设置挂载过程

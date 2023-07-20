@@ -3,7 +3,7 @@ title: VPS性能测试脚本
 author: 从小白开始
 date: 2022-07-17 00:34:00 +0800
 categories: [VPS,测试]
-tags: [VPS]
+tags: [VPS测试]
 img_path: '/assets/img/commons/vps'
 ---
 

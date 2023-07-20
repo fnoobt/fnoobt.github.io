@@ -2,7 +2,7 @@
 title: Cloudflare WARP教程
 author: 从小白开始
 date: 2022-04-12 00:34:00 +0800
-categories: [博客,教程]
+categories: [Cloudflare,教程]
 tags: [Cloudflare WARP]
 ---
 

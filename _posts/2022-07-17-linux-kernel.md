@@ -3,7 +3,7 @@ title: Linux内核
 author: 从小白开始
 date: 2022-07-17 00:34:00 +0800
 categories: [Linux,kernel]
-tags: [Linux]
+tags: [Linux kernel]
 ---
 
 ## 一、前
