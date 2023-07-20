@@ -23,10 +23,10 @@ title: 小白的博客 # the main title
 tagline: 日常学习记录 # it will display as the sub-title
 
 description: >- # used by seo meta and the atom feed
-  一个小小的学习记录博客.
+  一个小小的学习记录博客。
 
 # fill in the protocol & hostname for your site, e.g., 'https://username.github.io'
-url: ""
+url: "https://fnoobt.github.io/"
 
 github:
   username: fnoobt # change to your github username
@@ -76,7 +76,7 @@ theme_mode: # [light|dark]
 img_cdn: "https://fnoobt.github.io"
 
 # the avatar on sidebar, support local or CORS resources
-avatar: "/assets/img/commons/baymin.png"
+avatar: "/assets/img/commons/noob.png"
 
 # boolean type, the global switch for TOC in posts.
 toc: true
