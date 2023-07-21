@@ -135,8 +135,8 @@ systemctl enable frps.service
 systemctl start frps.service
 ```
 
-如果要重启应用，可以输入，`sudo systemctl restart frps`
-如果要停止应用，可以输入，`sudo systemctl stop frps`
+如果要重启应用，可以输入，`sudo systemctl restart frps`  
+如果要停止应用，可以输入，`sudo systemctl stop frps`  
 如果要查看应用的日志，可以输入，`sudo systemctl status frps`
 
 ### 2、配置 Frp 客户端
