@@ -6,6 +6,23 @@ categories: [Linux,kernel]
 tags: [linux,kernel]
 ---
 
+## 前言
+
+在操作软件时，很多时候会遇见内核版本过低的情况，本文主要学习升级内核版本。
+
+> **升级内核操作需谨慎！！！**
+{: .prompt-danger }
+
+### 核心命令
+
+```bash
+rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
+yum install https://www.elrepo.org/elrepo-release-8.el8.elrepo.noarch.rpm
+yum --disablerepo="*" --enablerepo="elrepo-kernel" list available
+yum --disablerepo="*" --enablerepo="elrepo-kernel" install kernel-ml
+grub2-set-default 0
+```
+
 ## 1.查看当前内核版本
 
 使用的系统版本，当前日期CentOS最新版：
@@ -26,21 +43,34 @@ $ uname -r
 
 ## 2.使用ELRepo仓库
 
-这里使用ELRepo仓库，ELRepo 仓库是基于社区的用于企业级 Linux 仓库，提供对 RedHat Enterprise（RHEL）和其他基于 RHEL的 Linux 发行版（CentOS、Scientific、Fedora 等）的支持。ELRepo 聚焦于和硬件相关的软件包，包括文件系统驱动、显卡驱动、网络驱动、声卡驱动和摄像头驱动等。<http://elrepo.org/tiki/tiki-index.php>:
+这里使用[ ELRepo 仓库](http://elrepo.org/tiki/tiki-index.php)，ELRepo 仓库是基于社区的用于企业级 Linux 仓库，提供对 RedHat Enterprise（RHEL）和其他基于 RHEL的 Linux 发行版（CentOS、Scientific、Fedora 等）的支持。ELRepo 聚焦于和硬件相关的软件包，包括文件系统驱动、显卡驱动、网络驱动、声卡驱动和摄像头驱动等。:
 
-导入ELRepo仓库的公共密钥：
+### 导入ELRepo仓库的公共密钥：
 
 ```bash
 $ rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
 ```
 
-安装ELRepo仓库的yum源：
+### 安装ELRepo仓库的yum源：
 
 ```bash
 $ yum install https://www.elrepo.org/elrepo-release-8.el8.elrepo.noarch.rpm
 ```
 
-可用的系统内核安装包：
+#### 出现报错：
+
+```bash
+Error: Failed to download metadata for repo 'appstream': Cannot prepare internal mirrorlist: No URLs in mirrorlist
+```
+
+CentOS团队从官方镜像中移除CentOS 8的所有包，但软件包仍在官方镜像上保留一段时间。现在被转移到<https://vault.centos.org>。如需继续运行旧CentOS 8，可以在`/etc/yum.repos`中更新repos.d，使用`vault.centos.org`代替`mirror.centos.org`。
+
+```bash
+$ sudo sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*
+$ sudo sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos
+```
+
+#### 启用 ELRepo 源仓库，将显示可用的系统内核安装包：
 
 ```bash
 $ yum --disablerepo="*" --enablerepo="elrepo-kernel" list available
@@ -58,16 +88,31 @@ python3-perf.x86_64 5.7.7-1.el8.elrepo elrepo-kernel
 
 ## 3.安装最新版内核
 
+在 ELRepo 中有两个内核选项，一个是 kernel-lt(长期支持版本)，一个是 kernel-ml(主线最新版本)，采用长期支持版本(kernel-lt)更稳定。
+
 ```bash
 $ yum --enablerepo=elrepo-kernel install kernel-ml
 ```
 
 ## 4.设置以新的内核启动
 
+查看当前默认启动内核
+
+```bash
+$ grubby --default-kernel
+/boot/vmlinuz-5.19.2-1.el8.elrepo.x86_64
+```
+
 0 表示最新安装的内核，设置为 0 表示以新版本内核启动：
 
 ```bash
 $ grub2-set-default 0
+```
+
+或指定内核启动
+
+```bash
+$ grubby --set-default /boot/vmlinuz-5.19.2-1.el8.elrepo.x86_64
 ```
 
 以后不需要第5步，直接使用这条指定不同数字设置不同内核版本启动。
@@ -79,7 +124,8 @@ $ grub2-mkconfig -o /boot/grub2/grub.cfg
 $ reboot
 ```
 
-这一步可以不用执行生成grub配置的命令，直接重启！
+> 这一步可以不用执行（生成grub配置的命令），直接重启！
+{: .prompt-info }
 
 ## 6.验证新内核
 
@@ -140,13 +186,12 @@ $ yum install yum-utils
 
 ## 9.参考文献
 
-- [ELRepo官网](http://elrepo.org/tiki/index.php)
-
+- [ELRepo官网](http://elrepo.org/tiki/index.php)  
 - [Centos7升级内核版本](https://www.cnblogs.com/xzkzzz/p/9627658.html)
 
 ****
 
+本文参考
 
-> 原作者：Erics-1996(CSDN博主)
-> [原文出处](https://blog.csdn.net/Thanlon/java/article/details/107193301)  
-> 版权声明：本文遵循[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)版权协议，非商业转载及引用请注明出处（作者、原文链接）。
+> [转述浪漫日落](https://blog.csdn.net/Thanlon/java/article/details/107193301)  
+> [三省同学](https://blog.csdn.net/qq_35764295/article/details/126411421)
