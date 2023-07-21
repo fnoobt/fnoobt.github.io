@@ -254,7 +254,9 @@ Cloud­flare 一直以来为广大人民群众免费提供优秀的网络服务�
 
 ****
 
-[原文出处](https://p3terx.com/archives/use-cloudflare-warp-to-add-extra-ipv4-or-ipv6-network-support-to-vps-servers-for-free.html)
+> 原作者：P3TERX  
+> [原文出处](https://p3terx.com/archives/use-cloudflare-warp-to-add-extra-ipv4-or-ipv6-network-support-to-vps-servers-for-free.html)  
+> 版权声明：本文遵循[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)版权协议，非商业转载及引用请注明出处（作者、原文链接）。
 
 
 [CloudflareWARP]:https://developers.cloudflare.com/cloudflare-one/connections/connect-devices/warp/

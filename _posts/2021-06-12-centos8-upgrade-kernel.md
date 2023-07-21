@@ -146,5 +146,7 @@ $ yum install yum-utils
 
 ****
 
-版权声明：本文为CSDN博主「Erics-1996」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
-[原文出处](https://blog.csdn.net/Thanlon/java/article/details/107193301)
+
+> 原作者：Erics-1996(CSDN博主)
+> [原文出处](https://blog.csdn.net/Thanlon/java/article/details/107193301)  
+> 版权声明：本文遵循[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)版权协议，非商业转载及引用请注明出处（作者、原文链接）。

@@ -145,6 +145,11 @@ $ docker run -it --rm \
 ```
 除非指定了输出路径，否则生成的站点文件将放置在项目根目录的文件夹 `_site`{: .filepath} 中。现在，您应该将这些文件上传到目标服务器。
 
+****
+
+> [原文出处](https://chirpy.cotes.page/posts/getting-started/)
+
+
 [nodejs]: https://nodejs.org/
 [starter]: https://github.com/cotes2020/chirpy-starter
 [pages-workflow-src]: https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site#publishing-with-a-custom-github-actions-workflow

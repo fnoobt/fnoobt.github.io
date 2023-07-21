@@ -166,8 +166,8 @@ routing路由NETFLIX数据到IPV6出口:
 
 本文参考
 
-1. [ZJ's Blog](https://www.zhangjun.sh.cn/linux/centos_wgcf_cf_ipv6.html)  
-2. [loukky](https://loukky.com/archives/1440#gsc.tab=0)
+> 1. [ZJ's Blog](https://www.zhangjun.sh.cn/linux/centos_wgcf_cf_ipv6.html)  
+> 2. [loukky](https://loukky.com/archives/1440#gsc.tab=0)
 
 
 [wgcf]:https://github.com/ViRb3/wgcf

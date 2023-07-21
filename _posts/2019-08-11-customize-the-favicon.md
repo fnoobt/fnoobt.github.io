@@ -34,3 +34,7 @@ tags: [图标]
 {: .prompt-info }
 
 下次构建网站时，网站图标将替换为自定义版本。
+
+****
+
+> [原文出处](https://chirpy.cotes.page/posts/customize-the-favicon/)

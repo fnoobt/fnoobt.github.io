@@ -411,3 +411,7 @@ echo 'No more line numbers!'
 ## 了解更多信息
 
 有关Jekyll帖子的更多信息，请访问[Jekyll 文档：posts](https://jekyllrb.com/docs/posts/)。
+
+****
+
+> [原文出处](https://chirpy.cotes.page/posts/write-a-new-post/)
