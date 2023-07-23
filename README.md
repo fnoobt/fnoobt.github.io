@@ -41,7 +41,7 @@
 
 ## 主题
 
-当通过[RubyGems.org][gem]安装[**Chirpy**][chirpy]主题时，Jekyll只能读取文件夹`/_data`、`/_layouts`、`/includes`、`/_sass`和`/assets`中的文件，以及主题的gem中`/_config.yml`文件的一小部分选项。如果您曾经安装过这个主题gem，则可以使用该命令`bundle info --path jekyll-theme-chirpy`来定位这些文件。
+当通过[RubyGems.org][gem]安装[**Chirpy**][chirpy]主题时，Jekyll只能读取文件夹`/_data`、`/_layouts`、`/includes`、`/_sass`和`/assets`中的文件，以及主题的gem中 `/_config.yml` 文件的一小部分选项。如果您曾经安装过这个主题gem，则可以使用该命令 `bundle info --path jekyll-theme-chirpy` 来定位这些文件。
 
 Jekyll团队声称，这是为了将球留在用户的球场上，但这也导致用户在使用功能丰富的主题时无法享受开箱即用的体验。
 
