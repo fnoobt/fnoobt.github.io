@@ -193,5 +193,5 @@ $ yum install yum-utils
 
 本文参考
 
-> [转述浪漫日落](https://blog.csdn.net/Thanlon/java/article/details/107193301)  
-> [三省同学](https://blog.csdn.net/qq_35764295/article/details/126411421)
+> 1. [Thanlon](https://blog.csdn.net/Thanlon/java/article/details/107193301)  
+> 2. [三省同学](https://blog.csdn.net/qq_35764295/article/details/126411421)
