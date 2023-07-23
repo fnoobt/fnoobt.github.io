@@ -481,13 +481,6 @@ _将呈现为：_
 [^footnote]: 标识符可以是数字或文本。但不能包含空格或制表符。
 [^2]: 数字脚注测试说明。
 
-****
-
-本文参考
-
-> 1. [Chirpy](https://chirpy.cotes.page/posts/text-and-typography/)  
-> 2. [Markdown中文网](https://markdown.p2hp.com/basic-syntax/)
-
 [discordJs]: https://discordjs.guide/popular-topics/canvas.html#setting-up-napi-rs-canvas
 [kramdown]: https://kramdown.gettalong.org/quickref.html#block-attributes
 [jekyllToc]: https://github.com/allejo/jekyll-toc
