@@ -1,7 +1,7 @@
 ---
 title: Debian10使用Rclone挂载Google云盘
 author: fnoobt
-date: 2021-11-09 00:34:00 +0800
+date: 2021-11-09 20:21:00 +0800
 categories: [Rclone,挂载]
 tags: [rclone,google drive,linux]
 ---

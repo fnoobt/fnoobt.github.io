@@ -1,7 +1,7 @@
 ---
 title: 在CentOS上面利用Wgcf使用CF WARP作为出口
 author: fnoobt
-date: 2021-09-19 11:34:00 +0800
+date: 2021-09-19 11:44:00 +0800
 categories: [Cloudflare,WGCF]
 tags: [cloudflare,warp,wgcf,vps,ipv6,linux]
 ---

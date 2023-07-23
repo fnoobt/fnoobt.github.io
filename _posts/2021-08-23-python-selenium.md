@@ -1,7 +1,7 @@
 ---
 title: Python selenium基础用法详解
 author: fnoobt
-date: 2021-08-23 09:34:00 +0800
+date: 2021-08-23 09:35:00 +0800
 categories: [Python,selenium]
 tags: [python,selenium]
 img_path: '/assets/img/commons/python'

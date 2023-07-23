@@ -1,7 +1,7 @@
 ---
 title: Centos 8升级内核
 author: fnoobt
-date: 2021-06-12 00:34:00 +0800
+date: 2021-06-12 16:08:00 +0800
 categories: [Linux,kernel]
 tags: [linux,kernel]
 ---
