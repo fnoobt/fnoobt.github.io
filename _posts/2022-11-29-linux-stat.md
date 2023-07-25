@@ -24,4 +24,6 @@ tags: [linux,stat]
 
 ****
 
-> [原文参考](https://www.cnblogs.com/lcword/p/13541931.html)
+本文参考
+
+> [lclc](https://www.cnblogs.com/lcword/p/13541931.html)

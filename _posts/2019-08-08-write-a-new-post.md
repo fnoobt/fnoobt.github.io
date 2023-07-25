@@ -2,7 +2,7 @@
 title: 编辑帖子
 author: cotes
 date: 2019-08-08 14:10:00 +0800
-categories: [博客,博客教程]
+categories: [Blog,博客教程]
 tags: [编辑帖子]
 render_with_liquid: false
 ---
@@ -136,7 +136,7 @@ _Image Caption_
 为了防止页面内容布局在加载图像时移动，我们应该设置每个图像的宽度和高度。
 
 ```markdown
-![Desktop View](/assets/img/sample/mockup.png){: width="700" height="400" }
+![Desktop View](/assets/img/commons/demo/mockup.png){: width="700" height="400" }
 ```
 {: .nolineno}
 
@@ -146,7 +146,7 @@ _Image Caption_
 从 _Chirpy v5.0.0_ 开始，`height`和`width`支持缩写（`height` → `h`，`width` → `w`）。以下示例具有与上述示例相同的效果：
 
 ```markdown
-![Desktop View](/assets/img/sample/mockup.png){: w="700" h="400" }
+![Desktop View](/assets/img/commons/demo/mockup.png){: w="700" h="400" }
 ```
 {: .nolineno}
 
@@ -162,21 +162,21 @@ _Image Caption_
   图像将在下面的示例中左对齐：
 
   ```markdown
-  ![Desktop View](/assets/img/sample/mockup.png){: .normal }
+  ![Desktop View](/assets/img/commons/demo/mockup.png){: .normal }
   ```
   {: .nolineno}
 
 - **向左浮动**
 
   ```markdown
-  ![Desktop View](/assets/img/sample/mockup.png){: .left }
+  ![Desktop View](/assets/img/commons/demo/mockup.png){: .left }
   ```
   {: .nolineno}
 
 - **向右浮动**
 
   ```markdown
-  ![Desktop View](/assets/img/sample/mockup.png){: .right }
+  ![Desktop View](/assets/img/commons/demo/mockup.png){: .right }
   ```
   {: .nolineno}
 
@@ -249,7 +249,7 @@ img_path: /img/path/
 
 ### 预览图像
 
-如果你想在帖子顶部添加一张图片，请提供一张分辨率为`1200 x 630`的图片。请注意，如果图像纵横比不满足`1.91 : 1`，则图像将被缩放和裁剪。
+如果你想在帖子顶部添加一张图片，请提供一张分辨率为 `1200 x 630` 的图片。请注意，如果图像纵横比不满足 `1.91 : 1` ，则图像将被缩放和裁剪。
 
 了解这些先决条件后，可以开始设置图像的属性：
 
@@ -282,7 +282,7 @@ image:
 ---
 ```
 
-> 您可以在帖子 [_文本和排版_](/posts/text-and-typography/) 的预览图像中观察 LQIP。
+> 您可以在帖子 _[文本和排版](/posts/text-and-typography/)_ 的预览图像中观察 LQIP。
 
 
 对于普通图像：

@@ -10,7 +10,7 @@ tags: [刷机,skyworth]
 {: .prompt-danger }
 
 电视机没问题的话就不要去刷机，`8S50`和`8S51`都是老型号电视机了。  
-[创维E510各机芯升级包](https://pan.baidu.com/s/1sjyUeFN)
+[创维E510各机芯本地升级包](https://pan.baidu.com/s/1sjyUeFN)
 
 ## 刷机准备
 

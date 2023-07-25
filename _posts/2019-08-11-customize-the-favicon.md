@@ -2,7 +2,7 @@
 title: 自定义图标
 author: cotes
 date: 2019-08-11 09:49:00 +0800
-categories: [博客,博客教程]
+categories: [Blog,博客教程]
 tags: [图标]
 ---
 

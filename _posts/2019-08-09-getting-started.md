@@ -2,7 +2,7 @@
 title: 开始
 author: cotes
 date: 2019-08-09 20:55:00 +0800
-categories: [博客,博客教程]
+categories: [Blog,博客教程]
 tags: [开始]
 img_path: '/assets/img/commons/demo'
 ---
