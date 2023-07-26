@@ -172,7 +172,7 @@ _将呈现为：_
 ```markdown
 > 此行显示**区块引用**。
 >> 此行显示**区块引用嵌套**。  
->> 区块引用嵌套。
+**区块引用嵌套。**
 >>> 此行显示**区块引用嵌套**。
 ```
 
@@ -180,7 +180,7 @@ _将呈现为：_
 
 > 此行显示**区块引用**。
 >> 此行显示**区块引用嵌套**。  
->> 区块引用嵌套。
+**区块引用嵌套。**
 >>> 此行显示**区块引用嵌套**。
 
 ## 提示框
@@ -371,22 +371,42 @@ $$ x = {-b \pm \sqrt{b^2-4ac} \over 2a} $$
 
 ````markdown
 ```mermaid
- gantt
-  title  为Mermaid添加甘特图（GANTT）功能
-  apple :a, 2017-07-20, 1w
-  banana :crit, b, 2017-07-23, 1d
-  cherry :active, c, after b a, 1d
+  gantt
+    title  水果销售情况
+    dateFormat  YYYY-MM-DD
+    苹果 :a, 2022-07-20, 1w
+    香蕉 :crit, b, 2022-07-23, 3d
+    樱桃 :active, c, after b a, 1d
 ```
 ````
 
 _将呈现为：_
 
 ```mermaid
- gantt
-  title  为Mermaid添加甘特图（GANTT）功能
-  apple :a, 2017-07-20, 1w
-  banana :crit, b, 2017-07-23, 1d
-  cherry :active, c, after b a, 1d
+  gantt
+    title  水果销售情况
+    dateFormat  YYYY-MM-DD
+    苹果 :a, 2022-07-20, 1w
+    香蕉 :crit, b, 2022-07-23, 3d
+    樱桃 :active, c, after b a, 1d
+```
+
+````markdown
+```mermaid
+  pie title 收养的宠物
+    "狗" : 386
+    "猫" : 85
+    "鼠" : 15
+```
+````
+
+_将呈现为：_
+
+```mermaid
+  pie title 收养的宠物
+    "狗" : 386
+    "猫" : 85
+    "鼠" : 15
 ```
 
 ## 图像
