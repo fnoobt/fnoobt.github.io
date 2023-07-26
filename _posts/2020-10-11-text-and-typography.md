@@ -367,6 +367,7 @@ $$ x = {-b \pm \sqrt{b^2-4ac} \over 2a} $$
 
 ## Mermaid SVG
 
+[**Mermaid**][mermaid]是一个很棒的图表生成工具。可以使用[Mermaid在线编辑器][mermaidLive]轻松创建详细的图表。
 
 ````markdown
 ```mermaid
@@ -485,3 +486,5 @@ _将呈现为：_
 [kramdown]: https://kramdown.gettalong.org/quickref.html#block-attributes
 [jekyllToc]: https://github.com/allejo/jekyll-toc
 [markdown_tables]: https://www.tablesgenerator.com/markdown_tables
+[mermaid]: https://github.com/mermaid-js/mermaid
+[mermaidLive]: https://mermaid.live/
