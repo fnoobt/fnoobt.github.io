@@ -12,8 +12,10 @@ img_path: '/assets/img/commons/ai/'
 ## 前提
 - 有一个梯子  
 注册和登陆需要注意网络环境，可以使用国外的网络环境，即你的网络的IP属于国外（非大陆、香港和澳门），因为中国大陆和香港都无法注册ChatGPT。
+
 - 有一个可以接收验证码的国外手机号  
 有一个大陆、香港和澳门地区之外的地区手机号（注意部分虚拟手机号的厂家无法接受验证码，请注意甄别），如果没有可以借助[接码平台](#注册接码平台)实现。
+
 - 有一个微软或Google账号（非必须）  
 虽然OpenAI支持邮箱注册，不过还是推荐用Google或微软账号来登陆。目前微软国内还能顺利访问，可以直接[注册微软][MicrosoftSignup]的, 进入地址，一步步按照提示注册即可，地区推荐选国外的。
 
@@ -63,6 +65,6 @@ img_path: '/assets/img/commons/ai/'
 > [原文出处](https://razeen.me/posts/ai-how-to-register-chatgpt/)
 
 [MicrosoftSignup]: https://signup.live.com/signup
-[smsActivate]: https://sms-activate.org/cn/getNumber
-[5sim]: https://5sim.net/
+[smsActivate]: https://sms-activate.org/cn
+[5sim]: https://5sim.net/zh
 [ChatGPT]: https://chat.openai.com/auth/login

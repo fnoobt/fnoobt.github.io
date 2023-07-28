@@ -2,7 +2,7 @@
 title: V2Ray自定义路由设置规则的写法
 author: fnoobt
 date: 2022-03-16 17:32:00 +0800
-categories: [V2ray,路由规则]
+categories: [VPS,V2ray]
 tags: [v2ray,路由规则]
 ---
 

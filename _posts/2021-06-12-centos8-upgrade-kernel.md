@@ -19,7 +19,7 @@ tags: [linux,kernel]
 rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
 yum install https://www.elrepo.org/elrepo-release-8.el8.elrepo.noarch.rpm
 yum --disablerepo="*" --enablerepo="elrepo-kernel" list available
-yum --disablerepo="*" --enablerepo="elrepo-kernel" install kernel-ml
+yum --disablerepo="*" --enablerepo="elrepo-kernel" install kernel-lt
 grub2-set-default 0
 ```
 
@@ -57,7 +57,7 @@ $ rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
 $ yum install https://www.elrepo.org/elrepo-release-8.el8.elrepo.noarch.rpm
 ```
 
-#### 出现报错：
+#### 如果出现报错：
 
 ```bash
 Error: Failed to download metadata for repo 'appstream': Cannot prepare internal mirrorlist: No URLs in mirrorlist
@@ -70,7 +70,7 @@ $ sudo sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*
 $ sudo sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos
 ```
 
-#### 启用 ELRepo 源仓库，将显示可用的系统内核安装包：
+### 启用 ELRepo 源仓库，将显示可用的系统内核安装包：
 
 ```bash
 $ yum --disablerepo="*" --enablerepo="elrepo-kernel" list available
@@ -91,6 +91,9 @@ python3-perf.x86_64 5.7.7-1.el8.elrepo elrepo-kernel
 在 ELRepo 中有两个内核选项，一个是 kernel-lt(长期支持版本)，一个是 kernel-ml(主线最新版本)，采用长期支持版本(kernel-lt)更稳定。
 
 ```bash
+# 安装长期支持版本
+$ yum --enablerepo=elrepo-kernel install kernel-lt
+# 安装主线最新版本
 $ yum --enablerepo=elrepo-kernel install kernel-ml
 ```
 
