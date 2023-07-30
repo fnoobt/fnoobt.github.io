@@ -2,7 +2,7 @@
 title: 前端与后端的数据交互（jquery ajax + python flask)
 author: fnoobt
 date: 2018-03-06 09:49:00 +0800
-categories: [Web,ajax]
+categories: [Web,Ajax]
 tags: [web,ajax,javascript,python,flask]
 ---
 
