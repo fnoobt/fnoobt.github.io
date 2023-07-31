@@ -56,6 +56,9 @@ cd /etc/frp
 vim frps.ini
 ```
 
+> 普通用户选择`/usr/local/etc/frp`{: .filepath}路径
+{: .prompt-tip }
+
 将以下内容写入配置文件：
 
 ```markdown
@@ -99,16 +102,10 @@ c:\frp\frps.exe -c c:\frp\frps.exe
 
 #### 设置开机自启动
 
-首先需要 cd 到 frp 的解压目录，如：
-
-```bash
-cd /etc/frp
-```
-
 编写 `frps.service` 文件(如相关文件夹不存在，则需要自行创建):
 
 ```bash
-vim /usr/lib/systemd/system/frps.service
+vim /etc/systemd/system/frps.service
 ```
 
 `frps.service`文件内容如下：
