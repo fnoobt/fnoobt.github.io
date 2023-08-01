@@ -72,18 +72,19 @@ tags: [刷机,skyworth]
 > **注意：**U盘插的电视机USB接口不能使用USB3.0接口(蓝色接口)。
 {: .prompt-tip }
 
-#### 使用调试串口升级：
+### 4、使用调试串口升级：
 
 准备工具：
-- 需要一个USB 转 TTL模块（简称串口），并安装驱动，我用的是CH340。
+- 需要一个USB 转 TTL模块（简称串口），并安装驱动，我用的是`CH340`，驱动为`CH341SER.EXE`。
 - 需要在电脑安装串口通信工具，我使用的是SecureCRT。
 
 连接电脑和电视调试串口，新建Serial会话，SecureCRT配置：
-- 波特率： `115200`
-- 数据位： `8`
+- 端口：     选择电脑设备管理器中显示的COM口
+- 波特率：   `115200`
+- 数据位：   `8`
 - 奇偶校验： `None`
-- 停止位： `1`
-- 流控制： `DTR\DSR`、`RTS\CTS`、`XON\XOF` 都不选
+- 停止位：   `1`
+- 流控制：   `DTR\DSR`、`RTS\CTS`、`XON\XOF` 都不勾选
 
 > 注意：USB 转 TTL模块（简称串口）引脚RX接电路板上面的TX，引脚TX接电路板上面的RX，引脚GND接电路板上面的GND，这三者不可缺少
 {: .prompt-warning }
@@ -91,9 +92,9 @@ tags: [刷机,skyworth]
 一般电视调试端口顺序为 `GND、TXD、RXD、CS/使能` 或 `GND、RXD、CS/使能、TXD、GND`。  
 8S60机芯调试端口定义（VCC: 5V）
 
-| 1.GND 	| 3.RXD     	| 5.TXD 	|
-|-------	|-----------	|-------	|
-| 2.TXD 	| 4.CS/使能 	| 6.GND 	|
+| 1.GND   | 3.RXD    | 5.TXD  |
+|:-------:|:--------:|:------:|
+| 2.TXD   | 4.RXD    | 6.GND  |
 
 > 请确保存刷机包 `MstarUpgrade.bin` 的U盘已接到电视USB 2.0接口。
 
@@ -116,3 +117,5 @@ reset
 
 > 1. [创维刷机教程](https://www.znds.com/forum.php?mod=viewthread&tid=1031267&page=1&mobile=no)
 > 2. [创维刷机固件](https://www.znds.com/tv-193862-1-1.html)
+> 3. [创维常用机芯刷机方法](https://www.znds.com/tv-1168375-1-1.html)
+> 4. [创维49G8200升级刷机方法](https://www.520101.com/html/skyworthi2c/1350196153.html)
