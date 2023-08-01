@@ -55,7 +55,32 @@ wget -N --no-check-certificate https://raw.githubusercontent.com/FunctionClub/ZB
 wget -N --no-check-certificate https://raw.githubusercontent.com/91yun/91yuntest/master/test.sh && bash test.sh -i "io,bandwidth,chinabw,download,traceroute,backtraceroute,allping"
 ```
 
+## NetFlix解锁检测脚本
+
+使用方法：
+```bash
+wget -O nf https://github.com/sjlleo/netflix-verify/releases/download/v3.1.0/nf_linux_amd64 && chmod +x nf && ./nf
+```
+
+测试结果如下：
+```bash
+**NetFlix 解锁检测小工具 v3.0 By @sjlleo**
+[IPv4]
+Netflix在您的出口IP所在的国家不提供服务
+
+[IPv6]
+您的出口IP完整解锁Netflix，支持非自制剧的观看
+NF所识别的IP地域信息：美国
+```
+
+相关名词解释
+- 不提供服务 - 所在的地区NF没开通，连自制剧也看不了
+- 宽松版权 - 有些NF拍摄的影片不是特别注重版权，所以限制放的很开
+- 解锁自制剧 - 代表可以看由NF自己拍摄的影片
+- 解锁非自制剧 - 代表可以看NF买下的第三方版权影片
+- 地域解锁 - NF在不同的地区可以看的片源都是不同的，有些影片只能在特定区观看
+
 ****
 
-> [原文出处](https://www.vpsgo.com/vps-test-scripts.html)
+> [测速](https://www.vpsgo.com/vps-test-scripts.html)
 
