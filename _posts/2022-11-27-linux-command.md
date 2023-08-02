@@ -1232,4 +1232,4 @@ yum install xxx
 > 1. [白色的风车](https://blog.csdn.net/weixin_52333476/article/details/127269431?spm=1001.2101.3001.6650.6&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-6-127269431-blog-131484976.235%5Ev38%5Epc_relevant_sort&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-6-127269431-blog-131484976.235%5Ev38%5Epc_relevant_sort&utm_relevant_index=7)
 > 2. [程序前行者](https://blog.csdn.net/m0_62808124/article/details/127540625)
 
-[STAT]:http://fnoobt.github.io/posts/linux-stat/
+[STAT]:http://fnoobt.github.io/posts/linux-ps-stat/
