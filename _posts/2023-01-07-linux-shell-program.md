@@ -2,7 +2,7 @@
 title: Linux Shell编程
 author: fnoobt
 date: 2023-01-07 19:29:00 +0800
-categories: [Linux,shell编程]
+categories: [Linux,Linux教程]
 tags: [linux,shell]
 ---
 

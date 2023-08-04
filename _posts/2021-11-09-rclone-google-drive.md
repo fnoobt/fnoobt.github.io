@@ -2,7 +2,7 @@
 title: Debian10使用Rclone挂载Google云盘
 author: fnoobt
 date: 2021-11-09 20:21:00 +0800
-categories: [VPS,Rclone]
+categories: [VPS,服务搭建]
 tags: [vps,rclone,google drive,linux]
 ---
 

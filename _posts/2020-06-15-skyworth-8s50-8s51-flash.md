@@ -2,7 +2,7 @@
 title: 创维8S50和8S51机芯刷机教程
 author: fnoobt
 date: 2020-06-15 10:24:00 +0800
-categories: [刷机,创维TV]
+categories: [刷机,电视]
 tags: [刷机,skyworth]
 ---
 

@@ -2,7 +2,7 @@
 title: EspoCRM安装
 author: fnoobt
 date: 2020-04-09 09:49:00 +0800
-categories: [Web,EspoCRM]
+categories: [Web,Demo]
 tags: [web,espocrm,php,mysql]
 ---
 

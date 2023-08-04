@@ -2,7 +2,7 @@
 title: Linux进程查看中STAT的含义(进程的状态)
 author: fnoobt
 date: 2022-11-29 17:31:00 +0800
-categories: [Linux,进程状态]
+categories: [Linux,Linux教程]
 tags: [linux,stat]
 ---
 

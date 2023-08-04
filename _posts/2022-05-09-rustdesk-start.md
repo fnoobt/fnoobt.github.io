@@ -2,7 +2,7 @@
 title: RustDesk 安装
 author: fnoobt
 date: 2022-05-09 15:32:00 +0800
-categories: [VPS,RustDesk]
+categories: [VPS,服务搭建]
 tags: [v2ray,rustdesk]
 ---
 

@@ -2,7 +2,7 @@
 title: FRP简单入门安装配置教程
 author: fnoobt
 date: 2021-06-24 09:56:00 +0800
-categories: [VPS,frp]
+categories: [VPS,服务搭建]
 tags: [linux,vps,frp]
 ---
 

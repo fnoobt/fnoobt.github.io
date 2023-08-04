@@ -2,7 +2,7 @@
 title: Newifi3刷三方固件（华硕老毛子Padavan）
 author: fnoobt
 date: 2020-03-02 18:44:00 +0800
-categories: [刷机,Newifi]
+categories: [刷机,路由器]
 tags: [刷机,newifi,padavan]
 ---
 
