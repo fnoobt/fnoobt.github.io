@@ -4,6 +4,7 @@ author: fnoobt
 date: 2021-06-24 09:56:00 +0800
 categories: [VPS,服务搭建]
 tags: [linux,vps,frp]
+img_path: '/assets/img/commons/vps/'
 ---
 
 
@@ -23,7 +24,7 @@ tags: [linux,vps,frp]
 
 内网穿透工具有很多，其中 Frp (Fast Reverse Proxy) 是比较流行的一款。FRP 是一个免费开源的用于内网穿透的反向代理应用，它支持 TCP、UDP 协议， 也为 http 和 https 协议提供了额外的支持。你可以粗略理解它是一个中转站，帮你实现 公网 ←→ FRP(服务器) ←→ 家庭内网 的连接，让内网里的设备也可以被公网访问到。
 
-![Architecture](/assets/img/commons/vps/frp_architecture.png)
+![Architecture](frp_architecture.png)
 _Frp架构原理示意图_
 
 而目前 FRP 还推出了“点对点穿透”的试验性功能，连接成功后可以让公网设备直接跟内网设备**点对点**传输，数据流不再经过 VPS 中转，这样可以不受服务器带宽的限制，传输大文件会更快更稳定。当然，此功能并不能保证在你的网络环境 100% 可用，而且还要求访问端也得运行 FRP 客户端 (因此目前手机是无法实现的，只有电脑可以)。由于实现条件较多，所以有文件传输需求的朋友还是建议买**带宽稍大一点的 VPS** 会比较省心。

@@ -52,7 +52,7 @@ chmod +x update.sh
 > 如果服务器无法访问github会导致该方法无效。
 {: .prompt-tip }
 
-会创建`etc/systemd/system/gohttpserver.service`{: .filepath}实现开机自启
+会自动创建`etc/systemd/system/gohttpserver.service`{: .filepath}实现开机自启
 
 ### 2、下载服务器端程序安装
 

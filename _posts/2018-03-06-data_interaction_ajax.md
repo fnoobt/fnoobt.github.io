@@ -4,6 +4,7 @@ author: fnoobt
 date: 2018-03-06 09:49:00 +0800
 categories: [Web,JavaScript]
 tags: [web,ajax,javascript,python,flask]
+img_path: '/assets/img/commons/web/'
 ---
 
 ## 概述
@@ -134,10 +135,10 @@ return Response(data=json.dumps({'ok': True}), mimetype='application/json')
 
 放两张截图来直观看一下请求
 
-![PostFormat](/assets/img/commons/web/post_format_data.png)
+![PostFormat](post_format_data.png)
 _post表单数据到服务端_
 
-![PostJson](/assets/img/commons/web/post_json_data.png)
+![PostJson](post_json_data.png)
 _Post JSON数据到服务端_
 
 ****

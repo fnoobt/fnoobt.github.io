@@ -146,7 +146,7 @@ _Image Caption_
 从 _Chirpy v5.0.0_ 开始，`height`和`width`支持缩写（`height` → `h`，`width` → `w`）。以下示例具有与上述示例相同的效果：
 
 ```markdown
-![Desktop View](/assets/img/commons/demo/mockup.png){: w="700" h="400" }
+![Desktop View](mockup.png){: w="700" h="400" }
 ```
 {: .nolineno}
 

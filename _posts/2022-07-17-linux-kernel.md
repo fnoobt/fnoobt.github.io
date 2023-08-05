@@ -4,6 +4,7 @@ author: fnoobt
 date: 2022-07-17 21:36:00 +0800
 categories: [Linux,kernel]
 tags: [linux,kernel]
+img_path: '/assets/img/commons/linux/kernel/'
 ---
 
 ## 一、前言
@@ -39,7 +40,7 @@ tags: [linux,kernel]
 
 #### Linux内核的特点：结合了unix操作系统的一些基础概念
 
-![Relationship](/assets/img/commons/linux/kernel/relationship.jpg)
+![Relationship](relationship.jpg)
 
 #### Linux内核的任务：
 
