@@ -306,6 +306,10 @@ journalctl -fu subconverter
 
 页面后端地址填写我们的地址就可以 https://你的主机ip:25500/sub?
 
+## 节点转换器（支持VLESS）
+
+因为SubConverter不支持VLESS，如果有VLESS需求可以使用[节点转换器](https://v2rayse.com/node-convert/)，使用前端生成，可断网使用。
+
 ****
 
 本文参考
