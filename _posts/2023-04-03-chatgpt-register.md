@@ -2,7 +2,7 @@
 title: ChatGPT 注册教程
 author: fnoobt
 date: 2023-04-03 14:31:00 +0800
-categories: [AI,ChatGPT]
+categories: [AI,AI教程]
 tags: [ai,chatgpt]
 img_path: '/assets/img/commons/ai/'
 ---
