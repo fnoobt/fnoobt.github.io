@@ -86,7 +86,7 @@ tags: [正则表达式]
 > 注意：字符具有高于替换运算符的优先级，表达式"m\|food"将匹配"m"或"food"。若要匹配"mood"或"food"，需要添加括号"(m\|f)ood"。
 {: .prompt-tip }
 
-## 示例
+## 常用正则表达式
 
 ### 校验数字的表达式
 - 数字：`^[0-9]*$`
@@ -163,5 +163,5 @@ tags: [正则表达式]
 
 本文参考
 
-> 1. [正则表达式|菜鸟教程](https://www.runoob.com/regexp/regexp-tutorial.html)
+> 1. [正则表达式\|菜鸟教程](https://www.runoob.com/regexp/regexp-tutorial.html)
 > 2. [常用正则表达式大全](https://zhuanlan.zhihu.com/p/33683962)
