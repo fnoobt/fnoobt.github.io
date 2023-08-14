@@ -81,7 +81,10 @@ tags: [正则表达式]
 | (), (?:), (?=), []          | 圆括号和方括号             |
 | *, +, ?, {n}, {n,}, {n,m}   | 限定符                    |
 | ^, $, \任何元字符、任何字符 | 定位点和序列（即：位置和顺序） |
-| \|                          | 替换，"或"操作 <br> 字符具有高于替换运算符的优先级，使得"m\|food"匹配"m"或"food"。若要匹配"mood"或"food"，请使用括号创建子表达式，从而产生"(m\|f)ood"。 |
+| \|                          | 替换，"或"操作             |
+
+> 注意：字符具有高于替换运算符的优先级，表达式"m\|food"将匹配"m"或"food"。若要匹配"mood"或"food"，需要添加括号"(m\|f)ood"。
+{: .prompt-tip }
 
 ## 示例
 
@@ -160,5 +163,5 @@ tags: [正则表达式]
 
 本文参考
 
-> 1. [正则表达式 | 菜鸟教程](https://www.runoob.com/regexp/regexp-tutorial.html)
+> 1. [正则表达式|菜鸟教程](https://www.runoob.com/regexp/regexp-tutorial.html)
 > 2. [常用正则表达式大全](https://zhuanlan.zhihu.com/p/33683962)
