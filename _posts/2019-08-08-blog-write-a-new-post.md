@@ -282,7 +282,7 @@ image:
 ---
 ```
 
-> 您可以在帖子 _[文本和排版](/posts/text-and-typography/)_ 的预览图像中观察 LQIP。
+> 您可以在帖子 _[文本和排版](/posts/blog-text-and-typography/)_ 的预览图像中观察 LQIP。
 
 
 对于普通图像：
