@@ -2,8 +2,8 @@
 title: 小米6刷第三方REC之TWRP
 author: fnoobt
 date: 2020-09-08 17:21:00 +0800
-categories: [刷机,手机]
-tags: [刷机,xiaomi,twrp]
+categories: [Flash,手机]
+tags: [flash,刷机,xiaomi,twrp]
 ---
 
 ## 准备阶段

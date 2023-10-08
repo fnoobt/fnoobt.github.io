@@ -3,7 +3,7 @@ title: RustDesk 安装
 author: fnoobt
 date: 2022-05-09 15:32:00 +0800
 categories: [VPS,服务搭建]
-tags: [v2ray,rustdesk]
+tags: [vps,rustdesk]
 ---
 
 RustDesk有三部分组成，中继服务器(hbbr)、ID注册服务器(hbbs)与客户端(win、linux、mac)，其中hbbr与hbbs需要部署在服务器上，客户端提供控制与被控服务。

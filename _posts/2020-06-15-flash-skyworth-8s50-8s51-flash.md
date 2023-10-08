@@ -2,8 +2,8 @@
 title: 创维8S50和8S51机芯刷机教程
 author: fnoobt
 date: 2020-06-15 10:24:00 +0800
-categories: [刷机,电视]
-tags: [刷机,skyworth]
+categories: [Flash,电视]
+tags: [flash,刷机,skyworth]
 ---
 
 > 重要的事情说三遍，***刷机有风险！刷机有风险！刷机有风险！***

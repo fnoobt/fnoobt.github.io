@@ -53,12 +53,12 @@ BGP Update 数据，主要就是交换Network Layer Reachability Information (NL
 
 ![BGPState](/assets/img/commons/network/bgp-state-machine.png)
 
-- Idle（空闲）：Idle 是BGP连接的第一个状态，在空闲状态，BGP在等待一个启动事件，启动事件出现以后，BGP初始化资源，复位连接重试计时器（Connect-Retry）（32s），发起一条TCP连接，同时转入Connect（连接）状态。
-- Connect（连接）：在Connect 状态，BGP发起第一个TCP连接，如果 连接重试计时器（Connect-Retry）超时，就重新发起TCP连接，并继续保持在Connect 状态，如果TCP 连接成功，就转入OpenSent 状态，如果TCP 连接失败，就转入Active 状态。（TCP连接失败两种情况：1.收到TCP参数协商失败的回复，则进入Active状态，2.对方长时间没有回复，超时，则保持在Connect状态—实验结果，如果想要实现这种效果，只需要把路由删除，那么对方就没有办法发送TCP回复）
-- Active（活跃）：在Active状态，BGP总是在试图建立TCP 连接，如果连接重试计时器（Connect-Retry）超时，就退回到Connect 状态，如果TCP 连接成功，就转入OpenSent 状态，如果TCP 连接失败，就继续保持在Active状态，并继续发起TCP连接。（TCP连接失败两种情况：1.收到TCP参数协商失败的回复，则继续保持在Active状态，2.对方长时间没有回复，超时，才进入Connect状态—实验结果，如果想要实现这种效果，只需要在一个方向上删除peer就可以了。总结为，第一种情况，就保持在Active状态，第二种情况则保持在Connect状态）
-- OpenSent（打开消息已发送）：在OpenSent 状态，TCP连接已经建立，BGP也已经发送了第一个Open报文，剩下的工作，BGP就在等待其对等体发送Open 报文。并对收到的Open报文进行正确性检查，如果有错误，系统就会发送一条出错通知消息并退回到Idle状态，如果没有错误，BGP就开始发送 Keepalive 报文，并复位Keepalive 计时器，开始计时。同时转入OpenConfirm状态。
-- OpenConfirm（打开消息确认）状态：在OpenConfirm状态，BGP发送一个Keepalive 报文，同时复位保持计时器，如果收到了一个Keepalive 报文，就转入Established 阶段，BGP邻居关系就建立起来了。如果TCP连接中断，就退回到Idle 状态。
-- Established（连接已建立）：在Established 状态，BGP 邻居关系已经建立，这时，BGP将和它的邻居们交换Update 报文，同时复位保持计时器。
+- **Idle（空闲）：**Idle 是BGP连接的第一个状态，在空闲状态，BGP在等待一个启动事件，启动事件出现以后，BGP初始化资源，复位连接重试计时器（Connect-Retry）（32s），发起一条TCP连接，同时转入Connect（连接）状态。
+- **Connect（连接）：**在Connect 状态，BGP发起第一个TCP连接，如果 连接重试计时器（Connect-Retry）超时，就重新发起TCP连接，并继续保持在Connect 状态，如果TCP 连接成功，就转入OpenSent 状态，如果TCP 连接失败，就转入Active 状态。（TCP连接失败两种情况：1.收到TCP参数协商失败的回复，则进入Active状态，2.对方长时间没有回复，超时，则保持在Connect状态—实验结果，如果想要实现这种效果，只需要把路由删除，那么对方就没有办法发送TCP回复）
+- **Active（活跃）：**在Active状态，BGP总是在试图建立TCP 连接，如果连接重试计时器（Connect-Retry）超时，就退回到Connect 状态，如果TCP 连接成功，就转入OpenSent 状态，如果TCP 连接失败，就继续保持在Active状态，并继续发起TCP连接。（TCP连接失败两种情况：1.收到TCP参数协商失败的回复，则继续保持在Active状态，2.对方长时间没有回复，超时，才进入Connect状态—实验结果，如果想要实现这种效果，只需要在一个方向上删除peer就可以了。总结为，第一种情况，就保持在Active状态，第二种情况则保持在Connect状态）
+- **OpenSent（打开消息已发送）：**在OpenSent 状态，TCP连接已经建立，BGP也已经发送了第一个Open报文，剩下的工作，BGP就在等待其对等体发送Open 报文。并对收到的Open报文进行正确性检查，如果有错误，系统就会发送一条出错通知消息并退回到Idle状态，如果没有错误，BGP就开始发送 Keepalive 报文，并复位Keepalive 计时器，开始计时。同时转入OpenConfirm状态。
+- **OpenConfirm（打开消息确认）状态：**在OpenConfirm状态，BGP发送一个Keepalive 报文，同时复位保持计时器，如果收到了一个Keepalive 报文，就转入Established 阶段，BGP邻居关系就建立起来了。如果TCP连接中断，就退回到Idle 状态。
+- **Established（连接已建立）：**在Established 状态，BGP 邻居关系已经建立，这时，BGP将和它的邻居们交换Update 报文，同时复位保持计时器。
 
 在除Idle 状态以外的其它五个状态出现任何Error 的时候，BGP状态机就会退回到Idle 状态。
 

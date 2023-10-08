@@ -3,7 +3,7 @@ title: Aria2 安装（一键安装管理脚本）
 author: fnoobt
 date: 2022-01-07 15:32:00 +0800
 categories: [VPS,服务搭建]
-tags: [v2ray,aria2,ariang]
+tags: [vps,aria2,ariang]
 ---
 
 Aria2 是目前最强大的全能型下载工具，它支持 BT、磁力、HTTP、FTP 等下载协议，常用做离线下载的服务端。  

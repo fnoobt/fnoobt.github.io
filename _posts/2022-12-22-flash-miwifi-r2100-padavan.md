@@ -2,8 +2,8 @@
 title: 小米/红米AC2100路由器刷三方固件（华硕老毛子Padavan）
 author: fnoobt
 date: 2022-12-22 17:44:00 +0800
-categories: [刷机,路由器]
-tags: [刷机,miwifi,ac2100,padavan]
+categories: [Flash,路由器]
+tags: [Flash,刷机,miwifi,ac2100,padavan]
 ---
 
 ## 准备阶段

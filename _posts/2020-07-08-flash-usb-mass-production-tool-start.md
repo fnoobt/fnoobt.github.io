@@ -2,8 +2,8 @@
 title: U盘量产工具教程
 author: fnoobt
 date: 2020-07-08 10:24:00 +0800
-categories: [刷机,U盘量产]
-tags: [刷机,量产]
+categories: [Flash,U盘量产]
+tags: [flash,刷机,量产]
 ---
 
 

@@ -3,7 +3,7 @@ title: V2Ray自定义路由设置规则的写法
 author: fnoobt
 date: 2022-03-16 17:32:00 +0800
 categories: [VPS,服务搭建]
-tags: [v2ray,路由规则]
+tags: [vps,v2ray,路由规则]
 ---
 
 目前，主流的V2Ray手机、电脑客户端都移除了对PAC模式的支持，这是因为通过功能强大的“（高级）路由设置”功能，同样可以实现PAC模式自动代理功能。

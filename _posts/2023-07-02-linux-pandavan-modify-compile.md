@@ -1,7 +1,7 @@
 ---
 title: Padavan固件修改编译
 author: fnoobt
-date: 2023-06-04 19:29:00 +0800
+date: 2023-07-02 19:29:00 +0800
 categories: [Linux,Linux教程]
 tags: [linux,Padavan,编译]
 ---

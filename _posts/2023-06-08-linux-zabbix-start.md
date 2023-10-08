@@ -1,7 +1,7 @@
 ---
 title: zabbix介绍及部署
 author: fnoobt
-date: 2023-05-08 19:29:00 +0800
+date: 2023-06-08 19:29:00 +0800
 categories: [Linux,Linux教程]
 tags: [linux,zabbix]
 ---
