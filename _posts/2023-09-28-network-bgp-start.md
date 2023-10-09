@@ -144,7 +144,7 @@ AS_Path属于公认必遵属性，是前往目标网络的路由经过的AS号�
 
 AS_Path的重要作用之一便是影响BGP路由的优选，在上图中，R5同时从R2及R4学习到去往10.1.1.0/24网段的BGP路由，在其他条件相同的情况下，R5会优选R2通告的路由，因为该条路由的AS_Path属性值较短，也即AS号的个数更少。
 
-### AS_Path类型
+#### AS_Path类型
 AS_Path分为四种类型：AS_SET、AS_SEQUENCE、AS_CONFED_SEQUENCE和AS_CONFED_SET。
 - AS_SET指去往目标网络需要经过路径的**无序**AS号列表，一般用于指示汇总路由
 - AS_SEQUENCE指去往目标网络需要经过路径的**有序**AS号列表
@@ -181,13 +181,6 @@ MED（Multi Exit Discriminator ）属于可选非传递属性，用于向外部�
 
 > 缺省情况下，路由器只比较来自同一相邻AS的BGP路由的MED值，也就是说如果去往同一个目的地的两条路由来自不同的相邻AS，则不进行MED值的比较。
 {: .prompt-tip }
-
-### 其他
-#### ORIGINATOR_ID
-Originator_ID用于路由反射器，参考路由反射器[Originator_ID](#Originator_ID)
-
-#### Cluster_list
-Cluster_list用于路由反射器，参考路由反射器[Cluster_list](#Cluster_List)
 
 ## BGP路由反射器
 ### 背景
@@ -253,7 +246,7 @@ BGP联邦是对IBGP对等体之间的关系进行重新的划分，分为联邦I
 - 通告给联邦的BGP路由，MED属性在整个联邦范围内缺省不会发生改变；
 - 通告给联邦的BGP路由，Local_Preference属性在整个联邦范围内缺省不会发生改变；
 
-BGP路由在联邦内的EBGP对等体间传递时，路由器将成员AS号插入AS_Path，并且使用`AS_CONFED_SEQUENCE`和`AS_CONFED_SET`（详见[AS_Path类型](#AS_Path类型)）的特殊AS_Path存储。成员AS号不会被公布到联邦AS之外，也即对于联邦AS外部而言，联邦成员AS是不可见的。AS_Path中的联邦成员AS号用于在联邦内部避免环路；联邦内成员AS号不参与AS_Path长度计算。
+BGP路由在联邦内的EBGP对等体间传递时，路由器将成员AS号插入AS_Path，并且使用`AS_CONFED_SEQUENCE`和`AS_CONFED_SET`（详见AS_Path类型）的特殊AS_Path存储。成员AS号不会被公布到联邦AS之外，也即对于联邦AS外部而言，联邦成员AS是不可见的。AS_Path中的联邦成员AS号用于在联邦内部避免环路；联邦内成员AS号不参与AS_Path长度计算。
 
 配置BGP联邦
 ```bash
