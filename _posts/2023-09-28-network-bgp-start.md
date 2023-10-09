@@ -246,7 +246,7 @@ BGP联邦是对IBGP对等体之间的关系进行重新的划分，分为联邦I
 - 通告给联邦的BGP路由，MED属性在整个联邦范围内缺省不会发生改变；
 - 通告给联邦的BGP路由，Local_Preference属性在整个联邦范围内缺省不会发生改变；
 
-BGP路由在联邦内的EBGP对等体间传递时，路由器将成员AS号插入AS_Path，并且使用`AS_CONFED_SEQUENCE`和`AS_CONFED_SET`（详见AS_Path类型）的特殊AS_Path存储。成员AS号不会被公布到联邦AS之外，也即对于联邦AS外部而言，联邦成员AS是不可见的。AS_Path中的联邦成员AS号用于在联邦内部避免环路；联邦内成员AS号不参与AS_Path长度计算。
+BGP路由在联邦内的EBGP对等体间传递时，路由器将成员AS号插入AS_Path，并且使用`AS_CONFED_SEQUENCE`和`AS_CONFED_SET`（详见[AS_Path类型](#as_path类型)）的特殊AS_Path存储。成员AS号不会被公布到联邦AS之外，也即对于联邦AS外部而言，联邦成员AS是不可见的。AS_Path中的联邦成员AS号用于在联邦内部避免环路；联邦内成员AS号不参与AS_Path长度计算。
 
 配置BGP联邦
 ```bash
@@ -312,7 +312,7 @@ BGP定义了一系列路由优选规则，从而使得设备能够在多条路�
 1. 优选具有最大Weight的路由  
 FRR通过`neighbor PEER weight WEIGHT`命令可以为对等体设置默认的路由权重，权重高的路由将被优选。
 2. 优选具有最大Local_Preference的路由  
-Local_Preference会在IBGP对等体之间传递，不会再EBGP对等体传递，参考[Local-Preference](#Local-Preference)
+Local_Preference会在IBGP对等体之间传递，不会再EBGP对等体传递，参考[Local-Preference](#local-preference)
 3. 优选起源于本地的路由  
 在其他条件相同的情况下，本地生成的路由优先级高于从邻居学来的路由。本地生成的路由包括  
   - 静态路由static
@@ -337,9 +337,9 @@ IGP度量值又叫IGP cost，指的是到达某个路由所指的目的地址的
 10. 优选已被选择的路由  
 当收到两条前置条件一样的路由，优先选择已有被优选通告的路由，这样可以避免出现路由振荡。如果配置了bgp bestpath compare-routerid则忽略这个优选规则。
 11. 优选Router-ID最小的BGP对等体发来的路由  
-如果配置了反射器，则使用[Originator_ID](#Originator_ID)代替Router-ID来进行比较。
+如果配置了反射器，则使用[Originator_ID](#originator_id)代替Router-ID来进行比较。
 12. 优选Cluster_List最短的路由  
-Cluster_List属性参考路由反射器[Cluster_List](#Cluster_List)
+Cluster_List属性参考路由反射器[Cluster_List](#cluster_list)
 13. 优选Peer-IP地址最小的对等体发来的路由  
 Peer-IP指的是通过neighbor命令配置对等体时所指定的IP地址。Peer-IP值越小，路由将被优先选择。
 
