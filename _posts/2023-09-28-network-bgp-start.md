@@ -145,7 +145,6 @@ AS_Path属于公认必遵属性，是前往目标网络的路由经过的AS号�
 AS_Path的重要作用之一便是影响BGP路由的优选，在上图中，R5同时从R2及R4学习到去往10.1.1.0/24网段的BGP路由，在其他条件相同的情况下，R5会优选R2通告的路由，因为该条路由的AS_Path属性值较短，也即AS号的个数更少。
 
 ### AS_Path类型
-
 AS_Path分为四种类型：AS_SET、AS_SEQUENCE、AS_CONFED_SEQUENCE和AS_CONFED_SET。
 - AS_SET指去往目标网络需要经过路径的**无序**AS号列表，一般用于指示汇总路由
 - AS_SEQUENCE指去往目标网络需要经过路径的**有序**AS号列表
