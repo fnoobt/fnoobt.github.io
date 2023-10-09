@@ -144,7 +144,7 @@ AS_Path属于公认必遵属性，是前往目标网络的路由经过的AS号�
 
 AS_Path的重要作用之一便是影响BGP路由的优选，在上图中，R5同时从R2及R4学习到去往10.1.1.0/24网段的BGP路由，在其他条件相同的情况下，R5会优选R2通告的路由，因为该条路由的AS_Path属性值较短，也即AS号的个数更少。
 
-#### AS_Path类型
+### AS_Path类型
 
 AS_Path分为四种类型：AS_SET、AS_SEQUENCE、AS_CONFED_SEQUENCE和AS_CONFED_SET。
 - AS_SET指去往目标网络需要经过路径的**无序**AS号列表，一般用于指示汇总路由
@@ -188,7 +188,7 @@ MED（Multi Exit Discriminator ）属于可选非传递属性，用于向外部�
 Originator_ID用于路由反射器，参考路由反射器[Originator_ID](#Originator_ID)
 
 #### Cluster_list
-Cluster_list用于路由反射器，参考路由反射器[Cluster_list](#Cluster_list)
+Cluster_list用于路由反射器，参考路由反射器[Cluster_list](#Cluster_List)
 
 ## BGP路由反射器
 ### 背景
@@ -227,7 +227,7 @@ Originator_ID是一个可选非传递属性，属性类型为9。是一个32bit�
 
 ![BGPOriginatorID](/assets/img/commons/network/bgp-originator-id.png)
 
-### Cluster_list
+### Cluster_List
 BGP路由反射器定义了一个概念路由反射簇（Cluster），路由反射簇包括反射器RR及其Client。一个AS内允许存在多个路由反射簇。
 
 每一个簇都有唯一的簇ID（Cluster-ID，缺省时为RR的BGP Router-ID）。
@@ -345,7 +345,7 @@ IGP度量值又叫IGP cost，指的是到达某个路由所指的目的地址的
 10. 优选已被选择的路由  
 当收到两条前置条件一样的路由，优先选择已有被优选通告的路由，这样可以避免出现路由振荡。如果配置了bgp bestpath compare-routerid则忽略这个优选规则。
 11. 优选Router-ID最小的BGP对等体发来的路由  
-如果配置了反射器，则使用[ORIGINATOR_ID](#ORIGINATOR_ID)代替Router-ID来进行比较。
+如果配置了反射器，则使用[Originator_ID](#Originator_ID)代替Router-ID来进行比较。
 12. 优选Cluster_List最短的路由  
 Cluster_List属性参考路由反射器[Cluster_List](#Cluster_List)
 13. 优选Peer-IP地址最小的对等体发来的路由  
