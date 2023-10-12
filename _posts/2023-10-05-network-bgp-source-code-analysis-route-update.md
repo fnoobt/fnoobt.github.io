@@ -20,7 +20,7 @@ BGP协议建立起来后，后续的核心就是UPDATE路由，其关键的部�
 ## Update消息
 Update消息的格式如下图所示，其作用是向对等体宣告一条可行的路由或者撤销多条不可行的路由或者两者。
 
-![bgpUpdateMessageFormat](assets/img/commons/network/bgp-update-message-format.png)
+![bgpUpdateMessageFormat](/assets/img/commons/network/bgp-update-message-format.png)
 
 BGPUpdate消息包含以下字段。
 - **不可行路由的长度（Unfeasible Routes Length）：**该字段长2个八位组，用于指示后面被撤销路由（Withdraw Routes）字段的长度（以八位组为单位），该字段值为0时表示没有被撤销的路由，且Update消息中无被撤销路由字段。
@@ -1309,7 +1309,7 @@ static void bgp_process_main_one(struct bgp *bgp, struct bgp_dest *dest,
 
 `bgp_process_main_one` 会根据BGP的选路原则选择一个最优的路由，选择原则如下：
 
-![bgpRoutePrinciple](assets/img/commons/network/bgp-route-principle.png)
+![bgpRoutePrinciple](/assets/img/commons/network/bgp-route-principle.png)
 
 ```c
 void bgp_best_selection(struct bgp *bgp, struct bgp_dest *dest,

@@ -599,7 +599,7 @@ struct route_node {
 
 整体的数据结构关系如下图所示：
 
-![bgpRouteTableNodeEntry](assets/img/commons/network/bgp-route-table-node-entry-data-structure.png)
+![bgpRouteTableNodeEntry](/assets/img/commons/network/bgp-route-table-node-entry-data-structure.png)
 
 ```c
 static void rib_addnode(struct route_node *rn,
