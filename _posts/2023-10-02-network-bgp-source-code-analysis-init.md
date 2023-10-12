@@ -1,9 +1,9 @@
 ---
-title: BGP源码分析
+title: FRR BGP源码分析1 -- 初始化
 author: fnoobt
-date: 2023-10-06 19:29:00 +0800
+date: 2023-10-02 19:29:00 +0800
 categories: [Network,路由协议]
-tags: [Network,BGP]
+tags: [network,bgp,frr]
 ---
 
 ##  一、名词解释
