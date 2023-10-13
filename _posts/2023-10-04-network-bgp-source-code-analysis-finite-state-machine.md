@@ -4,12 +4,14 @@ author: fnoobt
 date: 2023-10-04 19:29:00 +0800
 categories: [Network,路由协议]
 tags: [network,bgp,frr,fsm]
+pin: true
 ---
 
-前面创建完bgp peer之后，peer是active的话就会开启`bgp start timer`，然后开始BGP状态机的协商，不然费那么大劲创建出来不做事情就就很尴尬。
+前面创建完`bgp peer`之后，peer是active的话就会开启`bgp_start_timer`，然后开始BGP状态机的协商。
 
 ## 状态机简介
 下面是BGP的状态和事件驱动的定义：
+
 ```c
 /*
  * BGP finite state machine events
@@ -53,11 +55,11 @@ enum bgp_fsm_status {
 {: file='bgpd/bgpd.h'}
 
 bgp是基于tcp协议的，即包含了tcp协议的优点，因此上面的状态机也就跟tcp连接有一定的关系： 
-- tcp连接建立阶段的状态：Idle， Connect， Active
-- tcp连接建立完成之后： OpenSent， OpenConfirm， Established
+- tcp连接建立阶段的状态： Idle ， Connect ， Active
+- tcp连接建立完成之后： OpenSent ， OpenConfirm ， Established
 
 ### Idle
-BGP协议初始时是处于Idle状态。在这个状态时，系统不分配任何资源，也拒绝所有进入的BGP连接。只有收到Start Event时，才分配BGP资源，启动ConnectRetry计时器， 启动对其它BGP对等体的传输层连接，同时也侦听是否有来自其它对等体的连接请求。
+BGP协议初始时是处于Idle状态。在这个状态时，系统不分配任何资源，也拒绝所有进入的BGP连接。只有收到 Start Event 时，才分配BGP资源，启动ConnectRetry计时器，启动对其它BGP对等体的传输层连接，同时也侦听是否有来自其它对等体的连接请求。
 
 ### Connect
 这个状态下，BGP等待TCP完成连接。若连接成功，本地清空ConnectRetry计时器，并向对等体发送OPEN报文，然后状态改变为OpenSent状态；否则，本地重置ConnectRetry计时器，侦听是否有对等体启动连接， 并移至Active状态。
@@ -66,7 +68,7 @@ BGP协议初始时是处于Idle状态。在这个状态时，系统不分配任�
 这个状态下，BGP初始化TCP连接来获得一个对等体。如果连接成功，本地清空ConnectRetry计时器，并向对等体发送OPEN报文，并转至OpenSent状态。
 
 ### OpenSent
-这个状态下，BGP等待对等体的OPEN报文。收到报文后对报文进行检查，如果发现错误， 本地发送NOTIFICATION报文给对等体，并改变状态为IDLE。如果报文正确，BGP发送KEEPALIVE报文，并转至OpenConfirm状态。
+这个状态下，BGP等待对等体的OPEN报文。收到报文后对报文进行检查，如果发现错误，本地发送NOTIFICATION报文给对等体，并改变状态为IDLE。如果报文正确，BGP发送KEEPALIVE报文，并转至OpenConfirm状态。
 
 ### OpenConfirm
 这个状态下，BGP等待KEEPALIVE或NOTIFICATION报文。如果收到KEEPALIVE报文，则进入Established状态，如果收到NOTIFICATION报文，则变为Idle状态。
@@ -78,12 +80,13 @@ BGP协议初始时是处于Idle状态。在这个状态时，系统不分配任�
 
 ![BGPFSM](/assets/img/commons/network/bgp-finite-state-machine.png)
 
-BGP的FSM代码写的相当漂亮，使用当前状态 + EVENT作为FSM index，查找到对应的执行函数和下一个状态：
+BGP的FSM代码写的相当漂亮，使用 当前状态 + EVENT 作为FSM index，查找到对应的执行函数和下一个状态，FSM结构如下，用于处理BGP协议中对等体的状态转换：
+
 ```c
 /* Finite State Machine structure */
 static const struct {
-	enum bgp_fsm_state_progress (*func)(struct peer *);
-	enum bgp_fsm_status next_state;
+	enum bgp_fsm_state_progress (*func)(struct peer *); //处理特定事件的函数的指针
+	enum bgp_fsm_status next_state;      //指定在处理完特定事件后，对等体应该转移到的下一个状态
 } FSM[BGP_STATUS_MAX - 1][BGP_EVENTS_MAX - 1] = {
 	{
 		/* Idle state: In Idle state, all events other than BGP_Start is
@@ -117,7 +120,8 @@ static const struct {
 ```
 {: file='bgpd/bgp_fsm.c'}
 
-通过FSM数组，bgp_event_update让状态机转化的代码起到了化繁为简的神奇效果：
+通过FSM二维数组，`bgp_event_update`接收一个对等体和一个BGP有限状态机事件作为参数，然后根据当前状态和事件执行相应的状态转换和处理，让状态机转化的代码起到了化繁为简的神奇效果：
+
 ```c
 int bgp_event_update(struct peer *peer, enum bgp_fsm_events event)
 {
@@ -154,7 +158,7 @@ int bgp_event_update(struct peer *peer, enum bgp_fsm_events event)
 {: file='bgpd/bgp_fsm.c'}
 
 ## 状态机转化
-Peer初始状态是IDLE,那么对等体一旦start起来，就会进入各自的状态，在不同的状态下处理各自的事件消息。
+Peer初始状态是IDLE，那么对等体一旦start起来，就会进入各自的状态，在不同的状态下处理各自的事件消息。
 
 ### IDLE
 ```c
@@ -175,11 +179,56 @@ static void bgp_start_timer(struct event *thread)
 ```
 {: file='bgpd/bgp_fsm.c'}
 
-start定时器到期后，EVNET 为BGP_Start,在`bgp_event_update`函数里面，通过FSM的数组获取
-next = Connect
-func = bgp_start
+`bgp_event`将调用`bgp_event_update`进行event处理和状态更新
 
-bgp_start 做一些检查后，调用 `bgp_connect` 开始建立TCP的连接，bgp使用tcp连接，每个bgp实例自身是peer的一个tcp server端，同时也是peer的tcp client端，server端在bgp_create之后都建立自己的socket服务端开始监听179端口。
+```c
+/* Execute event process. */
+void bgp_event(struct event *thread)
+{
+	enum bgp_fsm_events event;
+	struct peer *peer;
+
+	peer = EVENT_ARG(thread);
+	event = EVENT_VAL(thread);
+
+	peer_lock(peer);
+	bgp_event_update(peer, event);
+	peer_unlock(peer);
+}
+```
+{: file='bgpd/bgp_fsm.c'}
+
+start定时器到期后， EVNET 为 BGP_Start,在`bgp_event_update`函数里面，通过FSM的数组获取  
+func = bgp_start  
+next_state = Connect
+
+#### bgp_start
+尝试使用非阻塞IO连接到远程对等体，并检查连接信息:
+
+```c
+/* This function is the first starting point of all BGP connection. It
+ * try to connect to remote peer with non-blocking IO.
+ */
+enum bgp_fsm_state_progress bgp_start(struct peer *peer)
+{
+	int status;
+
+	bgp_peer_conf_if_to_su_update(peer);
+
+	if (peer->su.sa.sa_family == AF_UNSPEC) {
+		if (bgp_debug_neighbor_events(peer))
+			zlog_debug(
+				"%s [FSM] Unable to get neighbor's IP address, waiting...",
+				peer->host);
+		peer->last_reset = PEER_DOWN_NBR_ADDR;
+		return BGP_FSM_FAILURE;
+	}
+```
+{: file='bgpd/bgp_fsm.c'}
+
+#### bgp_connect
+之后调用 `bgp_connect` 创建并配置用于连接的套接字，开始建立TCP的连接，bgp使用tcp连接，每个bgp实例自身是peer的一个tcp server端，同时也是peer的tcp client端，server端在`bgp_create`之后都建立自己的socket服务端开始监听179端口。
+
 ```c
 /* BGP try to connect to the peer.  */
 int bgp_connect(struct peer *peer)
@@ -203,7 +252,6 @@ int bgp_connect(struct peer *peer)
 
 - `peer->fd = vrf_sockunion_socket` 该命令创建连接peer的客服端的TCP fd,同时设置FD为非阻塞，因为FRR是事件驱动，不能由于fd阻塞导致线程给挂起。
 - 如果配置了密码会添加TCP MD5签名验证选项，在服务端，直接由内核在tcp接收处理时就完成了签名验证。
-
 - 更新TCP连接的源IP地址
 
 ```c
@@ -213,12 +261,17 @@ int bgp_connect(struct peer *peer)
 		return connect_error;
 	}
 ```
-{: file='lib/bgp_network.c'}
+{: file='lib/bgp_network.c -- bgp_connect()'}
 
-最后会调用bind 绑定配置的源IP地址
+然后调用 `bgp_update_source` 通过 `sockunion_bind` 绑定配置的源IP地址
+
+最后调用`sockunion_connect`尝试与远程对等体建立连接
+
+至此套接字创建、选项设置和连接的发起都已完成，进入 Connect 状态
 
 ### Connect 处理
-最后调用sockunion_connect处理connect到服务端
+调用`sockunion_connect`处理非阻塞connect到服务端，返回连接的状态，包括连接成功、连接进行中或连接错误
+
 ```c
 /* Performs a non-blocking connect().  */
 enum connect_result sockunion_connect(int fd, const union sockunion *peersu,
@@ -262,23 +315,18 @@ enum connect_result sockunion_connect(int fd, const union sockunion *peersu,
 		}
 	}
 
-	return connect_in_progress;
+	return connect_in_progress;  //表示连接正在进行中
 }
 ```
 {: file='lib/sockunion.c'}
 
-由于fd 是no block的，所以调用connect触发TCP的三次握手，大概率不会立马成功（如果是阻塞的话，线程会被挂住），那小概率会返回成功是什么情况下会发生了？？
+由于 fd 是no block（非阻塞）的，所以调用connect触发TCP的三次握手，连接不能立即完成（如果是阻塞的话，线程会被挂住），按照connect的man帮助，返回值如下，查看解释，可以理解代码的返回值处理：
 
-按照connect的man帮助，返回值如下，查看解释，可以理解代码的返回值处理：
-```
-RETURN VALUE
+> RETURN VALUE  
+>  If the connection or binding succeeds, zero is returned.  On error, -1 is returned, and errno is set appropriately.  
+> EINPROGRESS  
+>   The  socket  is  nonblocking  and  the connection cannot be completed immediately.  It is possible to select(2) or poll(2) for completion by selecting the socket for writing.  After select(2) indicates writability,  use  getsock‐opt(2)  to  read  the  SO_ERROR  option  at level SOL_SOCKET to determine whether connect() completed successfully (SO_ERROR is zero) or unsuccessfully (SO_ERROR is one of the usual error codes listed here, explaining the  reason for the failure).
 
-  If the connection or binding succeeds, zero is returned.  On error, -1 is returned, and errno is set appropriately.
-
-EINPROGRESS
-
-   The  socket  is  nonblocking  and  the connection cannot be completed immediately.  It is possible to select(2) or poll(2) for completion by selecting the socket for writing.  After select(2) indicates writability,  use  getsock‐opt(2)  to  read  the  SO_ERROR  option  at level SOL_SOCKET to determine whether connect() completed successfully (SO_ERROR is zero) or unsuccessfully (SO_ERROR is one of the usual error codes listed here, explaining the  reason for the failure).
-```
 
 ```c
 	status = bgp_connect(peer);
@@ -328,10 +376,10 @@ EINPROGRESS
 ```
 {: file='bgpd/bgp_fsm.c -- bgp_start()'}
 
-所以当bgp_connect返回的时候，根据返回值的不同会做不同的处理：
+所以当`bgp_connect`返回的时候，根据返回值的不同会做不同的处理：
 
-- **connect_success：**触发TCP_connection_open 事件 BGP_EVENT_ADD(peer, TCP_connection_open);
-- **connect_in_progress：**说明connect并没有成功，会触发fd的可读和可写的事件(根据前面man的说明可以理解这点)，bgp_connect_check 回调函数根据`getsockopt(peer->fd, SOL_SOCKET, SO_ERROR, (void *)&status, &slen);`来判断connect链接是否OK。
+- **connect_success：**触发`TCP_connection_open` 事件 `BGP_EVENT_ADD(peer, TCP_connection_open);`
+- **connect_in_progress：**说明connect并没有成功，会触发fd的可读和可写的事件(根据前面man的说明可以理解这点)，`bgp_connect_check` 回调函数根据`getsockopt(peer->fd, SOL_SOCKET, SO_ERROR, (void *)&status, &slen);`来判断connect链接是否OK。
 
 ```c
 /**
@@ -396,10 +444,11 @@ static void bgp_connect_check(struct event *thread)
 ```
 {: file='bgpd/bgp_fsm.c'}
 
-然后函数直接返回，最后达到bgp_event_update，会把peer的状态改成Connect (connect触发TCP链接不是立马成功的情况下)
+然后函数直接返回，最后达到`bgp_event_update`，会把peer的状态改成Connect (connect触发TCP链接不是立马成功的情况下)
 
 ### Connect
-当调用connect触发TCP的三次握手的时候，connect没有阻塞而是直接返回了，然后添加了FD可读和可写的事件，回调函数是bgp_connect_check函数，然后调用getsockopt 获取TCP connection的情况，如果status返回的是0，那么说明TCP connection is established，然后触发 TCP_connection_open事件：
+当调用connect触发TCP的三次握手的时候，connect没有阻塞而是直接返回了，然后添加了FD可读和可写的事件，回调函数是`bgp_connect_check`函数，然后调用`getsockopt` 获取TCP connection的情况，如果status返回的是0，那么说明TCP connection is established，然后触发 `TCP_connection_open`事件：
+
 ```c
 	/* When status is 0 then TCP connection is established. */
 	if (status == 0) {
@@ -418,34 +467,9 @@ static void bgp_connect_check(struct event *thread)
 ```
 {: file='bgpd/bgp_fsm.c -- bgp_connect_check()'}
 
-而此时peer的状态是connect,根据全局的FSM可以知道：
+而此时peer的状态是connect,根据全局的FSM可以知道，下一状态是OpenSent：
+
 ```c
-/* Finite State Machine structure */
-static const struct {
-	enum bgp_fsm_state_progress (*func)(struct peer *);
-	enum bgp_fsm_status next_state;
-} FSM[BGP_STATUS_MAX - 1][BGP_EVENTS_MAX - 1] = {
-	{
-		/* Idle state: In Idle state, all events other than BGP_Start is
-		   ignored.  With BGP_Start event, finite state machine calls
-		   bgp_start(). */
-		{bgp_start, Connect}, /* BGP_Start                    */
-		{bgp_stop, Idle},     /* BGP_Stop                     */
-		{bgp_stop, Idle},     /* TCP_connection_open          */
-		{bgp_stop, Idle},     /* TCP_connection_open_w_delay */
-		{bgp_stop, Idle},     /* TCP_connection_closed        */
-		{bgp_ignore, Idle},   /* TCP_connection_open_failed   */
-		{bgp_stop, Idle},     /* TCP_fatal_error              */
-		{bgp_ignore, Idle},   /* ConnectRetry_timer_expired   */
-		{bgp_ignore, Idle},   /* Hold_Timer_expired           */
-		{bgp_ignore, Idle},   /* KeepAlive_timer_expired      */
-		{bgp_ignore, Idle},   /* DelayOpen_timer_expired */
-		{bgp_ignore, Idle},   /* Receive_OPEN_message         */
-		{bgp_ignore, Idle},   /* Receive_KEEPALIVE_message    */
-		{bgp_ignore, Idle},   /* Receive_UPDATE_message       */
-		{bgp_ignore, Idle},   /* Receive_NOTIFICATION_message */
-		{bgp_ignore, Idle},   /* Clearing_Completed           */
-	},
 	{
 		/* Connect */
 		{bgp_ignore, Connect}, /* BGP_Start                    */
@@ -468,11 +492,11 @@ static const struct {
 		{bgp_fsm_exception, Idle},   /* Clearing_Completed           */
 	},
 ```
-{: file='bgpd/bgp_fsm.c'}
+{: file='bgpd/bgp_fsm.c -- struct FSM'}
 
 ### OpenSent
+回调函数：`bgp_connect_success`
 
-回调函数：bgp_connect_success
 ```c
 /* TCP connection open.  Next we send open message to remote peer. And
    add read thread for reading open message. */
@@ -484,7 +508,7 @@ static enum bgp_fsm_state_progress bgp_connect_success(struct peer *peer)
 		return bgp_stop(peer);
 	}
 
-	if (bgp_getsockname(peer) < 0) {
+	if (bgp_getsockname(peer) < 0) {  //获取本地套接字的地址信息，并检查
 		flog_err_sys(EC_LIB_SOCKET,
 			     "%s: bgp_getsockname(): failed for peer %s, fd %d",
 			     __func__, peer->host, peer->fd);
@@ -518,9 +542,9 @@ static enum bgp_fsm_state_progress bgp_connect_success(struct peer *peer)
 ```
 {: file='bgpd/bgp_fsm.c'}
 
-bgp_connect_success 主要完成：
+`bgp_connect_success` 主要完成：
+1. 开启IO线程对peer fd的可读事件，当对端发送消息到peer的时候，IO线程就会被唤醒，调用回调函数`bgp_process_reads`处理报文
 
-- 开启IO线程对peer fd的可读事件，当对端发送消息到peer的时候，IO线程就会被唤醒，调用回调函数bgp_process_reads处理报文
 ```c
 void bgp_reads_on(struct peer *peer)
 {
@@ -544,7 +568,7 @@ void bgp_reads_on(struct peer *peer)
 ```
 {: file='bgpd/bgp_io.c'}
 
-- 构造OPEN 报文，并开启IO线程对peer fd的可写事件，当本端发送消息到peer的时候，IO线程就会被唤醒，调用回调函数bgp_process_writes处理报文
+2. 构造OPEN 报文，并开启IO线程对peer fd的可写事件，当本端发送消息到peer的时候，IO线程就会被唤醒，调用回调函数`bgp_process_writes`处理报文
 
 ```c
 /*
@@ -618,7 +642,6 @@ void bgp_open_send(struct peer *peer)
 ```
 {: file='bgpd/bgp_packet.c'}
 
-
 ```c
 void bgp_writes_on(struct peer *peer)
 {
@@ -640,9 +663,33 @@ void bgp_writes_on(struct peer *peer)
 ```
 {: file='bgpd/bgp_io.c'}
 
-当函数返回到`bgp_event_update`，会把peer的状态改成OpenSend
-
 IO线程被唤醒，执行`bgp_process_writes`，然后调用`bgp_write` 把OPEN消息发送到对端
+
+```c
+/*
+ * Called from I/O pthread when a file descriptor has become ready for writing.
+ */
+static void bgp_process_writes(struct event *thread)
+{
+	static struct peer *peer;
+	peer = EVENT_ARG(thread);
+	uint16_t status;
+	bool reschedule;
+	bool fatal = false;
+
+	if (peer->fd < 0)
+		return;
+
+	struct frr_pthread *fpt = bgp_pth_io;
+
+	frr_with_mutex (&peer->io_mtx) {
+		status = bgp_write(peer);
+		reschedule = (stream_fifo_head(peer->obuf) != NULL);
+	}
+```
+{: file='bgpd/bgp_io.c'}
+
+当函数返回到`bgp_event_update`，会把peer的状态改成OpenSend
 
 ### OpenSend
 IO线程此时睡眠，等待对端OPEN报文的到来，当收到报文后，IO线程就会被唤醒，调用回调函数`bgp_process_reads`处理报文
@@ -655,36 +702,16 @@ IO线程此时睡眠，等待对端OPEN报文的到来，当收到报文后，IO
  * We read as much data as possible, process as many packets as we can and
  * place them on peer->ibuf for secondary processing by the main thread.
  */
-static void bgp_process_reads(struct event *thread)
-{
-	/* clang-format off */
-	static struct peer *peer;       /* peer to read from */
-	uint16_t status;                /* bgp_read status code */
-	bool fatal = false;             /* whether fatal error occurred */
-	bool added_pkt = false;         /* whether we pushed onto ->ibuf */
-	int code = 0;                   /* FSM code if error occurred */
-	static bool ibuf_full_logged;   /* Have we logged full already */
-	int ret = 1;
-	/* clang-format on */
 
-	peer = EVENT_ARG(thread);
+	while (true) {
+		ret = read_ibuf_work(peer);
+		if (ret <= 0)
+			break;
 
-	if (bm->terminating || peer->fd < 0)
-		return;
-
-	struct frr_pthread *fpt = bgp_pth_io;
-
-	frr_with_mutex (&peer->io_mtx) {
-		status = bgp_read(peer, &code);
+		added_pkt = true;
 	}
-	.
-	.
-	.
-}
 ```
-{: file='bgpd/bgp_io.c'}
-
-如果读取到了报文，那么放入peer的`struct stream_fifo *ibuf; // packets waiting to be processed` 里面，唤醒主线程取报文处理，主线程回调处理函数为`bgp_process_packet`
+{: file='bgpd/bgp_io.c -- bgp_process_reads'}
 
 ```c
 	/*
@@ -708,6 +735,7 @@ static void bgp_process_reads(struct event *thread)
 ```
 {: file='bgpd/bgp_io.c -- read_ibuf_work()'}
 
+如果读取到了报文，那么放入peer的`struct stream_fifo *ibuf; `(packets waiting to be processed) 里面，唤醒主线程取报文处理，主线程回调处理函数为`bgp_process_packet`
 
 ```c
 	/* handle invalid header */
@@ -757,7 +785,7 @@ static void bgp_process_reads(struct event *thread)
 ```
 {: file='bgpd/bgp_packet.c -- bgp_process_packet'}
 
-OPEN 报文包含各种能力值的验证，如果存在差错，则返回BGP_stop 事件，后续会发送Notification消息，并把状态迁移到IDLE状态，如果没有差错，则返回`Receive_OPEN_message` 事件，然后根据返回的事件处理状态机mprc的值本次就是`Receive_OPEN_message`
+`bgp_open_receive`处理 OPEN 报文包含各种能力值的验证，如果存在差错，则返回BGP_stop 事件，后续会发送Notification消息，并把状态迁移到IDLE状态，如果没有差错，则返回`Receive_OPEN_message` 事件，然后根据返回的事件处理状态机mprc的值本次就是`Receive_OPEN_message`
 
 ```c
 		/* Update FSM */
@@ -791,8 +819,7 @@ OPEN 报文包含各种能力值的验证，如果存在差错，则返回BGP_st
 		{bgp_fsm_exception, Idle},   /* Clearing_Completed           */
 	},
 ```
-{: file='bgpd/bgp_fsm.c -- FSM structure'}
-
+{: file='bgpd/bgp_fsm.c -- struct FSM'}
 
 ```c
 static enum bgp_fsm_state_progress bgp_fsm_open(struct peer *peer)
@@ -829,7 +856,6 @@ case BGP_MSG_KEEPALIVE:
 			break;
 ```
 {: file='bgpd/bgp_packet.c -- bgp_process_packet()'}
-
 
 ```c
 /**
@@ -881,7 +907,7 @@ static int bgp_keepalive_receive(struct peer *peer, bgp_size_t size)
 ```
 {: file='bgpd/bgp_packet.c'}
 
-事件是Receive_KEEPALIVE_message，根据FSM数组可以定位到，收到Keeplive消息后的处理，下一个状态是Established,处理函数是：`bgp_establish`
+事件是`Receive_KEEPALIVE_message`，根据FSM数组可以定位到，收到Keeplive消息后的处理，下一个状态是Established,处理函数是：`bgp_establish`
 
 ```c
 {
@@ -904,9 +930,34 @@ static int bgp_keepalive_receive(struct peer *peer, bgp_size_t size)
 		{bgp_fsm_exception, Idle},    /* Clearing_Completed           */
 	},
 ```
-{: file='bgpd/bgp_fsm.c -- FSM structure'}
+{: file='bgpd/bgp_fsm.c -- struct FSM'}
 
-`bgp_establish` 会做很多事情，包含peer很多字段的赋值和一些处理
+### Established
+`bgp_establish` 会处理标志重置、更新哈希表、路由更新等：
+
+```c
+/**
+ * Transition to Established state.
+ *
+ * Convert peer from stub to full fledged peer, set some timers, and generate
+ * initial updates.
+ */
+static enum bgp_fsm_state_progress bgp_establish(struct peer *peer)
+{
+	afi_t afi;
+	safi_t safi;
+	int nsf_af_count = 0;
+	enum bgp_fsm_state_progress ret = BGP_FSM_SUCCESS;
+	struct peer *other;
+	int status;
+	struct peer *orig = peer;
+
+	other = peer->doppelganger;
+	hash_release(peer->bgp->peerhash, peer);
+	if (other)
+		hash_release(peer->bgp->peerhash, other);
+```
+{: file='bgpd/bgp_fsm.c'}
 
 ****
 

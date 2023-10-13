@@ -4,7 +4,6 @@ author: fnoobt
 date: 2020-10-11 09:54:00 +0800
 categories: [Blog,演示]
 tags: [排版,markdown]
-pin: true
 math: true
 mermaid: true
 #img_path: '/assets/img/commons/demo/'

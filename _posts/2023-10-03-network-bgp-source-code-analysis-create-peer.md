@@ -4,9 +4,11 @@ author: fnoobt
 date: 2023-10-03 19:29:00 +0800
 categories: [Network,路由协议]
 tags: [network,bgp,frr]
+pin: true
 ---
 
-本次继续分析BGP最简单的配置的代码实现，这样大家对BGP的框架会有进一步的熟悉：
+本次分析 BGP 最简单的配置的代码实现，这样大家对BGP的框架会有进一步的熟悉：
+
 ```bash
 router bgp 200
 bgp router-id 2.2.2.2
@@ -16,6 +18,7 @@ bgp router-id 2.2.2.2
 
 ## router bgp XX
 ### router bgp执行函数
+
 ```c
 /* "router bgp" commands. */
 DEFUN_NOSH (router_bgp,
@@ -42,19 +45,17 @@ DEFUN_NOSH (router_bgp,
 	struct bgp *bgp;
 	const char *name = NULL;
 	enum bgp_instance_type inst_type;
-	.
-	.
-	.
-}
 ```
 {: file='bgpd/bgp_vty.c'}
 
-命令执行函数是router_bgp_cmd，主要完成以下几点：
+命令执行函数是 router_bgp_cmd ，主要完成以下几点：
 
-1. 根据参数查找bgp 对象是否存在，第一个配置的route bgp XX将作为default，后续带vrf的将作为新的bgp对象
-2. 如果bgp对象不存在，则需要重新创建一个bgp对象，struct bgp *bgp，所有的bgp对象存放在struct bgp_master *bm链表里面，此时BGP 最重要，贯穿全局的顶级结构体struct bgp闪亮登场，后续都会和这个结构体打交道，和bgp相关的几乎都在这里面，也是BGP最大的一个结构体。
+1. 根据参数查找bgp 对象是否存在，第一个配置的`route bgp XX`将作为default，后续带vrf的将作为新的bgp对象
+2. 如果bgp对象不存在，则需要重新创建一个bgp对象，`struct bgp *bgp`，所有的bgp对象存放在`struct bgp_master *bm`链表里面，此时BGP 最重要，贯穿全局的顶级结构体`struct bgp`闪亮登场，后续都会和这个结构体打交道，和bgp相关的几乎都在这里面，也是BGP最大的一个结构体。
 
 ### BGP结构体
+这个数据结构包含了 BGP 实例的各种配置和状态信息，用于管理 BGP 路由器的行为
+
 ```c
 /* BGP instance structure.  */
 struct bgp {
@@ -88,15 +89,12 @@ struct bgp {
 
 	/* The current number of BGP dynamic neighbors */
 	int dynamic_neighbors_count;
-	.
-	.
-	.
-}
 ```
 {: file='bgpd/bgpd.h'}
 
 ### 创建bgp对象
-bgp_get函数创建bgp对象：
+通过bgp_get函数创建或查找 BGP 实例，并确保与 Zebra 的正确集成：
+
 ```c
 /* Called from VTY commands. */
 int bgp_get(struct bgp **bgp_val, as_t *as, const char *name,
@@ -107,11 +105,11 @@ int bgp_get(struct bgp **bgp_val, as_t *as, const char *name,
 	struct vrf *vrf = NULL;
 	int ret = 0;
 
-	ret = bgp_lookup_by_as_name_type(bgp_val, as, name, inst_type);
+	ret = bgp_lookup_by_as_name_type(bgp_val, as, name, inst_type);  //尝试通过自治系统号、名称和实例类型查找已有的 BGP 实例
 	if (ret || *bgp_val)
 		return ret;
 
-	bgp = bgp_create(as, name, inst_type, as_pretty, asnotation);
+	bgp = bgp_create(as, name, inst_type, as_pretty, asnotation);  //找不到时创建一个新的 BGP 实例
 
 	/*
 	 * view instances will never work inside of a vrf
@@ -145,14 +143,17 @@ int bgp_get(struct bgp **bgp_val, as_t *as, const char *name,
 	/* BGP server socket already processed if BGP instance
 	 * already part of the list
 	 */
-	bgp_handle_socket(bgp, vrf, VRF_UNKNOWN, true);
+	/* 创建对应的socket，bgp是使用TCP 建立连接的，建立socker服务端，监听179端口，等待peer端的connect接入
+	 * 其中会处理和VRF相关的socker创建的细节
+	 */
+	bgp_handle_socket(bgp, vrf, VRF_UNKNOWN, true);  
 	listnode_add(bm->bgp, bgp);
 
 	if (IS_BGP_INST_KNOWN_TO_ZEBRA(bgp)) {
 		if (BGP_DEBUG(zebra, ZEBRA))
 			zlog_debug("%s: Registering BGP instance %s to zebra",
 				   __func__, bgp->name_pretty);
-		bgp_zebra_instance_register(bgp);
+		bgp_zebra_instance_register(bgp);  //向 Zebra 注册 BGP 实例
 	}
 
 	return BGP_CREATED;
@@ -160,21 +161,22 @@ int bgp_get(struct bgp **bgp_val, as_t *as, const char *name,
 ```
 {: file='bgpd/bgpd.c'}
 
-1. bgp_create -- 会创建新的struct bgp结构，并初始化里面很多的值和数据结构，其中最重要的peer对象
-2. bgp_router_id_set -- 处理router_id
-3. bgp_address_init -- 建立 bgp address的HASH
-4. bgp_tip_hash_init
-5. bgp_scan_init
-6. 处理VRF相关的事情
-7. bgp_handle_socket -- 创建对应的socket,bgp是使用TCP 建立连接的，建立socker服务端，监听179端口，等待peer端的connect接入，其中会处理和VRF相关的socker创建的细节
-8. listnode_add(bm->bgp, bgp) -- 加入全局的bgp链表
+1. 尝试通过自治系统号、名称和实例类型查找已有的 BGP 实例。如果找到，则将其返回给调用者。
+2. 如果没有找到现有的 BGP 实例，则通过bgp_create 创建一个新的 BGP 实例，并初始化里面很多的值和数据结构，其中最重要的peer对象
+3. 检查实例类型是否为 BGP_INSTANCE_TYPE_VIEW（视图实例），如果是将vrf_id 设置为默认值 VRF_DEFAULT
+4. 初始化 BGP 实例的路由器标识符和地址相关的数据结构
+5. 将 BGP 实例添加到全局 BGP 实例列表中 `bm->bgp`
+6. 如果 BGP 实例已经在 Zebra 中注册，向 Zebra 注册 BGP 实例
+7. BGP 实例成功创建，返回 `BGP_CREATED`
 
 ## neighbor peer remote-as XXX
 `neighbor peer remote-as` 命令就是配置一个对等体，peer是指对等体的地址（ipv4，ipv6地址），可以看到，bgp对等体之间是单播通信，与OSPF协议的组播是不一样的。
 
-对于路由协议，不管是基于3层的还是2层的，都需要建立自己的寻路数据库，也就是通过邻居找到下一跳，你要走的远，你就得认识更多邻居，以及邻居的邻居，好比一句老话，在家靠父母，出门靠朋友，朋友多路好走，就这么一个道理。
+对于路由协议，不管是基于3层的还是2层的，都需要建立自己的寻路数据库，也就是通过邻居找到下一跳。创建对等体呢，就是给自己找邻居，不过呢，BGP这个人呢，更像一个干中介的，比如卖房的中介，他自己不建房子，只把建好的房源介绍给要买房的人，同时还维护这个房源信息库，及时更新已经卖掉的房子。
 
-那么话又说回来了，创建对等体呢，就是给自己找邻居，找朋友，不过呢，BGP这个人呢，更像一个干中介的，比如卖房的中介，他自己不建房子，只把建好的房源介绍给要买房的人，同时还维护这个房源信息库，及时更新已经卖掉的房子。
+### neighbor peer remote-as执行函数
+用于配置BGP对等体的命令，为指定的对等体设置远程AS号码
+
 ```c
 DEFUN (neighbor_remote_as,
        neighbor_remote_as_cmd,
@@ -195,6 +197,7 @@ DEFUN (neighbor_remote_as,
 {: file='bgpd/bgp_vty.c'}
 
 `peer_remote_as_vty`处理CLI的命令:
+
 ```c
 	/* If peer is peer group or interface peer, call proper function. */
 	ret = str2sockunion(peer_str, &su);
@@ -226,13 +229,14 @@ DEFUN (neighbor_remote_as,
 		ret = peer_remote_as(bgp, &su, NULL, &as, as_type, as_str);
 	}
 ```
-{: file='bgpd/bgp_vty.c'}
+{: file='bgpd/bgp_vty.c -- peer_remote_as_vty()'}
 
 如果传给peer的值不是一个合法的地址，那么会被当做是一个`peer group/interface`名称来处理,如果是合法的，检查下地址是否是本地的，如果不是，`peer_remote_as` 则开始peer创建的奇妙之旅。
 
 按照国际惯例，查找一下是不是已经为这个peer地址创建了peer，如果peer地址相同，as值不一样，就修改一下peer的as值，如果这个peer已经是某个group的成员，那么就不能成功创建对等体关系了。
 
-如果上面的事情都没有发生，那么就可以创建一个新的对等体了，`peer_create`负责创我们的peer
+### peer数据结构
+
 ```c
 /* BGP neighbor structure. */
 struct peer {
@@ -263,8 +267,59 @@ struct peer {
 ```
 {: file='bgpd/bgpd.h'}
 
-- 创建一个新的peer结构，并给里面的status赋值为Idle，端口号 `BGP_PORT_DEFAULT = 179`，初始化大部分的数据结构。
-- 初始化peer的`ibuf`和`obuf`来收发报文
+### 创建peer对象
+如果上面的事情都没有发生，那么就可以创建一个新的对等体了，`peer_create`负责创我们的peer
+
+```c
+		if (conf_if)
+			return BGP_ERR_NO_INTERFACE_CONFIG;
+
+		/* If the peer is not part of our confederation, and its not an
+		   iBGP peer then spoof the source AS */
+		if (bgp_config_check(bgp, BGP_CONFIG_CONFEDERATION) &&
+		    !bgp_confederation_peers_check(bgp, *as) && *as &&
+		    bgp->as != *as)
+			local_as = bgp->confed_id;
+		else
+			local_as = bgp->as;
+
+		peer_create(su, conf_if, bgp, local_as, *as, as_type, NULL,
+			    true, as_str);
+	}
+```
+{: file='bgpd/bgpd.h -- peer_remote_as()'}
+
+1. `peer_create`在BGP实例中创建一个新的对等体，并进行一系列的初始化和配置
+
+```c
+/*
+ * Create new BGP peer.
+ *
+ * conf_if and su are mutually exclusive if configuring from the cli.
+ * If we are handing a doppelganger, then we *must* pass in both
+ * the original peer's su and conf_if, so that we can appropriately
+ * track the bgp->peerhash( ie we don't want to remove the current
+ * one from the config ).
+ */
+struct peer *peer_create(union sockunion *su, const char *conf_if,
+			 struct bgp *bgp, as_t local_as, as_t remote_as,
+			 int as_type, struct peer_group *group,
+			 bool config_node, const char *as_str)
+{
+	int active;
+	struct peer *peer;
+	char buf[SU_ADDRSTRLEN];
+	afi_t afi;
+	safi_t safi;
+
+	peer = peer_new(bgp);
+```
+{: file='bgpd/bgpd.h'}
+
+`peer_new`主要实现了下面两个功能
+- 创建一个新的peer结构，并给里面的 status 赋值为 Idle，初始化大部分数据结构，获取BGP服务的端口号（默认端口号179）。
+- 初始化peer的`ibuf`和`obuf`缓存区来收发报文
+
 ```c
 /* Allocate new peer object, implicitely locked.  */
 struct peer *peer_new(struct bgp *bgp)
@@ -281,9 +336,9 @@ struct peer *peer_new(struct bgp *bgp)
 	peer = XCALLOC(MTYPE_BGP_PEER, sizeof(struct peer));
 
 	/* Set default value. */
-	peer->fd = -1;
-	peer->v_start = BGP_INIT_START_TIMER;
-	peer->v_connect = bgp->default_connect_retry;
+	peer->fd = -1;  //文件描述符初始化
+	peer->v_start = BGP_INIT_START_TIMER;  //初始化启动计时器
+	peer->v_connect = bgp->default_connect_retry;  //初始化连接重试计时器
 	peer->status = Idle;
 	peer->ostatus = Idle;
 	peer->cur_event = peer->last_event = peer->last_major_event = 0;
@@ -322,15 +377,15 @@ struct peer *peer_new(struct bgp *bgp)
 	bgp_peer_gr_init(peer);
 
 	/* Create buffers.  */
-	peer->ibuf = stream_fifo_new();
-	peer->obuf = stream_fifo_new();
+	peer->ibuf = stream_fifo_new();  //初始化对等体的输入缓冲区
+	peer->obuf = stream_fifo_new();  //初始化对等体的输出缓冲区
 	pthread_mutex_init(&peer->io_mtx, NULL);
 
 	peer->ibuf_work =
 		ringbuf_new(BGP_MAX_PACKET_SIZE + BGP_MAX_PACKET_SIZE/2);
 
 	/* Get service port number.  */
-	sp = getservbyname("bgp", "tcp");
+	sp = getservbyname("bgp", "tcp"); 
 	peer->port = (sp == NULL) ? BGP_PORT_DEFAULT : ntohs(sp->s_port);
 
 	QOBJ_REG(peer, peer);
@@ -339,72 +394,18 @@ struct peer *peer_new(struct bgp *bgp)
 ```
 {: file='bgpd/bgpd.c'}
 
+2. `peer_create`把 peer 加入 `bgp->peer` 的链表，以及 peerhash 的HASH表里面
+
 ```c
-/*
- * Create new BGP peer.
- *
- * conf_if and su are mutually exclusive if configuring from the cli.
- * If we are handing a doppelganger, then we *must* pass in both
- * the original peer's su and conf_if, so that we can appropriately
- * track the bgp->peerhash( ie we don't want to remove the current
- * one from the config ).
- */
-struct peer *peer_create(union sockunion *su, const char *conf_if,
-			 struct bgp *bgp, as_t local_as, as_t remote_as,
-			 int as_type, struct peer_group *group,
-			 bool config_node, const char *as_str)
-{
-	int active;
-	struct peer *peer;
-	char buf[SU_ADDRSTRLEN];
-	afi_t afi;
-	safi_t safi;
-
-	peer = peer_new(bgp);
-	if (conf_if) {
-		peer->conf_if = XSTRDUP(MTYPE_PEER_CONF_IF, conf_if);
-		if (su)
-			peer->su = *su;
-		else
-			bgp_peer_conf_if_to_su_update(peer);
-		XFREE(MTYPE_BGP_PEER_HOST, peer->host);
-		peer->host = XSTRDUP(MTYPE_BGP_PEER_HOST, conf_if);
-	} else if (su) {
-		peer->su = *su;
-		sockunion2str(su, buf, SU_ADDRSTRLEN);
-		XFREE(MTYPE_BGP_PEER_HOST, peer->host);
-		peer->host = XSTRDUP(MTYPE_BGP_PEER_HOST, buf);
-	}
-	peer->local_as = local_as;
-	peer->as = remote_as;
-	/* internal and external values do not use as_pretty */
-	if (as_str && asn_str2asn(as_str, NULL))
-		peer->as_pretty = XSTRDUP(MTYPE_BGP, as_str);
-	peer->as_type = as_type;
-	peer->local_id = bgp->router_id;
-	peer->v_holdtime = bgp->default_holdtime;
-	peer->v_keepalive = bgp->default_keepalive;
-	peer->v_routeadv = (peer_sort(peer) == BGP_PEER_IBGP)
-				   ? BGP_DEFAULT_IBGP_ROUTEADV
-				   : BGP_DEFAULT_EBGP_ROUTEADV;
-	if (bgp_config_inprocess())
-		peer->shut_during_cfg = true;
-
 	peer = peer_lock(peer); /* bgp peer list reference */
 	peer->group = group;
 	listnode_add_sort(bgp->peer, peer);
 ```
-{: file='bgpd/bgpd.c'}
+{: file='bgpd/bgpd.c -- peer_create()'}
 
-- peer会加入 bgp -> peer 的链表，以及peerhash的HASH表里面
-- 在把peer加入对应的地址族里面
+3. `peer_create`把peer加入对应的地址族里面
 
 ```c
-struct peer *peer_create(union sockunion *su, const char *conf_if,
-			 struct bgp *bgp, as_t local_as, as_t remote_as,
-			 int as_type, struct peer_group *group,
-			 bool config_node, const char *as_str)
-{
 /* If 'bgp default <afi>-<safi>' is configured, then activate the
 	 * neighbor for the corresponding address family. IPv4 Unicast is
 	 * the only address family enabled by default without expliict
@@ -417,7 +418,43 @@ struct peer *peer_create(union sockunion *su, const char *conf_if,
 		}
 	}
 ```
+{: file='bgpd/bgpd.c -- peer_create()'}
+
+`peer_af_create`为BGP对等体创建并初始化特定地址族的数据结构
+
+```c
+struct peer_af *peer_af_create(struct peer *peer, afi_t afi, safi_t safi)
+{
+	struct peer_af *af;
+	int afid;
+	struct bgp *bgp;
+
+	if (!peer)
+		return NULL;
+
+	afid = afindex(afi, safi);  //函数获取给定AFI和SAFI的对应索引
+	if (afid >= BGP_AF_MAX)
+		return NULL;
+
+	bgp = peer->bgp;
+	assert(peer->peer_af_array[afid] == NULL);
+
+	/* Allocate new peer af */
+	af = XCALLOC(MTYPE_BGP_PEER_AF, sizeof(struct peer_af));
+
+	peer->peer_af_array[afid] = af;
+	af->afi = afi;
+	af->safi = safi;
+	af->afid = afid;
+	af->peer = peer;
+	bgp->af_peer_count[afi][safi]++;
+
+	return af;
+}
+```
 {: file='bgpd/bgpd.c'}
+
+`peer_af` 的数据结构：
 
 ```c
 struct peer_af {
@@ -447,15 +484,16 @@ struct peer_af {
 ```
 {: file='bgpd/bgpd.h'}
 
+4. 最后，将这个peer加入到定时器任务中：
 
-- 最后，将这个peer加入到定时器任务中：
 ```c
 	/* Set up peer's events and timers. */
 	else if (!active && peer_active(peer))
 		bgp_timer_set(peer);
 ```
-{: file='bgpd/bgpd.c'}
+{: file='bgpd/bgpd.c -- peer_create()'}
 
+`bgp_timer_set`设置BGP对等体状态机中各种定时器，根据对等体的当前状态执行相应的操作，包括启动、连接、保持时间等定时器的开启和关闭
 
 ```c
 /* Hook function called after bgp event is occered.  And vty's

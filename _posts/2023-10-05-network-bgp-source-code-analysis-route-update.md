@@ -27,27 +27,26 @@ BGPUpdate消息包含以下字段。
 - **被撤销路由的长度（Withdrawn Routes Length）：**该字段长2个八位组，用于指示后面被撤销路由字段的总长度（以八位组为单位），该字段值为0时表示没有要撤销的路由，并且Update消息中无被撤销路由字段。
 - **被撤销路由（WithdrawRoutes）：**该可变长度字段包含了一个要退出服务的路由列表，列表中的每条路由都以（长度，前缀）二元组形式加以表示，其中，长度表示前缀的长度，前缀表示被撤销路由的IP地址前缀。如果二元组中的长度部分为0，那么前缀部分将匹配所有路由。
 - **整个路径属性的长度（Total Path AttributeLength）：**该字段长2个八位组，用于指示后面的路径属性字段的长度（以八位组为单位）。字段值为0时表示Update消息中未包含路径属性和NLRI。
-
 - **路径属性（Path Attributes）：**该可变长度字段列出了与后面NLRI字段相关联的属性信息，每个路径属性者都以可变长度的三元组（属性类型，属性长度，属性值）进行表示，该三元组中的属性类型部分是一个长为2个八位组的字段，由4个标记比特、4个未用比特以及1个属性类型代码组成（见图2-21）。表2-4列出了最常见的一些属性类型代码以及母种属性类型的可能属性值。
 - **网络层可达性信息（NetworkLayerReachabilityInformation）：**该可变长度字段包含一个（长度，前缀）二元组，其中，长度部分以比特为单位表示后面的前缀长度，前缀部分则是NLRI的IP地址前缀。如果长度部分取值为0，那么就表示前缀将匹配所有IP地址。
 
-路径属性包含以下几种（可能不是最新的）：
+常见的路径属性包含以下几种：
 
 |              属性              |      类别      |  RFC |         应用         |
 |:------------------------------:|:--------------:|:----:|:--------------------:|
-|             ORIGIN             |  周知强制属性  | 4271 |         策路         |
-|             AS_PATH            |  周知强制属性  | 4271 |    策略、环路检测    |
-|            NEXT_HOP            |  周知强制属性  | 4271 |         策略         |
-|           LOCAL_PREF           |  周知自选属性  | 4271 |         策略         |
-|        ATOMIC_AGGREGATE        |  周知自选属性  | 4271 |       地址聚合       |
-|           AGGREGATOR           |  可选传递属性  | 4271 |       地址聚合       |
+|             ORIGIN             |  公认必遵属性  | 4271 |         策路         |
+|             AS_PATH            |  公认必遵属性  | 4271 |    策略、环路检测    |
+|            NEXT_HOP            |  公认必遵属性  | 4271 |         策略         |
+|           LOCAL_PREF           |  公认自决属性  | 4271 |         策略         |
+|        ATOMIC_AGGREGATE        |  公认自决属性  | 4271 |       地址聚合       |
 |            COMMUNITY           |  可选传递属性  | 1997 |         扩展         |
+|           AGGREGATOR           |  可选传递属性  | 4271 |       地址聚合       |
 |       EXTENDED COMMUNITY       |  可选传递属性  | 4360 |         扩展         |
+|            AS4_PATH            |  可选传递属性  | 6793 |      扩展、策略      |
+|         AS4_AGGREGATOR         |  可选传递属性  | 6793 |    扩展、地址聚合    |
 |      MULTI_EXIT_DISC(MED)      | 可选非传递属性 | 4271 |         策路         |
 |          ORIGINATOR_ID         | 可选非传递属性 | 4456 | 扩展、环路检测、策略 |
 |          CLUSTER_LIST          | 可选非传递属性 | 4456 | 扩展、环路检测、策略 |
-|            AS4_PATH            |  可选传递属性  | 6793 |      扩展、策略      |
-|         AS4_AGGREGATOR         |  可选传递属性  | 6793 |    扩展、地址聚合    |
 |  Multiprotocol Reachable NLRI  | 可选非传选属性 | 4760 |       多协议BGP      |
 | Multiprotocol Unreachable NLRI | 可选非传选属性 | 4760 |       多协议BGP      |
 
@@ -109,9 +108,9 @@ BGP 把 NLRI 分为4种，nlri是（network layer reachable infomation，网络�
 - NLRI_MP_UPDATE
 - NLRI_MP_WITHDRAW
 
-MP是Multiprotocol BGP 多协议BGP的简写，上面的代码引申出BGP新的两个数据结构：
+MP是`Multiprotocol BGP` 多协议BGP的简写，上面的代码引申出BGP新的两个数据结构：
 
-bgp_nlri用于解析过程中的临时存储，解析完成后，用于后续的函数继续处理
+`struct bgp_nlri`用于解析过程中的临时存储，解析完成后，用于后续的函数继续处理
 
 ```c
 /* This structure's member directly points incoming packet data
@@ -132,7 +131,7 @@ struct bgp_nlri {
 ```
 {: file='bgpd/bgpd.h'}
 
-struct attr 是BGP 所有属性attribute的统一的结构体，包含了前面描述的BGP的所有属性信息。
+`struct attr` 是BGP 所有属性attribute的统一的结构体，包含了前面描述的BGP的所有属性信息。
 
 ```c
 /* BGP core attribute structure. */
@@ -160,13 +159,8 @@ struct attr {
 
 	/* PMSI tunnel type (RFC 6514). */
 	enum pta_type pmsi_tnl_type;
-	.
-	.
-	.
-}
 ```
 {: file='bgpd/bgp_attr.h'}
-
 
 ```c
 	/* Unfeasible Route Length. */

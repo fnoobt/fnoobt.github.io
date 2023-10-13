@@ -4,6 +4,7 @@ author: fnoobt
 date: 2023-10-02 19:29:00 +0800
 categories: [Network,路由协议]
 tags: [network,bgp,frr]
+pin: true
 ---
 
 ##  一、名词解释
@@ -286,6 +287,10 @@ community：定义了团体的相关属性，如用于输出和扩展团体列�
 ## 三、BGP初始化
 初始化在`bgp_main.c`的main函数里开始，main函数里最重要是初始化
 ### 1.命令行参数的处理
+通过 frr_opt_add 添加了一些命令行参数，例如设置BGP监听端口、指定监听地址、禁用内核路由、禁用Zebra通信等。
+
+使用 frr_getopt 来解析命令行参数。
+
 ```c
 frr_preinit(&bgpd_di, argc, argv);
 	frr_opt_add(
@@ -301,71 +306,72 @@ frr_preinit(&bgpd_di, argc, argv);
 
 	/* Command line argument treatment. */
 	while (1) {
-        ......
-    }
+		opt = frr_getopt(argc, argv, 0);
 ```
-{: file='bgpd/bgp_main.c'}
+{: file='bgpd/bgp_main.c -- main()'}
 
 ### 2.事件驱动的初始化
+初始化BGP的主控制结构，包括各种参数、列表的初始化，以及一些相关模块的初始化。
+
 ```c
 	/* BGP master init. */
 	bgp_master_init(frr_init(), buffer_size, addresses);
 	bm->port = bgp_port;
 ```
-{: file='bgpd/bgp_main.c'}
+{: file='bgpd/bgp_main.c -- main()'}
 
 ```c
 void bgp_master_init(struct event_loop *master, const int buffer_size,
 		     struct list *addresses)
 {
-	qobj_init();
+	qobj_init();  //初始化Q-Object系统，Q-Object是一种FRRouting中用于管理对象生命周期的机制。
 
-	memset(&bgp_master, 0, sizeof(bgp_master));
+	memset(&bgp_master, 0, sizeof(bgp_master));  //使用memset将bgp_master的内存清零，确保初始状态是空的。
 
-	bm = &bgp_master;
-	bm->bgp = list_new();
-	bm->listen_sockets = list_new();
+	bm = &bgp_master;  //将bm指针指向全局的bgp_master结构。
+	bm->bgp = list_new();  //创建一个链表用于存储BGP实例。
+	bm->listen_sockets = list_new();  //创建一个链表用于存储监听套接字。
 	bm->port = BGP_PORT_DEFAULT;
 	bm->addresses = addresses;
 	bm->master = master;
 	bm->start_time = monotime(NULL);
 	bm->t_rmap_update = NULL;
-	bm->rmap_update_timer = RMAP_DEFAULT_UPDATE_TIMER;
+	bm->rmap_update_timer = RMAP_DEFAULT_UPDATE_TIMER;  //设置一些BGP更新和计时器的参数。
 	bm->v_update_delay = BGP_UPDATE_DELAY_DEF;
 	bm->v_establish_wait = BGP_UPDATE_DELAY_DEF;
 	bm->terminating = false;
-	bm->socket_buffer = buffer_size;
+	bm->socket_buffer = buffer_size;  //设置BGP的套接字缓冲区大小。
 	bm->wait_for_fib = false;
 	bm->tcp_dscp = IPTOS_PREC_INTERNETCONTROL;
 	bm->inq_limit = BM_DEFAULT_Q_LIMIT;
 	bm->outq_limit = BM_DEFAULT_Q_LIMIT;
 
-	bgp_mac_init();
+	bgp_mac_init();  //初始化BGP的MAC地址管理。
 	/* init the rd id space.
 	   assign 0th index in the bitfield,
 	   so that we start with id 1
 	 */
-	bf_init(bm->rd_idspace, UINT16_MAX);
-	bf_assign_zero_index(bm->rd_idspace);
+	bf_init(bm->rd_idspace, UINT16_MAX);  //初始化用于RD（路由区分符）分配的位图。
+	bf_assign_zero_index(bm->rd_idspace);  //将0索引分配给RD空间，确保从ID 1开始分配。
 
 	/* mpls label dynamic allocation pool */
-	bgp_lp_init(bm->master, &bm->labelpool);
+	bgp_lp_init(bm->master, &bm->labelpool);  //初始化BGP的MPLS标签池。
 
 	bgp_l3nhg_init();
 	bgp_evpn_mh_init();
-	QOBJ_REG(bm, bgp_master);
+	QOBJ_REG(bm, bgp_master);  //注册BGP主控制结构为Q-Object。
 }
 ```
 {: file='bgpd/bgpd.c'}
 
-bgp_master 全局变量统管这一切，傲视天下。
+### 3.VRF虚拟路由转发的初始化
+调用 `bgp_vrf_init` 初始化VRF（虚拟路由转发），包括设置 VRF 操作的钩子函数、创建默认 VRF、处理 NETNS 情况等
 
-### 3.VRF的初始化
 ```c
 /* Initializations. */
 	bgp_vrf_init();
 ```
-{: file='bgpd/bgp_main.c'}
+{: file='bgpd/bgp_main.c -- main()'}
 
 ```c
 static void bgp_vrf_init(void)
@@ -375,77 +381,76 @@ static void bgp_vrf_init(void)
 ```
 {: file='bgpd/bgpd.c'}
 
-VRF的初始化，FRR 里面VRF是在linux上创建的，整个流程的具体处理在vrf.c中
-
 ### 4.BGP初始化
+调用bgp_init初始化和配置BGP路由守护进程，包括各种BGP功能的初始化、模块的注册以及钩子函数的设置
+
 ```c
 	/* BGP related initialization.  */
 	bgp_init((unsigned short)instance);
 ```
-{: file='bgpd/bgp_main.c'}
+{: file='bgpd/bgp_main.c -- main()'}
 
 ```c
 void bgp_init(unsigned short instance)
 {
-	hook_register(bgp_config_end, peer_unshut_after_cfg);
+	hook_register(bgp_config_end, peer_unshut_after_cfg);  //注册钩子函数，用于在BGP配置结束后执行peer_unshut_after_cfg
 
 	/* allocates some vital data structures used by peer commands in
 	 * vty_init */
 
 	/* pre-init pthreads */
-	bgp_pthreads_init();
+	bgp_pthreads_init();  //初始化BGP的pthread线程。
 
 	/* Init zebra. */
-	bgp_zebra_init(bm->master, instance);
+	bgp_zebra_init(bm->master, instance);  //初始化Zebra，用于与路由守护进程之间的通信。
 
 #ifdef ENABLE_BGP_VNC
 	vnc_zebra_init(bm->master);
 #endif
 
 	/* BGP VTY commands installation.  */
-	bgp_vty_init();
+	bgp_vty_init();  //初始化BGP的VTY（Virtual Terminal Interface虚拟终端接口）命令，用于交互式控制和配置。
 
 	/* BGP inits. */
-	bgp_attr_init();
-	bgp_debug_init();
-	bgp_community_alias_init();
-	bgp_dump_init();
-	bgp_route_init();
-	bgp_route_map_init();
-	bgp_scan_vty_init();
-	bgp_mplsvpn_init();
+	bgp_attr_init();  //初始化BGP属性。
+	bgp_debug_init();  //初始化BGP调试功能。
+	bgp_community_alias_init();  //初始化BGP社区别名。
+	bgp_dump_init();  //初始化BGP路由信息的Dump功能。
+	bgp_route_init();  //初始化BGP路由。
+	bgp_route_map_init();  //初始化BGP路由映射。
+	bgp_scan_vty_init();  //初始化BGP扫描的VTY命令。
+	bgp_mplsvpn_init();  //初始化BGP MPLS VPN。
 #ifdef ENABLE_BGP_VNC
 	rfapi_init();
 #endif
-	bgp_ethernetvpn_init();
-	bgp_flowspec_vty_init();
+	bgp_ethernetvpn_init();  //初始化BGP以太网VPN。
+	bgp_flowspec_vty_init();  //初始化BGP流规格的VTY命令。
 
 	/* Access list initialize. */
-	access_list_init();
+	access_list_init(); 
 	access_list_add_hook(peer_distribute_update);
 	access_list_delete_hook(peer_distribute_update);
 
 	/* Filter list initialize. */
-	bgp_filter_init();
-	as_list_add_hook(peer_aslist_add);
-	as_list_delete_hook(peer_aslist_del);
+	bgp_filter_init();  //初始化BGP过滤器。
+	as_list_add_hook(peer_aslist_add);    //为AS列表添加钩子函数，用于更新对等体信息。
+	as_list_delete_hook(peer_aslist_del);  //为AS列表删除钩子函数，用于更新对等体信息。
 
 	/* Prefix list initialize.*/
-	prefix_list_init();
-	prefix_list_add_hook(peer_prefix_list_update);
-	prefix_list_delete_hook(peer_prefix_list_update);
-
+	prefix_list_init();  //初始化前缀列表。
+	prefix_list_add_hook(peer_prefix_list_update);  //为前缀列表添加钩子函数，用于更新对等体信息。
+	prefix_list_delete_hook(peer_prefix_list_update);  //为前缀列表删除钩子函数，用于更新对等体信息。
 	/* Community list initialize. */
-	bgp_clist = community_list_init();
+	bgp_clist = community_list_init();  //初始化BGP社区列表。
 
 	/* BFD init */
-	bgp_bfd_init(bm->master);
+	bgp_bfd_init(bm->master);  //初始化BFD，用于检测连接的状态。
 
-	bgp_lp_vty_init();
+	bgp_lp_vty_init();  //初始化BGP的标签分配策略。
 
-	bgp_label_per_nexthop_init();
+	bgp_label_per_nexthop_init();  //初始化每个下一跳的BGP标签
 
-	cmd_variable_handler_register(bgp_viewvrf_var_handlers);
+	cmd_variable_handler_register(bgp_viewvrf_var_handlers);  //注册BGP的VTY命令处理程序。
 }
 ```
 {: file='bgpd/bgpd.c'}
@@ -455,19 +460,20 @@ void bgp_init(unsigned short instance)
 ```c
 static void bgp_pthreads_init(void)
 {
-	assert(!bgp_pth_io);
+	/* 使用断言确保bgp_pth_io和bgp_pth_ka为NULL，即尚未被初始化。如果不满足条件，程序会中止执行并输出错误信息。 */
+	assert(!bgp_pth_io);  
 	assert(!bgp_pth_ka);
 
 	struct frr_pthread_attr io = {
 		.start = frr_pthread_attr_default.start,
 		.stop = frr_pthread_attr_default.stop,
-	};
+	};   //该结构体用于I/O线程。
 	struct frr_pthread_attr ka = {
 		.start = bgp_keepalives_start,
 		.stop = bgp_keepalives_stop,
-	};
-	bgp_pth_io = frr_pthread_new(&io, "BGP I/O thread", "bgpd_io");
-	bgp_pth_ka = frr_pthread_new(&ka, "BGP Keepalives thread", "bgpd_ka");
+	};    //该结构体用于Keepalives线程。
+	bgp_pth_io = frr_pthread_new(&io, "BGP I/O thread", "bgpd_io"); //创建一个I/O线程,线程名称"BGP I/O thread"，线程标识符"bgpd_io"
+	bgp_pth_ka = frr_pthread_new(&ka, "BGP Keepalives thread", "bgpd_ka");  //创建Keepalives线程
 }
 ```
 {: file='bgpd/bgpd.c'}
@@ -478,25 +484,28 @@ FRR模拟了线程，BGP 的线程包含bgpd / bgpd_io / bgpd_ka，他们的主�
 - bgpd_ka  ---  处理BGP的keeplive，bgp_keepalives_start
 
 #### 4.2 Zebra的初始化
+初始化BGP与Zebra之间的通信机制。通过创建一个Zebra客户端，并设置了相应的回调函数和参数。这样的初始化允许BGP与Zebra进行交互，以便获取和传递路由信息。
+
 ```c
 void bgp_zebra_init(struct event_loop *master, unsigned short instance)
 {
-	zclient_num_connects = 0;
+	zclient_num_connects = 0;  //初始化连接数计数器为0，用于记录与Zebra的连接数。
 
+	/* 设置Zebra的回调函数，这些回调函数用于处理接口（interface）的创建、启动、关闭和销毁。 */
 	if_zapi_callbacks(bgp_ifp_create, bgp_ifp_up,
 			  bgp_ifp_down, bgp_ifp_destroy);
 
 	/* Set default values. */
 	zclient = zclient_new(master, &zclient_options_default, bgp_handlers,
-			      array_size(bgp_handlers));
-	zclient_init(zclient, ZEBRA_ROUTE_BGP, 0, &bgpd_privs);
-	zclient->zebra_connected = bgp_zebra_connected;
-	zclient->instance = instance;
+			      array_size(bgp_handlers));  //创建一个Zebra客户端
+	zclient_init(zclient, ZEBRA_ROUTE_BGP, 0, &bgpd_privs);  //初始化Zebra客户端
+	zclient->zebra_connected = bgp_zebra_connected;  //设置Zebra客户端的连接回调函数
+	zclient->instance = instance;  //Zebra客户端的实例字段
 }
 ```
 {: file='bgpd/bgp_zebra.c'}
 
-zclient_new 创建一个zclient客户端，struct thread_master填入bgp的master，这样客户端的回调函数就在bgp的进程上下文执行
+`zclient_new` 创建一个zclient客户端，`struct thread_master`填入bgp的master，这样客户端的回调函数就在bgp的进程上下文执行
 ```c
 /* Initialize zebra client.  Argument redist_default is unwanted
    redistribute route type. */
@@ -506,18 +515,18 @@ void zclient_init(struct zclient *zclient, int redist_default,
 	int afi, i;
 
 	/* Set -1 to the default socket value. */
-	zclient->sock = -1;
-	zclient->privs = privs;
+	zclient->sock = -1;  //将Zebra客户端的套接字初始化为-1，表示默认的套接字值
+	zclient->privs = privs;  //将Zebra客户端的权限设置为传入的privs结构体
 
 	/* Clear redistribution flags. */
 	for (afi = AFI_IP; afi < AFI_MAX; afi++)
 		for (i = 0; i < ZEBRA_ROUTE_MAX; i++)
-			zclient->redist[afi][i] = vrf_bitmap_init();
+			zclient->redist[afi][i] = vrf_bitmap_init();  //用于表示重分发的各个类型。
 
 	/* Set unwanted redistribute route.  bgpd does not need BGP route
 	   redistribution. */
-	zclient->redist_default = redist_default;
-	zclient->instance = instance;
+	zclient->redist_default = redist_default;  //设置Zebra客户端的默认路由类型，即不需要重分发的路由类型。
+	zclient->instance = instance;  //设置Zebra客户端的实例
 	/* Pending: make afi(s) an arg. */
 	for (afi = AFI_IP; afi < AFI_MAX; afi++) {
 		redist_add_instance(&zclient->mi_redist[afi][redist_default],
@@ -530,22 +539,22 @@ void zclient_init(struct zclient *zclient, int redist_default,
 	if (zclient_debug)
 		zlog_debug("scheduling zclient connection");
 
-	zclient_event(ZCLIENT_SCHEDULE, zclient);
+	zclient_event(ZCLIENT_SCHEDULE, zclient);  //调度Zebra客户端的连接事件，表示需要与Zebra建立连接
 }
 ```
 {: file='lib/zclient.c'}
 
-zclient_init 初始化客户端相关的数据后，会调用 zclient_event ,添加一个事件，回调函数是 zclient_connect ，初始化完成后，后续会和zebra进程建立连接。
+`zclient_init` 初始化客户端相关的数据后，会调用 `zclient_event` ，根据不同的Zebra客户端事件类型，执行相应的操作，如建立连接、重新尝试连接或处理读取数据。这是一种基于事件的异步处理机制。添加一个事件，回调函数是 `zclient_connect` ，初始化完成后，后续会和zebra进程建立连接。
 
 ```c
 static void zclient_event(enum zclient_event event, struct zclient *zclient)
 {
 	switch (event) {
-	case ZCLIENT_SCHEDULE:
+	case ZCLIENT_SCHEDULE:  //调度连接事件
 		event_add_event(zclient->master, zclient_connect, zclient, 0,
 				&zclient->t_connect);
 		break;
-	case ZCLIENT_CONNECT:
+	case ZCLIENT_CONNECT:  //连接事件
 		if (zclient_debug)
 			zlog_debug(
 				"zclient connect failures: %d schedule interval is now %d",
@@ -554,7 +563,7 @@ static void zclient_event(enum zclient_event event, struct zclient *zclient)
 				zclient->fail < 3 ? 10 : 60,
 				&zclient->t_connect);
 		break;
-	case ZCLIENT_READ:
+	case ZCLIENT_READ:  //读取事件
 		zclient->t_read = NULL;
 		event_add_read(zclient->master, zclient_read, zclient,
 			       zclient->sock, &zclient->t_read);
@@ -564,25 +573,38 @@ static void zclient_event(enum zclient_event event, struct zclient *zclient)
 ```
 {: file='lib/zclient.c'}
 
-然后会填充各种bgp关心的事件的回调函数，在bgp_zebra_connected回调函数里面（客户端连接zebra成功后会调用），会注册各种BGP 感兴趣的事件，如router-id, interfaces, redistributed routes。
+然后会填充各种bgp关心的事件的回调函数，在`bgp_zebra_connected`回调函数里面（客户端连接zebra成功后会调用），会注册各种BGP 感兴趣的事件，如router-id, interfaces, redistributed routes。
 
 #### 4.3 命令行的初始化
+vty 初始化函数在 vty 中注册和安装与BGP路由器配置相关的各种命令和选项，以便通过命令行界面进行BGP的配置和管理
+
 ```c
 void bgp_vty_init(void)
 {
-.......
-}
+	cmd_variable_handler_register(bgp_var_neighbor);
+	cmd_variable_handler_register(bgp_var_peergroup);
+
+	cmd_init_config_callbacks(bgp_config_start, bgp_config_end);
 ```
 {: file='bgpd/bgp_vty.c'}
 
+调试初始化函数进行注册和安装各种BGP调试命令，以便在调试过程中查看和分析BGP路由器的内部状态和行为
 
 ```c
 void bgp_debug_init(void)
 {
-.......
-}
+	install_node(&debug_node);
+
+	install_element(ENABLE_NODE, &show_debugging_bgp_cmd);
+
+	install_element(ENABLE_NODE, &debug_bgp_as4_cmd);
+	install_element(CONFIG_NODE, &debug_bgp_as4_cmd);
+	install_element(ENABLE_NODE, &debug_bgp_as4_segment_cmd);
+	install_element(CONFIG_NODE, &debug_bgp_as4_segment_cmd);
 ```
 {: file='bgpd/bgp_debug.c'}
+
+初始化BGP路由器的报文转储功能，使得路由器可以在发送或接收BGP报文时将其内容进行记录或输出，以便进行调试和分析
 
 ```c
 void bgp_dump_init(void)
@@ -594,23 +616,25 @@ void bgp_dump_init(void)
 	bgp_dump_obuf =
 		stream_new(BGP_MAX_PACKET_SIZE + BGP_MAX_PACKET_SIZE_OVERFLOW);
 
-	install_node(&bgp_dump_node);
+	install_node(&bgp_dump_node);  //注册报文转储节点
 
 	install_element(CONFIG_NODE, &dump_bgp_all_cmd);
 	install_element(CONFIG_NODE, &no_dump_bgp_all_cmd);
 
-	hook_register(bgp_packet_dump, bgp_dump_packet);
-	hook_register(peer_status_changed, bgp_dump_state);
+	hook_register(bgp_packet_dump, bgp_dump_packet);  //钩子在每个BGP报文发送或接收时调用，用于进行报文的转储。
+	hook_register(peer_status_changed, bgp_dump_state);  //钩子在BGP对等体状态发生变化时调用，用于更新转储状态。
 }
 ```
 {: file='bgpd/bgp_dump.c'}
 
+初始化vty扫描功能，通过vty界面提供了对BGP路由表和导入检查的查看功能，使得用户可以在虚拟终端界面上获取相关的BGP信息
+
 ```c
 void bgp_scan_vty_init(void)
 {
-	install_element(VIEW_NODE, &show_ip_bgp_nexthop_cmd);
-	install_element(VIEW_NODE, &show_ip_bgp_import_check_cmd);
-	install_element(VIEW_NODE, &show_ip_bgp_instance_all_nexthop_cmd);
+	install_element(VIEW_NODE, &show_ip_bgp_nexthop_cmd);  //用于显示BGP路由表中的下一跳信息
+	install_element(VIEW_NODE, &show_ip_bgp_import_check_cmd);  //用于显示BGP导入检查的信息
+	install_element(VIEW_NODE, &show_ip_bgp_instance_all_nexthop_cmd);  //用于显示BGP实例中所有路由表的下一跳信息
 }
 ```
 {: file='bgpd/bgp_nexthop.c'}
@@ -618,24 +642,28 @@ void bgp_scan_vty_init(void)
 准备注册CLI
 
 #### 4.4 属性相关的初始化
+在BGP路由器启动时，会预先初始化这些属性，以确保在运行时可以有效地处理和管理相关的BGP属性
+
 ```c
 /* Initialization of attribute. */
 void bgp_attr_init(void)
 {
-	aspath_init();
-	attrhash_init();
-	community_init();
-	ecommunity_init();
-	lcommunity_init();
-	cluster_init();
-	transit_init();
-	encap_init();
-	srv6_init();
+	aspath_init();  //初始化AS路径相关的数据结构
+	attrhash_init();  //初始化AS路径相关的数据结构
+	community_init();  //初始化Community属性相关的数据结构
+	ecommunity_init();  //初始化Extended Community属性相关的数据结构
+	lcommunity_init();  //初始化Large Community属性相关的数据结构
+	cluster_init();  //初始化Cluster属性相关的数据结构
+	transit_init();  //初始化Transit属性相关的数据结构
+	encap_init();  //初始化封装（Encapsulation）属性相关的数据结构
+	srv6_init();  //初始化SRv6（Segment Routing over IPv6）属性相关的数据结构
 }
 ```
 {: file='bgpd/bgp_attr.c'}
 
 ##### 4.4.1 aspath_init
+初始化AS Path的hash存储，AS Path 哈希表键生成函数 `aspath_key_make` ，AS Path 比较函数 `aspath_cmp`
+
 ```c
 /* AS path hash initialize. */
 void aspath_init(void)
@@ -646,41 +674,42 @@ void aspath_init(void)
 ```
 {: file='bgpd/bgp_aspath.c'}
 
-aspath_init 初始化aspath的hash存储，hash头ashash，所有的aspath用全局的hash存放，相关的数据结构如下：
+所有的AS Path用全局ashash存放，相关的数据结构如下：
 
 ```c
 /* AS_PATH segment data in abstracted form, no limit is placed on length */
 struct assegment {
-	struct assegment *next;
-	as_t *as;
-	unsigned short length;
-	uint8_t type;
+	struct assegment *next;  //指向下一个 AS Path 段的指针，因为 AS Path 可以由多个段组成
+	as_t *as;  //指向 AS 的指针
+	unsigned short length;  //AS Path 段的长度
+	uint8_t type;  //AS Path 段的类型
 };
 
 /* AS path may be include some AsSegments.  */
 struct aspath {
 	/* Reference count to this aspath.  */
-	unsigned long refcnt;
+	unsigned long refcnt;  //对此 AS Path 的引用计数。用于跟踪有多少个对象正在引用此 AS Path，以便在不再需要时正确释放内存。
 
 	/* segment data */
-	struct assegment *segments;
+	struct assegment *segments;  //指向 AS Path 的第一个段的指针。
 
 	/* AS path as a json object */
-	json_object *json;
+	json_object *json;  //表示 AS Path 的 JSON 对象。可能在某些上下文中用于序列化和反序列化 AS Path。
 
 	/* String expression of AS path.  This string is used by vty output
 	   and AS path regular expression match.  */
-	char *str;
-	unsigned short str_len;
+	char *str;  //AS Path 的字符串表达形式，用于 vty 输出和 AS Path 正则表达式匹配。
+	unsigned short str_len;  //字符串表达形式的长度。
 
 	/* AS notation used by string expression of AS path */
-	enum asnotation_mode asnotation;
+	enum asnotation_mode asnotation;  //AS Path 字符串表达形式所使用的 AS 表示法（AS 表示法的模式）
 };
 ```
 {: file='bgpd/bgp_aspath.h'}
 
 ##### 4.4.2 attrhash_init
-attrhash_init 初始化属性的hash存储，hash头attrhash，所有的属性用全局的hash存放，数据结构：
+初始化属性的hash存储，hash头attrhash，所有的属性用全局的hash存放，数据结构：
+
 ```c
 static void attrhash_init(void)
 {
@@ -690,7 +719,8 @@ static void attrhash_init(void)
 ```
 {: file='bgpd/bgp_attr.c'}
 
-attr数据结构较大，包含了BGP的所有属性，AS_PATH，community,med, origin, local_pref, med等等，数据结构：
+attr是BGP的核心属性结构体，数据结构较大，包含了BGP的所有属性，AS_PATH，community,med, origin, local_pref, med等等，数据结构：
+
 ```c
 /* BGP core attribute structure. */
 struct attr {
@@ -714,20 +744,17 @@ struct attr {
 
 	/* Path origin attribute */
 	uint8_t origin;
-    .
-    .
-    .
-}
 ```
 {: file='bgpd/bgp_attr.h'}
 
 ##### 4.4.3 community_init
-community_init 初始化community的HASH，全局comhash存储，数据结构：
+初始化community的HASH，全局comhash存储，数据结构：
+
 ```c
 /* Communities attribute.  */
 struct community {
 	/* Reference count of communities value.  */
-	unsigned long refcnt;
+	unsigned long refcnt;  // 引用计数
 
 	/* Communities value size.  */
 	int size;
@@ -740,13 +767,14 @@ struct community {
 
 	/* String of community attribute.  This sring is used by vty output
 	   and expanded community-list for regular expression match.  */
-	char *str;
+	char *str;  //// Community 属性的字符串表示
 };
 ```
 {: file='bgpd/bgp_community.h'}
 
 ##### 4.4.4 ecommunity_init
-ecommunity_init初始化ecommunity的HASH ，全局ecomhash存储，数据结构：
+初始化ecommunity的HASH ，全局ecomhash存储，数据结构：
+
 ```c
 /* Extended Communities attribute.  */
 struct ecommunity {
@@ -774,7 +802,8 @@ struct ecommunity {
 {: file='bgpd/bgp_ecommunity.h'}
 
 ##### 4.4.5 lcommunity_init
-lcommunity_init初始化lcommunity的HASH ，全局lcomhash存储，数据结构：
+初始化lcommunity的HASH ，全局lcomhash存储，数据结构：
+
 ```c
 /* Large Communities attribute.  */
 struct lcommunity {
@@ -797,7 +826,8 @@ struct lcommunity {
 {: file='bgpd/bgp_lcommunity.h'}
 
 ##### 4.4.6 cluster_init
-cluster_init 初始化 cluster 路由反射器的HASH，全局变量cluster_hash，数据结构：
+初始化 cluster 路由反射器的HASH，全局变量cluster_hash，数据结构：
+
 ```c
 /* Router Reflector related structure. */
 struct cluster_list {
@@ -809,7 +839,8 @@ struct cluster_list {
 {: file='bgpd/bgp_attr.h'}
 
 ##### 4.4.7 transit_init
-transit_init初始化传输的属性的HASH，全局变量transit_hash，数据结构：
+初始化传输的属性的HASH，全局变量transit_hash，数据结构：
+
 ```c
 /* Unknown transit attribute. */
 struct transit {
@@ -821,7 +852,8 @@ struct transit {
 {: file='bgpd/bgp_attr.h'}
 
 ##### 4.4.8 encap_init
-encap_init 初始化BGP Encap Hash，数据结构：
+初始化BGP Encap Hash，数据结构：
+
 ```c
 /* PMSI tunnel types (RFC 6514) */
 
@@ -837,7 +869,8 @@ struct bgp_attr_encap_subtlv {
 {: file='bgpd/bgp_attr.h'}
 
 ##### 4.4.7 transit_init
-transit_init初始化传输的属性的HASH，全局变量transit_hash，数据结构：
+初始化传输的属性的HASH，全局变量transit_hash，数据结构：
+
 ```c
 /* Unknown transit attribute. */
 struct transit {
@@ -849,7 +882,8 @@ struct transit {
 {: file='bgpd/bgp_attr.h'}
 
 ##### 4.4.8 srv6_init
-srv6_init初始化srv6的HASH，数据结构：
+初始化srv6的HASH，数据结构：
+
 ```c
 /*
  * Prefix-SID type-4
@@ -883,6 +917,8 @@ struct bgp_attr_srv6_l3vpn {
 {: file='bgpd/bgp_attr.h'}
 
 #### 4.5 路由表的初始化
+初始化 BGP 路由表的各个组件，同时安装相关的命令，以便用户可以配置和管理 BGP 路由
+
 ```c
 void bgp_route_init(void)
 {
@@ -899,14 +935,11 @@ void bgp_route_init(void)
 	install_element(BGP_NODE, &no_bgp_table_map_cmd);
 
 	install_element(BGP_NODE, &aggregate_addressv4_cmd);
-    .
-    .
-    .
-}
 ```
 {: file='bgpd/bgp_route.c'}
 
-bgp_table初始化函数
+初始化 BGP 路由表，`bgp_table_init`接受 BGP 实例（bgp）、网络类型（afi）和子网络类型（safi）作为参数，并返回一个指向初始化后的 BGP 路由表的指针
+
 ```c
 /*
  * bgp_table_init
@@ -917,7 +950,7 @@ struct bgp_table *bgp_table_init(struct bgp *bgp, afi_t afi, safi_t safi)
 
 	rt = XCALLOC(MTYPE_BGP_TABLE, sizeof(struct bgp_table));
 
-	rt->route_table = route_table_init_with_delegate(&bgp_table_delegate);
+	rt->route_table = route_table_init_with_delegate(&bgp_table_delegate);  //初始化一个路由表
 
 	/*
 	 * Set up back pointer to bgp_table.
@@ -938,11 +971,12 @@ struct bgp_table *bgp_table_init(struct bgp *bgp, afi_t afi, safi_t safi)
 ```
 {: file='bgpd/bgp_table.c'}
 
-bgp_table数据结构：
+bgp_table数据结构可以对 BGP 路由表进行灵活的管理和操作，并且与 BGP 协议的不同特性和网络类型相关联：
+
 ```c
 struct bgp_table {
 	/* table belongs to this instance */
-	struct bgp *bgp;
+	struct bgp *bgp;  //路由表所属的 BGP 实例
 
 	/* afi/safi of this table */
 	afi_t afi;    //网络类型（IPV4, IPV6）
@@ -951,25 +985,26 @@ struct bgp_table {
 	int lock;   //引用计数
 
 	/* soft_reconfig_table in progress */
-	bool soft_reconfig_init;
-	struct event *soft_reconfig_thread;
+	bool soft_reconfig_init;  //软重配置是否已经初始化
+	struct event *soft_reconfig_thread;  //软重配置线程
 
 	/* list of peers on which soft_reconfig_table has to run */
-	struct list *soft_reconfig_peers;
+	struct list *soft_reconfig_peers;  //列表，包含需要运行软重配置的对等体（peers）
 
-	struct route_table *route_table;  //路由表项的集合，与zebra使用的是同一个数据结构，存放路由表项
-	uint64_t version;
+	struct route_table *route_table;  //存放路由表项的集合，与zebra使用的是同一个数据结构
+	uint64_t version;  //路由表的版本号，用于跟踪路由表的更改
 };
 ```
 {: file='bgpd/bgp_table.h'}
 
-#### 4.6 初始化路由图
-初始化路由图，并增加hook的回调函数
+#### 4.6 初始化路由映射
+初始化路由映射，初始化和安装匹配条件和设置，以便在 BGP 路由映射中使用
+
 ```c
 /* Initialization of route map. */
 void bgp_route_map_init(void)
 {
-	route_map_init();
+	route_map_init();  //初始化路由映射系统
 
 	route_map_add_hook(bgp_route_map_add);
 	route_map_delete_hook(bgp_route_map_delete);
@@ -977,14 +1012,11 @@ void bgp_route_map_init(void)
 
 	route_map_match_interface_hook(generic_match_add);
 	route_map_no_match_interface_hook(generic_match_delete);
-    .
-    .
-    .
-}
 ```
 {: file='bgpd/bgp_routemap.c'}
 
-route_map 初始化
+为路由映射系统进行必要的初始化，包括创建散列表、设置调试标志、安装命令等
+
 ```c
 /* Initialization of route map vector. */
 void route_map_init(void)
@@ -994,14 +1026,11 @@ void route_map_init(void)
 	route_map_master_hash =
 		hash_create_size(8, route_map_hash_key_make, route_map_hash_cmp,
 				 "Route Map Master Hash");
-    .
-    .
-    .
-}
 ```
 {: file='lib/routemap.c'}
 
-route_map数据结构
+route_map数据结构提供了管理和追踪路由映射对象的信息所需的各种属性
+
 ```c
 /* Route map list structure. */
 struct route_map {
@@ -1040,7 +1069,8 @@ struct route_map {
 {: file='lib/routemap.h'}
 
 #### 4.7 mplsvpn
-MPLS VPN的初始化全是CLI的初始化
+MPLS VPN的初始化安装了一系列与BGP VPN相关的命令，包括IPv4和IPv6 VPN网络的配置命令、显示命令等
+
 ```c
 void bgp_mplsvpn_init(void)
 {
@@ -1070,40 +1100,45 @@ void bgp_mplsvpn_init(void)
 {: file='bgpd/mplsvpn.c'}
 
 #### 4.8 EVPN
-bgp_ethernetvpn_init函数，CLI的初始化
+`bgp_ethernetvpn_init`函数，CLI的初始化
 
 #### 4.9 FLOWSPEC
-bgp_flowspec_vty_init函数，CLI的初始化
+`bgp_flowspec_vty_init`函数，CLI的初始化
 
 #### 4.10 Access list
 CLI的初始化
+
 ```c
 	/* Access list initialize. */
 	access_list_init();
 	access_list_add_hook(peer_distribute_update);
 	access_list_delete_hook(peer_distribute_update);
 ```
-{: file='bgpd/bgpd.c'}
+{: file='bgpd/bgpd.c -- bgp_init()'}
 
 #### 4.11 Prefix list
 CLI的初始化
+
 ```c
 	/* Filter list initialize. */
 	bgp_filter_init();
 	as_list_add_hook(peer_aslist_add);
 	as_list_delete_hook(peer_aslist_del);
 ```
-{: file='bgpd/bgpd.c'}
+{: file='bgpd/bgpd.c -- bgp_init()'}
 
 #### 4.12 Community list
 CLI的初始化
+
 ```c
 	/* Community list initialize. */
 	bgp_clist = community_list_init();
 ```
-{: file='bgpd/bgpd.c'}
+{: file='bgpd/bgpd.c -- bgp_init()''}
 
 #### 4.13 BFD init
+初始化配置和管理BFD功能，以实现双向转发检测
+
 ```c
 void bgp_bfd_init(struct event_loop *tm)
 {
@@ -1124,11 +1159,13 @@ void bgp_bfd_init(struct event_loop *tm)
 ```
 {: file='bgpd/bgp_bfd.c'}
 
-### 5.配置frr
+### 5.配置项解析
+使用 `frr_config_fork` 和 `bgp_gr_apply_running_config` 来处理配置项，fork进程以及应用运行时配置。
+
 ```c
 void frr_config_fork(void)
 {
-	hook_call(frr_late_init, master);
+	hook_call(frr_late_init, master);  //通过hook执行FRR的后期初始化
 
 	if (!(di->flags & FRR_NO_SPLIT_CONFIG)) {
 		/* Don't start execution if we are in dry-run mode */
@@ -1136,41 +1173,41 @@ void frr_config_fork(void)
 			frr_config_read_in(NULL);
 			exit(0);
 		}
-
+ 
 		event_add_event(master, frr_config_read_in, NULL, 0,
 				&di->read_in);
 	}
 
 	if (di->daemon_mode || di->terminal)
-		frr_daemonize();
+		frr_daemonize();  //守护进程
 
 	frr_is_after_fork = true;
 
 	if (!di->pid_file)
 		di->pid_file = pidfile_default;
 	pid_output(di->pid_file);
-	zlog_tls_buffer_init();
+	zlog_tls_buffer_init();  //初始化日志系统的 TLS 缓冲区
 }
 ```
 {: file='lib/libfrr.c'}
 
 ### 6.创建线程
+调用`bgp_pthread_run`创建BGP相关的线程，并运行起来。
+
 ```c
 void bgp_pthreads_run(void)
 {
-	frr_pthread_run(bgp_pth_io, NULL);
-	frr_pthread_run(bgp_pth_ka, NULL);
+	frr_pthread_run(bgp_pth_io, NULL);  //启动 BGP I/O 线程
+	frr_pthread_run(bgp_pth_ka, NULL);  //启动 BGP Keepalive 线程
 
 	/* Wait until threads are ready. */
-	frr_pthread_wait_running(bgp_pth_io);
+	frr_pthread_wait_running(bgp_pth_io);  //等待线程就绪
 	frr_pthread_wait_running(bgp_pth_ka);
 }
 ```
 {: file='bgpd/bgpd.c'}
 
-Bgp_pthread_run创建对应的线程，并运行起来。
-
-然后bgpd在frr_run中开始死循环，处理各种事件。
+使用`frr_run`来运行主程序，处理各种事件。
 
 **初始化完成！！！！！！！！！**
 
