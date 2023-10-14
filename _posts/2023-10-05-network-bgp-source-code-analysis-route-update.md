@@ -51,7 +51,76 @@ BGPUpdate消息包含以下字段。
 | Multiprotocol Unreachable NLRI | 可选非传选属性 | 4760 |       多协议BGP      |
 
 ## Update消息处理
-根据前面FSM的分析我们知道IO线程FD可读以后，会执行`bgp_process_reads`处理可读的事件，`bgp_read` 读取FD的报文消息,TCP是stream如何保证读取的是完整的报文，没有可能读取一半？？然后添加事件到主线程继续处理，主线程调用`bgp_process_packet`处理接收到的报文，其中处理update的消息的函数是`bgp_update_receive`。
+根据前面FSM的分析我们知道IO线程FD可读以后，会执行`bgp_process_reads`处理可读的事件，`bgp_read` 读取FD的报文消息，TCP是stream如何保证读取的是完整的报文，没有可能读取一半？？
+
+```c
+/*
+ * Reads a chunk of data from peer->fd into peer->ibuf_work.
+ *
+ * code_p
+ *    Pointer to location to store FSM event code in case of fatal error.
+ *
+ * @return status flag (see top-of-file)
+ *
+ * PLEASE NOTE:  If we ever transform the bgp_read to be a pthread
+ * per peer then we need to rethink the global ibuf_scratch
+ * data structure above.
+ */
+static uint16_t bgp_read(struct peer *peer, int *code_p)
+{
+	size_t readsize; /* how many bytes we want to read */
+	ssize_t nbytes;  /* how many bytes we actually read */
+	size_t ibuf_work_space; /* space we can read into the work buf */
+	uint16_t status = 0;
+
+	ibuf_work_space = ringbuf_space(peer->ibuf_work);  //计算可用于读取的空间大小
+
+	if (ibuf_work_space == 0) {   //空间不足处理
+		SET_FLAG(status, BGP_IO_WORK_FULL_ERR);
+		return status;
+	}
+
+	readsize = MIN(ibuf_work_space, sizeof(ibuf_scratch));  //要读取的字节数
+
+	nbytes = read(peer->fd, ibuf_scratch, readsize);
+
+	/* EAGAIN or EWOULDBLOCK; come back later */
+	if (nbytes < 0 && ERRNO_IO_RETRY(errno)) {
+		SET_FLAG(status, BGP_IO_TRANS_ERR);
+	} else if (nbytes < 0) {
+		/* Fatal error; tear down session */
+		flog_err(EC_BGP_UPDATE_RCV,
+			 "%s [Error] bgp_read_packet error: %s", peer->host,
+			 safe_strerror(errno));
+
+		/* Handle the error in the main pthread. */
+		if (code_p)
+			*code_p = TCP_fatal_error;
+
+		SET_FLAG(status, BGP_IO_FATAL_ERR);
+
+	} else if (nbytes == 0) {
+		/* Received EOF / TCP session closed */
+		if (bgp_debug_neighbor_events(peer))
+			zlog_debug("%s [Event] BGP connection closed fd %d",
+				   peer->host, peer->fd);
+
+		/* Handle the error in the main pthread. */
+		if (code_p)
+			*code_p = TCP_connection_closed;
+
+		SET_FLAG(status, BGP_IO_FATAL_ERR);
+	} else {
+		assert(ringbuf_put(peer->ibuf_work, ibuf_scratch, nbytes) ==
+		       (size_t)nbytes);
+	}
+
+	return status;
+}
+```
+{: file='bgpd/bgp_io.c'}
+
+然后添加事件到主线程继续处理，主线程调用`bgp_process_packet`处理接收到的报文，其中处理update的消息的函数是`bgp_update_receive`。
 
 ```c
 case BGP_MSG_UPDATE:
@@ -70,6 +139,7 @@ case BGP_MSG_UPDATE:
 {: file='bgpd/bgp_packet.c -- bgp_process_packet()'}
 
 这个函数很大，我们分阶段来分析
+
 ```c
 /**
  * Process BGP UPDATE message for peer.
@@ -218,7 +288,7 @@ struct attr {
 ```
 {: file='bgpd/bgp_packet.c -- bgp_update_receive()'}
 
-`bgp_attr_parse` 处理解析各种属性值，因为报文中`Path Attributes`有很多，所以while循环里面处理所有的属性信息。
+`bgp_attr_parse` 接收来自对等体的BGP UPDATE消息，并解析该消息以创建相应的属性对象，因为报文中`Path Attributes`有很多，所以while循环里面处理所有的属性信息。
 
 ```c
 /* Read attribute of update packet.  This function is called from
@@ -289,7 +359,7 @@ enum bgp_attr_parse_ret bgp_attr_parse(struct peer *peer, struct attr *attr,
 		else
 			length = stream_getc(BGP_INPUT(peer));    //1个字节
 ```
-{: file='bgpd/bgp_attr.c -- bgp_attr_parse_ret()'}
+{: file='bgpd/bgp_attr.c -- bgp_attr_parse()'}
 
 然后填充下面的结构体，以便后面继续处理，参数太多，写成一个结构体往下传递
 
@@ -318,9 +388,9 @@ struct bgp_attr_parser_args {
 			.total = attr_endp - startp,
 		};
 ```
-{: file='bgpd/bgp_attr.c -- bgp_attr_parse_ret()'}
+{: file='bgpd/bgp_attr.c -- bgp_attr_parse()'}
 
-然后根据属性的TYPE值，处理不同的属性，我们拿简单的`BGP_ATTR_ORIGIN`看下，其解析报文里面的origin值(1个字节)，并赋值到attr里面，置位`Flag |= BGP_ATTR_ORIGIN`，attr是函数`bgp_update_receive`传下来的一个临时变量，后续会分析attr的处理。
+然后根据属性的TYPE值，处理不同的属性，我们拿简单的`BGP_ATTR_ORIGIN`看下，其解析报文里面的origin值(1个字节)，并赋值到attr里面，置位`Flag |= BGP_ATTR_ORIGIN`，attr是函数`bgp_update_receive`传下来的一个临时变量。
 
 ```c
 		/* OK check attribute and store it's value. */
@@ -401,7 +471,9 @@ struct bgp_attr_parser_args {
 			break;
 		}
 ```
-{: file='bgpd/bgp_attr.c -- bgp_attr_parse_ret()'}
+{: file='bgpd/bgp_attr.c -- bgp_attr_parse()'}
+
+### Origin的解析
 
 ```c
 /* Get origin attribute of the update message. */
@@ -446,7 +518,7 @@ bgp_attr_origin(struct bgp_attr_parser_args *args)
 ```
 {: file='bgpd/bgp_attr.c'}
 
-我们在来看看AS_PATH的解析过程
+### AS_PATH解析
 
 ```c
 /* Parse AS path information.  This function is wrapper of
@@ -501,7 +573,7 @@ static int bgp_attr_aspath(struct bgp_attr_parser_args *args)
 ```
 {: file='bgpd/bgp_attr.c'}
 
-存放的数据结构struct aspath
+存放的数据结构`struct aspath`
 
 ```c
 /* AS_PATH segment data in abstracted form, no limit is placed on length */
@@ -534,7 +606,7 @@ struct aspath {
 ```
 {: file='bgpd/bgp_aspath.h'}
 
-真正的AS号存放在`assegment`的as里面,type/length对应的是AS_PATH报文的内容，str是翻译为人可以读的内容比如100,400
+真正的AS号存放在`struct assegment`的as里面,type/length对应的是AS_PATH报文的内容，str是翻译为人可以读的内容比如100,400
 
 ```c
 /* AS path parse function.  pnt is a pointer to byte stream and length
@@ -586,11 +658,9 @@ struct aspath *aspath_parse(struct stream *s, size_t length, int use32bit,
 
 `assegments_parse`根据报文解析并创建segments，然后aspath_hash_alloc创建新的aspath并hash加入全局的ashash的全局HASH表里面。
 
-## next_hop
-
 其余的路径解析这里不再分析，等后面业务遇到的时候在继续分析。
 
-当所有的路径属性解析完成后，需要做一次检查，检查所有的公知比尊的属性是否全部包含，否则是有问题的，返回错误
+当所有的路径属性解析完成后，需要做一次检查，检查所有的公认必遵的属性是否全部包含，否则是有问题的，返回错误
 
 ```c
 	/* Check all mandatory well-known attributes are present */
@@ -623,9 +693,9 @@ struct aspath *aspath_parse(struct stream *s, size_t length, int use32bit,
 		goto done;
 	}
 ```
-{: file='bgpd/bgp_attr.c -- bgp_attr_parse_ret()'}
+{: file='bgpd/bgp_attr.c -- bgp_attr_parse()'}
 
-至此UPDATE报文里面的属性全部解析完成，存放在attr的局部变量里面。
+至此UPDATE报文里面的属性全部解析完成，存放在 attr 的局部变量里面。
 
 ```c
 	/* Parse attribute when it exists. */
@@ -707,7 +777,7 @@ struct aspath *aspath_parse(struct stream *s, size_t length, int use32bit,
 ```
 {: file='bgpd/bgp_packet.c -- bgp_update_receive()'}
 
-然后我们遍历这个数组，处理里面所有的NLRI的类型，本次先分析NLRI_UPDATE，MP后面再分析。
+然后我们遍历这个数组，处理里面所有的NLRI的类型，本次先分析 `NLRI_UPDATE` ，MP后面再分析。
 
 ```c
 /**
@@ -745,40 +815,29 @@ int bgp_nlri_parse(struct peer *peer, struct attr *attr,
 ```c
 /* Address family numbers from RFC1700. */
 typedef enum {
-	AFI_UNSPEC = 0,
-	AFI_IP = 1,
-	AFI_IP6 = 2,
-	AFI_L2VPN = 3,
-	AFI_MAX = 4
+	AFI_UNSPEC = 0,  //未指定的AFI类型
+	AFI_IP = 1,  //IPv4地址家族
+	AFI_IP6 = 2,  // IPv6地址家族，表示IPv6路由信息。
+	AFI_L2VPN = 3,  //Layer 2 VPN地址家族，用于表示层2虚拟专用网络的路由信息。
+	AFI_MAX = 4  //AFI类型的最大值。
 } afi_t;
 
 #define IS_VALID_AFI(a) ((a) > AFI_UNSPEC && (a) < AFI_MAX)
 
 /* Subsequent Address Family Identifier. */
 typedef enum {
-	SAFI_UNSPEC = 0,
-	SAFI_UNICAST = 1,
-	SAFI_MULTICAST = 2,
-	SAFI_MPLS_VPN = 3,
-	SAFI_ENCAP = 4,
-	SAFI_EVPN = 5,
-	SAFI_LABELED_UNICAST = 6,
-	SAFI_FLOWSPEC = 7,
-	SAFI_MAX = 8
+	SAFI_UNSPEC = 0,  //未指定的SAFI类型
+	SAFI_UNICAST = 1,  //单播路由
+	SAFI_MULTICAST = 2, //多播路由,
+	SAFI_MPLS_VPN = 3,  // MPLS VPN路由
+	SAFI_ENCAP = 4,  // Encapsulation SAFI，表示封装（Encapsulation）路由信息
+	SAFI_EVPN = 5,  //Ethernet VPN（EVPN），用于在数据中心网络中传输以太网以及与以太网相关的服务的VPN路由信息
+	SAFI_LABELED_UNICAST = 6,  //带标签的单播路由
+	SAFI_FLOWSPEC = 7,  //流规格（Flowspec）路由，表示用于描述流量特性和策略的路由信息
+	SAFI_MAX = 8  //SAFI类型的最大值
 } safi_t;
 ```
 {: file='lib/zebra.h'}
-
-AFI_IP 的组合定义如下：
-
-|     IP + UNICAST     |    普通的IP 单播路由处理   |
-|:--------------------:|:--------------------------:|
-|    IP + MULTICAST    |        组播路由？？        |
-|     IP + MPLS_VPN    |     MPLS VPN 路由的处理    |
-|      IP + ENCAP      |                            |
-|       IP + EVPN      |                          |
-| IP + LABELED_UNICAST |   BGP的标签分发的路由处理  |
-|     IP + FLOWSPEC    |     BGP FLOWSPEC的处理     |
 
 可以从下面的函数查看组合：
 
@@ -851,7 +910,7 @@ static inline int afindex(afi_t afi, safi_t safi)
 ```
 {: file='bgpd/bgpd.h'}
 
-IP + UNICAST/ MULTICAST走的是下面的函数，NLRI里面存放的是前缀：
+IP + UNICAST/ MULTICAST 将调用`bgp_nlri_parse_ip`函数，NLRI里面存放的是前缀：
 
 ```c
 /* Parse NLRI stream.  Withdraw NLRI is recognized by NULL attr
@@ -877,17 +936,17 @@ int bgp_nlri_parse_ip(struct peer *peer, struct attr *attr,
 ```
 {: file='bgpd/bgp_route.c'}
 
-这里又引出BGP的一个数据结构struct prefix
+这里又引出BGP的一个数据结构`struct prefix`
 
 ```c
 /* FRR generic prefix structure. */
 struct prefix {
-	uint8_t family;
-	uint16_t prefixlen;
+	uint8_t family;  //表示前缀的地址家族，指明了前缀的类型，可以是IPv4、IPv6、以太网等
+	uint16_t prefixlen;  //表示前缀的长度，即网络前缀的位数。
 	union {
-		uint8_t prefix;
-		struct in_addr prefix4;
-		struct in6_addr prefix6;
+		uint8_t prefix;  // 一个字节的前缀信息，用于存储某些特定类型的前缀
+		struct in_addr prefix4;  // IPv4地址类型的前缀信息
+		struct in6_addr prefix6;  //IPv6地址类型的前缀信息。
 		struct {
 			struct in_addr id;
 			struct in_addr adv_router;
@@ -903,7 +962,7 @@ struct prefix {
 ```
 {: file='lib/prefix.h'}
 
-在每次的for循环里面，需要填充好prefix前缀里面的长度、family、前缀值，然后以便后续bgp_update函数继续处理。
+在每次的for循环里面，需要填充好prefix前缀里面的长度、 family 、前缀值，然后以便后续`bgp_update`函数继续处理。
 
 ```c
 		/* Fetch prefix length. */
@@ -919,9 +978,35 @@ struct prefix {
 		/* Fetch prefix from NLRI packet. */
 		memcpy(p.u.val, pnt, psize);
 ```
-{: file='bgpd/bgpd.h'}
+{: file='bgpd/bgp_route.c -- bgp_nlri_parse_ip()'}
 
-`bgp_update` 引申出`struct bgp_node`的数据结构，是BGP 存放路由的关键数据结构，我们先认识下，使用关键字prefix组织成radix树
+```c
+		/* Normal process. */
+		if (attr)
+			bgp_update(peer, &p, addpath_id, attr, afi, safi,
+				   ZEBRA_ROUTE_BGP, BGP_ROUTE_NORMAL, NULL,
+				   NULL, 0, 0, NULL);
+		else
+			bgp_withdraw(peer, &p, addpath_id, afi, safi,
+				     ZEBRA_ROUTE_BGP, BGP_ROUTE_NORMAL, NULL,
+				     NULL, 0, NULL);
+```
+{: file='bgpd/bgp_route.c -- bgp_nlri_parse_ip()'}
+
+```c
+void bgp_update(struct peer *peer, const struct prefix *p, uint32_t addpath_id,
+		struct attr *attr, afi_t afi, safi_t safi, int type,
+		int sub_type, struct prefix_rd *prd, mpls_label_t *label,
+		uint32_t num_labels, int soft_reconfig,
+		struct bgp_route_evpn *evpn)
+{
+	int ret;
+	int aspath_loop_count = 0;
+	struct bgp_dest *dest;
+```
+{: file='bgpd/bgp_route.c'}
+
+`bgp_update`函数引申出`struct bgp_dest`数据结构，因为在`bgp_table.h`中定义了`#define bgp_dest bgp_node`，实际上就是`struct bgp_node`，是BGP 存放路由的关键数据结构，我们先认识下，使用关键字prefix组织成radix树
 
 ```c
 /*
@@ -932,20 +1017,20 @@ struct prefix {
 	struct prefix p;                                                       \
                                                                                \
 	/* Tree link. */                                                       \
-	struct route_table *table_rdonly(table);                               \
-	struct route_node *table_rdonly(parent);                               \
-	struct route_node *table_rdonly(link[2]);                              \
+	struct route_table *table_rdonly(table);    /* 指向路由表的指针，以只读方式访问 */    \
+	struct route_node *table_rdonly(parent);    /* 指向父节点的指针，以只读方式访问 */   \
+	struct route_node *table_rdonly(link[2]);   /* 包含两个指针的数组，表示左右两个子节点 */   \
                                                                                \
 	/* Lock of this radix */                                               \
-	unsigned int table_rdonly(lock);                                       \
+	unsigned int table_rdonly(lock);        /* 表示该节点的锁，以只读方式访问 */     \
                                                                                \
-	struct rn_hash_node_item nodehash;                                     \
+	struct rn_hash_node_item nodehash;    /* 用于哈希的节点项 */    \
 	/* Each node of route. */                                              \
-	void *info;                                                            \
+	void *info;                  /* 每个节点的信息 */           \
 
 /* Each routing entry. */
-struct route_node {
-	ROUTE_NODE_FIELDS
+struct route_node {   //该结构体能够表示路由表中的一个节点，包含了该节点的各种信息和链接关系
+	ROUTE_NODE_FIELDS  //包含 ROUTE_NODE_FIELDS 宏展开后的所有字段
 
 #define l_left   link[0]
 #define l_right  link[1]
@@ -995,45 +1080,7 @@ struct bgp_node {
 ```
 {: file='bgpd/bgp_table.h'}
 
-`struct bgp_path_info` 存放在bgp_node的void *info里面
-
-```c
-struct bgp_path_info {
-	/* For linked list. */
-	struct bgp_path_info *next;
-	struct bgp_path_info *prev;
-
-	/* For nexthop linked list */
-	LIST_ENTRY(bgp_path_info) nh_thread;
-
-	/* Back pointer to the prefix node */
-	struct bgp_dest *net;
-
-	/* Back pointer to the nexthop structure */
-	struct bgp_nexthop_cache *nexthop;
-
-	/* Peer structure.  */
-	struct peer *peer;
-
-	/* Attribute structure.  */
-	struct attr *attr;
-
-	/* Extra information */
-	struct bgp_path_info_extra *extra;
-
-
-	/* Multipath information */
-	struct bgp_path_info_mpath *mpath;
-
-	/* Uptime.  */
-	time_t uptime;
-
-	/* reference count */
-	int lock;
-```
-{: file='bgpd/bgp_route.h'}
-
-在bgp_table中定义了`#define bgp_dest bgp_node`
+`bgp_update`引入了`bgp_path_info`数据结构，该结构体包含了一条BGP路径的各种信息，用于描述从源到目的的路由路径
 
 ```c
 void bgp_update(struct peer *peer, const struct prefix *p, uint32_t addpath_id,
@@ -1089,9 +1136,94 @@ void bgp_update(struct peer *peer, const struct prefix *p, uint32_t addpath_id,
 ```
 {: file='bgpd/bgp_route.c'}
 
-`bgp_afi_node_get`在bgp对应的afi/safi table里面使用prefix前缀，获取struct bgp_node节点，并加入afi/safi table的二叉树里面。
+```c
+struct bgp_path_info {
+	/* For linked list. */
+	struct bgp_path_info *next;  //指向下一条BGP路径信息的指针，用于构建路径信息的链表
+	struct bgp_path_info *prev;  //指向上一条BGP路径信息的指针
 
-如果需要记录adj_in，那么把当前的信息存入bgp_adj_in结构体，然后link到bgp_node的链表上面。
+	/* For nexthop linked list */
+	LIST_ENTRY(bgp_path_info) nh_thread; 
+
+	/* Back pointer to the prefix node */
+	struct bgp_dest *net;
+
+	/* Back pointer to the nexthop structure */
+	struct bgp_nexthop_cache *nexthop;
+
+	/* Peer structure.  */
+	struct peer *peer;
+
+	/* Attribute structure.  */
+	struct attr *attr;
+
+	/* Extra information */
+	struct bgp_path_info_extra *extra;
+
+
+	/* Multipath information */
+	struct bgp_path_info_mpath *mpath;
+
+	/* Uptime.  */
+	time_t uptime;
+
+	/* reference count */
+	int lock;
+```
+{: file='bgpd/bgp_route.h'}
+
+`bgp_afi_node_get`在bgp对应的afi/safi table里面使用prefix前缀，获取`struct bgp_node`节点，并加入afi/safi table的二叉树里面。
+
+如果需要记录adj_in，那么把当前的信息存入`bgp_adj_in`结构体，然后link到bgp_node的链表上面。
+
+```c
+	/* When peer's soft reconfiguration enabled.  Record input packet in
+	   Adj-RIBs-In.  */
+	if (!soft_reconfig &&
+	    CHECK_FLAG(peer->af_flags[afi][safi], PEER_FLAG_SOFT_RECONFIG) &&
+	    peer != bgp->peer_self) {
+		/*
+		 * If the trigger is not from soft_reconfig and if
+		 * PEER_FLAG_SOFT_RECONFIG is enabled for the peer, then attr
+		 * will not be interned. In which case, it is ok to update the
+		 * attr->evpn_overlay, so that, this can be stored in adj_in.
+		 */
+		if ((afi == AFI_L2VPN) && evpn) {
+			memcpy(&attr->evpn_overlay, evpn,
+			       sizeof(struct bgp_route_evpn));
+		}
+		bgp_adj_in_set(dest, peer, attr, addpath_id);
+	}
+```
+{: file='bgpd/bgp_route.c -- bgp_update()'}
+
+```c
+void bgp_adj_in_set(struct bgp_dest *dest, struct peer *peer, struct attr *attr,
+		    uint32_t addpath_id)
+{
+	struct bgp_adj_in *adj;
+
+	for (adj = dest->adj_in; adj; adj = adj->next) {
+		if (adj->peer == peer && adj->addpath_rx_id == addpath_id) {
+			if (adj->attr != attr) {
+				bgp_attr_unintern(&adj->attr);
+				adj->attr = bgp_attr_intern(attr);
+			}
+			return;
+		}
+	}
+	adj = XCALLOC(MTYPE_BGP_ADJ_IN, sizeof(struct bgp_adj_in));
+	adj->peer = peer_lock(peer); /* adj_in peer reference */
+	adj->attr = bgp_attr_intern(attr);
+	adj->uptime = monotime(NULL);
+	adj->addpath_rx_id = addpath_id;
+	BGP_ADJ_IN_ADD(dest, adj);
+	bgp_dest_lock_node(dest);
+}
+```
+{: file='bgpd/bgp_advertise.c'}
+
+`struc bgp_adj_in`数据结构
 
 ```c
 /* BGP adjacency in. */
@@ -1115,27 +1247,6 @@ struct bgp_adj_in {
 ```
 {: file='bgpd/bgp_advertise.h'}
 
-```c
-	/* When peer's soft reconfiguration enabled.  Record input packet in
-	   Adj-RIBs-In.  */
-	if (!soft_reconfig &&
-	    CHECK_FLAG(peer->af_flags[afi][safi], PEER_FLAG_SOFT_RECONFIG) &&
-	    peer != bgp->peer_self) {
-		/*
-		 * If the trigger is not from soft_reconfig and if
-		 * PEER_FLAG_SOFT_RECONFIG is enabled for the peer, then attr
-		 * will not be interned. In which case, it is ok to update the
-		 * attr->evpn_overlay, so that, this can be stored in adj_in.
-		 */
-		if ((afi == AFI_L2VPN) && evpn) {
-			memcpy(&attr->evpn_overlay, evpn,
-			       sizeof(struct bgp_route_evpn));
-		}
-		bgp_adj_in_set(dest, peer, attr, addpath_id);
-	}
-```
-{: file='bgpd/bgp_route.c -- bgp_update()'}
-
 然后会进行AS_PATH的防环检查，
 
 ```c
@@ -1151,22 +1262,18 @@ struct bgp_adj_in {
 ```
 {: file='bgpd/bgp_route.c -- bgp_update()'}
 
-- `attr_new = bgp_attr_intern(&new_attr);` 会根据前面解析的attr(局部变量传下来的)，申请一个attr_new，以便后续保存。
-- `info_make` 会创建一个新的struct bgp_path_info数据结构，attr_new 便保存在里面的，后续会在给bgp_path_info赋值。
-- `bgp_maximum_prefix_overflow` 会检查BGP Max Prefix条目限制
-- `bgp_path_info_add` 会把新的bgp_path_info，连接到bgp_node里面。
-- `bgp_process` 会把rn入队work_queue,后续work_queue注册的回调函数bgp_process_wq，会出队继续处理rn,而work_queue是在初始化的时候，就已经初始化好了
-
-这里的 work_queue 和linux内核的 work queue 是异曲同工之妙。
+`bgp_update`中其他几个函数
 
 ```c
+	attr_new = bgp_attr_intern(&new_attr);  //会根据前面解析的attr(局部变量传下来的)，申请一个attr_new，以便后续保存。
+
 	/* Make new BGP info. */
-	new = info_make(type, sub_type, 0, peer, attr_new, dest);
+	new = info_make(type, sub_type, 0, peer, attr_new, dest);  //会创建一个新的struct bgp_path_info数据结构， attr_new 便保存在里面的，后续会在给bgp_path_info赋值。
 
 	/* If maximum prefix count is configured and current prefix
 	 * count exeed it.
 	 */
-	if (bgp_maximum_prefix_overflow(peer, afi, safi, 0)) {
+	if (bgp_maximum_prefix_overflow(peer, afi, safi, 0)) {  //会检查BGP Max Prefix条目限制
 		reason = "maximum-prefix overflow";
 		bgp_attr_flush(&new_attr);
 		goto filtered;
@@ -1179,15 +1286,17 @@ struct bgp_adj_in {
 	bgp_aggregate_increment(bgp, p, new, afi, safi);
 
 	/* Register new BGP information. */
-	bgp_path_info_add(dest, new);
+	bgp_path_info_add(dest, new);  //会把新的bgp_path_info，连接到bgp_node里面。
 
 	/* route_node_get lock */
-	bgp_dest_unlock_node(dest);
+	bgp_dest_unlock_node(dest);  
 
 	/* Process change. */
-	bgp_process(bgp, dest, afi, safi);
+	bgp_process(bgp, dest, afi, safi);  //会把rn入队work_queue,后续work_queue注册的回调函数bgp_process_wq，会出队继续处理rn,而work_queue是在初始化的时候，就已经初始化好了
 ```
-{: file='bgpd/bgpd.h'}
+{: file='bgpd/bgp_route.c -- bgp_update()'}
+
+在`bgp_route.h`宏中定义了`#define bgp_path_info_add(A, B) bgp_path_info_add_with_caller(__func__, (A), (B))`:
 
 ```c
 void bgp_path_info_add_with_caller(const char *name, struct bgp_dest *dest,
@@ -1213,6 +1322,13 @@ void bgp_path_info_add_with_caller(const char *name, struct bgp_dest *dest,
 ```
 {: file='bgpd/bgp_route.c -- bgp_path_info_add()'}
 
+接下来我们看看 WORK QUEUE（工作队列）
+
+```c
+	bgp_process_queue_init(bgp);
+```
+{: file='bgpd/bgpd.c -- bgp_create()'}
+
 ```c
 void bgp_process_queue_init(struct bgp *bgp)
 {
@@ -1233,9 +1349,7 @@ void bgp_process_queue_init(struct bgp *bgp)
 ```
 {: file='bgpd/bgp_route.c'}
 
-WORK_QUEUE 后续处理
-
-work queue的回调函数`bgp_process_wq`出队queue继续处理，`bgp_process_main_one` 处理具体的queue node,即bgp route_node的信息，这里提个问题，单线程处理的bgpd，为何这里需要在异步下work_queue继续处理？？
+work queue的回调函数`bgp_process_wq`出队queue继续处理，`bgp_process_main_one` 处理具体的`queue node`,即`bgp route_node`的信息，这里提个问题，单线程处理的bgpd，为何这里需要在异步下`work_queue`继续处理？？
 
 ```c
 static wq_item_status bgp_process_wq(struct work_queue *wq, void *data)
@@ -1316,7 +1430,7 @@ void bgp_best_selection(struct bgp *bgp, struct bgp_dest *dest,
 ```
 {: file='bgpd/bgp_route.c'}
 
-然后`group_announce_route`发布路由，会遍历bgp->update_groups的HASH表，执行回调函数`update_group_walkcb`，最后会调到函数`group_announce_route_walkcb`
+然后`group_announce_route`发布路由，会遍历`bgp->update_groups`的HASH表，执行回调函数`update_group_walkcb`，最后会调到函数`group_announce_route_walkcb`
 
 ```c
 			group_announce_route(bgp, afi, safi, dest, new_select);
@@ -1393,7 +1507,7 @@ static int update_group_walkcb(struct hash_bucket *bucket, void *arg)
 /* assign update-group/subgroup */
 	update_group_adjust_peer_afs(peer);
 ```
-{: file='bgpd/bgp_fsm.c -- bgp_fsm_state_progress()'}
+{: file='bgpd/bgp_fsm.c -- bgp_establish()'}
 
 ```c
 /*
@@ -1414,8 +1528,6 @@ static inline void update_group_adjust_peer_afs(struct peer *peer)
 }
 ```
 {: file='bgpd/bgp_updgrp.h'}
-
-
 
 ```c
 /*
@@ -1481,7 +1593,7 @@ void update_group_adjust_peer(struct peer_af *paf)
 ```
 {: file='bgpd/bgp_updgrp.c'}
 
-回到`group_announce_route_walkcb`函数，遍历group下的subgroup，然后得到`struct bgp_path_info`和bgp_node，调用函数`subgroup_process_announce_selected`,最后调用`bgp_adj_out_set_subgroup` 加入sync->update表，等待定时器更新发送，但此时传入定时器的时间为0，所以应该是一个实时的时间，此时相当于又异步了一次。
+回到`group_announce_route_walkcb`函数，遍历group下的subgroup，然后得到`struct bgp_path_info`和`bgp_node`，调用函数`subgroup_process_announce_selected`,最后调用`bgp_adj_out_set_subgroup` 加入sync->update表，等待定时器更新发送，但此时传入定时器的时间为0，所以应该是一个实时的时间，此时相当于又异步了一次。
 
 事件执行会调用`bgp_generate_updgrp_packets`，然后调用`subgroup_update_packet`，在该函数里面封装发送的UPDATE报文，其中`bgp_packet_attribute`封装属性,报文封装好后，调用`bpacket_reformat_for_peer`修正下报文的nexthop，然后调用`bgp_packet_add`把报文加入到peer的obuf里面，然后调用`bgp_writes_on(peer)`，等fd可写的时候，IO线程会把UPDATE报文发送出去。
 
