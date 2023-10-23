@@ -4,7 +4,6 @@ author: fnoobt
 date: 2023-10-02 19:29:00 +0800
 categories: [Network,路由协议]
 tags: [network,bgp,frr]
-pin: true
 ---
 
 ##  一、名词解释

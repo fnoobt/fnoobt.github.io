@@ -4,7 +4,6 @@ author: fnoobt
 date: 2023-10-03 19:29:00 +0800
 categories: [Network,路由协议]
 tags: [network,bgp,frr]
-pin: true
 ---
 
 本次分析 BGP 最简单的配置的代码实现，这样大家对BGP的框架会有进一步的熟悉：

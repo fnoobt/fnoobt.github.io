@@ -3,7 +3,7 @@ title: Padavan固件修改编译
 author: fnoobt
 date: 2023-07-02 19:29:00 +0800
 categories: [Linux,Linux教程]
-tags: [linux,Padavan,编译]
+tags: [linux,padavan,编译]
 ---
 
 Padavan固件是俄罗斯人Andy Padavan在bitbucket上发布的基于华硕路由器开源项目 asuswrt 修改而来的 rt-n56u 这套路由器系统的源码，所以国内就直接把这个路由器固件叫padavan了，俗称老毛子。
