@@ -19,7 +19,7 @@ EVE-NG是运行在VMware Workstation中，所以需要先下载安装VMware Work
 ## 2. 安装EVE-NG
 
 ### 2.1. 下载EVE-NG
-[EVE-NG官方下载链接](https://www.eve-ng.net/index.php/download/)
+EVE-NG官方提供两种下载安装方式，一种是 OVF 虚拟机的压缩包，这种一般使用导入OVF和vmdk的方式来部署；另一种是 ISO 镜像，这种一般用于从头安装部署。本文采用第一种方式。[EVE-NG官方下载链接](https://www.eve-ng.net/index.php/download/)
 
 ### 2.2. 导入VMware
 
