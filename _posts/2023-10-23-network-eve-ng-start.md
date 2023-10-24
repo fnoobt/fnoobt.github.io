@@ -80,7 +80,7 @@ cpu: 2                     # CPU数
 ram: 4096                  # 内存（MB）
 ethernet: 2                # 端口数量
 eth_format: em{0}          # 设备接口命名
-console: vnc               # 连接设备的方式，交换机、路由器一般选择telnet连接，其他需要可视化界面的可以改为vnc连接
+console: telnet            # 连接设备的方式，交换机、路由器一般选择telnet连接，其他需要可视化界面的可以改为vnc连接
 qemu_arch: x86_64
 qemu_version: 4.1.0
 qemu_options: -machine type=pc,accel=kvm -nographic -rtc base=utc
