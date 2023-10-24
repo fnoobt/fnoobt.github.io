@@ -32,13 +32,13 @@ BGP 用于通告特定服务的前缀从出口提供商边缘 (PE) 到入口 PE 
 
 基于SRv6的BGP业务是指以BGP为控制平面、SRv6为数据平面的三层和二层叠加业务。 本文档定义了基于 SRv6 的 BGP 服务的流程和消息，包括 L3VPN、EVPN 和 Internet 服务。 它基于[RFC4364：BGP/MPLS IP 虚拟专用网络 (VPN)](https://datatracker.ietf.org/doc/html/rfc4364) 和[RFC7432: 基于 BGP MPLS 的以太网 VPN](https://datatracker.ietf.org/doc/html/rfc7432) 的基础上。
 
-SRv6 SID 是指 SRv6 分段标识符，如 [RFC8402] 中定义。
+SRv6 SID (Segment Identifier) 是指 SRv6 分段标识符，如 [RFC8402] 中定义。
 
 SRv6 服务 SID 是指与广告 PE 路由器上特定于服务的 SRv6 端点行为之一关联的 SRv6 SID，例如（但不限于）End.DT（在虚拟路由和转发 (VRF) 表中查找） 或 L3VPN 服务情况下的 End.DX（交叉连接到下一跳）行为，如 [RFC8986] 中定义。 本文档描述了PE之间现有的BGP消息如何携带SRv6服务SID来互连PE并形成VPN。
 
 为了向 SRv6 服务提供尽力而为的连接，出口 PE 使用 BGP 覆盖服务路由发送 SRv6 服务 SID 信号。 入口 PE 将有效负载封装在外部 IPv6 标头中，其中目标地址是出口 PE 提供的 SRv6 服务 SID。 PE 之间的底层仅需要支持普通 IPv6 转发 [RFC8200]。
 
-为了结合从入口 PE 到出口 PE 的底层服务级别协议 (SLA) 提供 SRv6 服务，出口 PE 使用颜色扩展社区 [RFC9012] 对覆盖服务路由进行着色，以引导这些路由的流量，如 [段路由策略] 第 8 节。 入口 PE 将有效负载数据包封装在外部 IPv6 标头中，其中包含与相关 SLA 关联的 SR 策略段列表以及与使用分段路由标头 (SRH) [RFC8754] 的路由关联的 SRv6 服务 SID。 SRv6 SID 属于 SRH 段列表一部分的底层节点必须支持 SRv6 数据平面。
+为了结合从入口 PE 到出口 PE 的底层服务级别协议 (SLA) 提供 SRv6 服务，出口 PE 使用颜色扩展社区 [RFC9012] 对覆盖服务路由进行着色，以引导这些路由的流量，如 [段路由策略] 第 8 节。 入口 PE 将有效负载数据包封装在外部 IPv6 标头中，其中包含与相关 SLA 关联的 SR 策略段列表以及与使用分段路由标头 (Segment Routing Header， SRH) [RFC8754] 的路由关联的 SRv6 服务 SID。 SRv6 SID 属于 SRH 段列表一部分的底层节点必须支持 SRv6 数据平面。
 
 ### 1.1. 要求语言
 
