@@ -127,7 +127,9 @@ eve-ng客户端（EVE-NG-Win-Client-Pack-2.0）为必需安装的前置软件，
 
 2. 抓包为空
 
-在eve-ng客户端中打开`putty.exe`，连接EVE虚拟机保存密钥，再尝试打开wireshark发现就能抓到包了
+解决抓包为空，有两种方法：
+- 用管理员权限打开CMD命令窗口，切换到eve-ng客户端安装路径`C:\Program Files\EVE-NG`{: .filepath}下，再通过`plink EVE虚拟机IP地址`命令，连接EVE虚拟机保存密钥，即可。
+- 在eve-ng客户端安装路径`C:\Program Files\EVE-NG`{: .filepath}中打开`putty.exe`，连接EVE虚拟机保存密钥，再尝试打开wireshark。
 
 ****
 
