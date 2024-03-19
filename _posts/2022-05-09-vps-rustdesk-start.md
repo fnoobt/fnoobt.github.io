@@ -18,6 +18,7 @@ RustDesk对硬件要求非常低，基础云服务器的最低配置就足够了
 
 ## 服务器端安装方法
 
+服务器需要先设置防火墙放行相关端口。
 ### 放行防火墙端口
 请在运行脚本之前在服务器上设置防火墙。
 
@@ -34,6 +35,7 @@ ufw allow 21116/udp
 sudo ufw enable
 ```
 
+有两种安装方式，建议使用脚本安装[(方式一)](#1安装脚本方式安装)运行，这样比较简单。
 ### 1、安装脚本方式安装
 建议使用此方法，运行以下命令：
 ```bash
@@ -55,14 +57,14 @@ chmod +x update.sh
 会自动创建`etc/systemd/system/gohttpserver.service`{: .filepath}实现开机自启
 
 ### 2、下载服务器端程序安装
-
 下载rustdesk server
 ```bash
 wget --no-check-certificate https://github.com/rustdesk/rustdesk-server/releases/download/1.1.8-2/rustdesk-server-linux-amd64.zip
 unzip rustdesk-server-linux-amd64.zip
 ```
 
-建议使用PM2方式(方式二)安装，这样便于管理。
+### 服务器端运行方法
+有两种运行方式，建议使用PM2方式[(方式二)](#方式二用pm2运行hbbshbbr)运行，这样便于管理。
 
 #### 方式一、在没有PM2的情况下运行hbbs/hbbr
 
@@ -86,14 +88,22 @@ pm2 start hbbr
 ```
 
 查看运行状态
-```
+```bash
 pm2 list
+#或者
+pm2 status
+```
+
+重启服务
+```bash
+pm2 restart hbbs -- -r <relay-server-ip[:port]>
+pm2 restart hbbr
 ```
 
 > 其中<relay-server-ip[:port]>是你服务器的公网ip与端口。比如服务器IP为1.2.3.4，命令为`pm2 start hbbs -- -r 1.2.3.4 -k _`
 > `hbbs`的参数`-r`不是强制性的，只是方便您不要在受控客户端指定中继服务器。如果使用默认 21117 端口，则无需指定端口。客户端指定的中继服务器的优先级高于此优先级。 
 
-如果上述操作都没问题，那服务端已经部署完成了。在rustdesk文件夹中找到公钥文件id_ed25519.pub，保存了公钥Key。
+如果上述操作都没问题，那服务端已经部署完成了。在rustdesk文件夹中找到公钥文件`id_ed25519.pub`，保存了公钥Key。
 
 ## 客户端安装方法
 
