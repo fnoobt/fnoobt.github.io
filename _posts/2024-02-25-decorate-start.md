@@ -270,6 +270,6 @@ img_path: '/assets/img/commons/decorate/'
 
 ****
 
-参考资料
+本文参考
 
-> [详细的房子装修流程](https://baijiahao.baidu.com/s?id=1774010558200677996&wfr=spider&for=pc)
+> 1. [详细的房子装修流程](https://baijiahao.baidu.com/s?id=1774010558200677996&wfr=spider&for=pc)
