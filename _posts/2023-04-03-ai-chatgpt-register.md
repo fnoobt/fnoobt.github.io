@@ -1,11 +1,3 @@
-<!--
- * @Author: jianglang my_hb@qq.com
- * @Date: 2023-07-26 15:46:55
- * @LastEditors: jianglang my_hb@qq.com
- * @LastEditTime: 2024-03-24 13:05:57
- * @FilePath: \Blog\_posts\2023-04-03-ai-chatgpt-register.md
- * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
--->
 ---
 title: ChatGPT 注册教程
 author: fnoobt
