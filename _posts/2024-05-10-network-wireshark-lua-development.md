@@ -189,17 +189,17 @@ or
 对解析器的引用，用于针对数据包或其一部分调用解析器。
 
 - **Dissector.get(name)**
- + 按名称获取解析器引用。
- + 参数：
-  * name:解析器的名字
- + 返回：如果找到，则为 Dissector 引用，否则 nil 。
+   + 按名称获取解析器引用。
+   + 参数：
+      * name:解析器的名字
+   + 返回：如果找到，则为 Dissector 引用，否则 nil 。
 - **dissector:call(tvb, pinfo, tree)**
- + 针对给定数据包（或其一部分）调用解析器。
- + 参数：
-  * tvb:要剖析的缓冲区
-  * pinfo:数据包信息
-  * tree:要在其上添加协议项的树。
- + 返回：剖析的字节数。请注意，某些解析器总是返回传入缓冲区中的字节数，因此请注意。
+   + 针对给定数据包（或其一部分）调用解析器。
+   + 参数：
+      * tvb:要剖析的缓冲区
+      * pinfo:数据包信息
+      * tree:要在其上添加协议项的树。
+   + 返回：剖析的字节数。请注意，某些解析器总是返回传入缓冲区中的字节数，因此请注意。
 
 #### 2.1.2 解析器表 DissectorTable
 特定协议的子解析器表（例如，http、smtp、sip 等 TCP 子解析器被添加到表“tcp.port”中）。
@@ -207,82 +207,82 @@ or
 有助于向表中添加更多解析器，以便它们出现在“解码为...”对话框中。
 
 - **DissectorTable.new(tablename, [uiname], [type], [base], [proto])**
- + 创建一个新的解析器表供您的解析器使用。
- + 参数：
-  * tablename:表名，表的简称，使用小写字母数字、点和/或下划线
-  * uiname:用户界面中表的名称。默认为tablename中给定的名称，但可以是任何字符串
-  * type:类型，ftypes.UINT8、ftypes.UINT16、ftypes.UINT24、ftypes.UINT32、ftypes.STRING、ftypes.NONE、ftypes.GUID、ftypes.UINT32之一。
-  * base:进制类型，base.NONE、base.DEC、base.HEX、base.OCT、base.DEC_HEX、base.HEX_DEC、base.DEC之一。
-  * proto:使用此解析器表的 Proto 对象。
- + 返回：新创建的 DissectorTable。
+   + 创建一个新的解析器表供您的解析器使用。
+   + 参数：
+      * tablename:表名，表的简称，使用小写字母数字、点和/或下划线
+       * uiname:用户界面中表的名称。默认为tablename中给定的名称，但可以是任何字符串
+       * type:类型，ftypes.UINT8、ftypes.UINT16、ftypes.UINT24、ftypes.UINT32、ftypes.STRING、ftypes.NONE、ftypes.GUID、ftypes.UINT32之一。
+      * base:进制类型，base.NONE、base.DEC、base.HEX、base.OCT、base.DEC_HEX、base.HEX_DEC、base.DEC之一。
+       * proto:使用此解析器表的 Proto 对象。
+   + 返回：新创建的 DissectorTable。
 - **DissectorTable.get(tablename)**
- + 获取对现有解析器表的引用。
- + 参数：
-  * tablename:表名
- + 返回：如果找到，则为 DissectorTable 引用，否则 nil 。
+   + 获取对现有解析器表的引用。
+   + 参数：
+       * tablename:表名
+   + 返回：如果找到，则为 DissectorTable 引用，否则 nil 。
 - **dissectortable:add(pattern, dissector)**
- + 将带有解析器函数的 Proto 或 Dissector 对象添加到解析器表中。
- + 参数：
-  * pattern:要匹配的模式（整数、整数范围或字符串，具体取决于表的类型）。
-  * dissector:要添加的解析器（ Proto 或 Dissector ）。
+   + 将带有解析器函数的 Proto 或 Dissector 对象添加到解析器表中。
+   + 参数：
+      * pattern:要匹配的模式（整数、整数范围或字符串，具体取决于表的类型）。
+      * dissector:要添加的解析器（ Proto 或 Dissector ）。
 - **dissectortable:try(pattern, tvb, pinfo, tree)**
- + 尝试从表中调用解析器。
- + 参数：
-  * pattern:要匹配的模式（整数、整数范围或字符串，具体取决于表的类型）。
-  * tvb:要剖析的缓冲区
-  * pinfo:数据包信息
-  * tree:要在其上添加协议项的树。
- + 返回：剖析的字节数。请注意，某些解析器总是返回传入缓冲区中的字节数，因此请注意。
+   + 尝试从表中调用解析器。
+   + 参数：
+      * pattern:要匹配的模式（整数、整数范围或字符串，具体取决于表的类型）。
+      * tvb:要剖析的缓冲区
+      * pinfo:数据包信息
+      * tree:要在其上添加协议项的树。
+   + 返回：剖析的字节数。请注意，某些解析器总是返回传入缓冲区中的字节数，因此请注意。
 - **dissectortable:get_dissector(pattern)**
- + 尝试从表中获取解析器。
- + 参数：
-  * pattern:要匹配的模式（整数、整数范围或字符串，具体取决于表的类型）。
- + 返回：如果找到则 Dissector 句柄，否则 nil 。
+   + 尝试从表中获取解析器。
+   + 参数：
+      * pattern:要匹配的模式（整数、整数范围或字符串，具体取决于表的类型）。
+   + 返回：如果找到则 Dissector 句柄，否则 nil 。
 - **dissectortable:add_for_decode_as(proto)**
- + 将给定的 Proto 添加到此 DissectorTable 的“解码为...​”列表中。传入的 Proto 对象的函数用于解析。
- + 参数：
-  * proto:要添加的 Proto 。
+   + 将给定的 Proto 添加到此 DissectorTable 的“解码为...​”列表中。传入的 Proto 对象的函数用于解析。
+   + 参数：
+      * proto:要添加的 Proto 。
 
 #### 2.1.3 偏好 Pref
 Proto 的偏好。
 
 - **Pref.bool(label, default, description)**
- + 创建要添加到 Proto.prefs Lua 表的布尔首选项。
- + 参数：
-  * label:此首选项的标签（首选项输入右侧的文本）。
-  * default:此首选项的默认值。
-  * description:此偏好的描述。
+   + 创建要添加到 Proto.prefs Lua 表的布尔首选项。
+   + 参数：
+      * label:此首选项的标签（首选项输入右侧的文本）。
+      * default:此首选项的默认值。
+      * description:此偏好的描述。
 
 #### 2.1.4 首选项 Prefs
 协议的首选项表。
 
 - **prefs:__newindex(name, pref)**
- + 创建新的偏好。
- + 参数：
-  * name:此首选项的缩写。
-  * pref:有效但仍未分配的 Pref 对象。
+   + 创建新的偏好。
+   + 参数：
+      * name:此首选项的缩写。
+      * pref:有效但仍未分配的 Pref 对象。
 
 #### 2.1.5 协议 Proto
 Wireshark 中的新协议。协议有多种用途。主要是解析协议，但它们也可以是用于注册用于其他目的的偏好的虚拟对象。
 
 - **Proto.new(name, description)**
- + 创建一个新的 Proto 对象。
- + 参数：
-  * name:协议的名称。
-  * description:协议的长文本描述（通常是小写）。
- + 返回：新创建的 Proto 对象。
+   + 创建一个新的 Proto 对象。
+   + 参数：
+      * name:协议的名称。
+      * description:协议的长文本描述（通常是小写）。
+   + 返回：新创建的 Proto 对象。
 
 - **proto.dissector**
- + 协议的解析器，您定义的函数。稍后调用时，将给出该函数。
-  * 一个 Tvb 对象
-  * 一个 Pinfo 对象
-  * 一个 TreeItem 对象
+   + 协议的解析器，您定义的函数。稍后调用时，将给出该函数。
+      * 一个 Tvb 对象
+      * 一个 Pinfo 对象
+      * 一个 TreeItem 对象
 - **proto.name**
- + 该解析器的名字。
+   + 该解析器的名字。
 - **proto.description**
- + 该解析器的描述。
+   + 该解析器的描述。
 - **proto.fields**
- + 该解析器的 Lua 表。ProtoField
+   + 该解析器的 Lua 表。ProtoField
 
 #### 2.1.6 协议专家 ProtoExpert
 协议专家信息字段，在将项目添加到解剖树时使用。
@@ -293,17 +293,17 @@ Wireshark 中的新协议。协议有多种用途。主要是解析协议，但�
 协议字段（将项目添加到解析树时使用）。
 
 - **ProtoField.new(name, abbr, type, [valuestring], [base], [mask], [description])**
- + 创建一个新的 ProtoField 对象用于协议字段。
- + 参数：
-  * name:字段的实际名称（出现在树中的字符串）。
-  * abbr:字段的过滤器名称（过滤器中使用的字符串）。
-  * type:类型，ftypes.BOOLEAN、ftypes.CHAR、ftypes.UINT8、ftypes.UINT16、
-  ftypes.UINT24、ftypes.UINT32、ftypes.UINT64、ftypes.INT8、ftypes.INT16、ftypes.INT24、ftypes.INT32、ftypes.INT64、ftypes.FLOAT、ftypes.DOUBLE、ftypes.ABSOLUTE_TIME、ftypes.RELATIVE_TIME、ftypes.STRING、ftypes.STRINGZ、ftypes.UINT_STRING、ftypes.ETHER、ftypes.BYTES、ftypes.UINT_BYTES、ftypes.IPv4、ftypes.IPv6、ftypes.IPXNET、ftypes.FRAMENUM、ftypes.PCRE、ftypes.GUID、ftypes.OID、ftypes.PROTOCOL、ftypes.REL_OID、ftypes.SYSTEM_ID、ftypes.EUI64、ftypes.NONE之一。
-  * valuestring:包含与值相对应的文本的表，或者包含与值 ({min, max, "string"}) 相对应的范围字符串值表的表，或者包含值的单位名称的表如果基数是后续base之一，或者如果字段类型是 ftypes.FRAMENUM。base.RANGE_STRING、base.UNIT_STRING、frametype.NONE、frametype.REQUEST、frametype.RESPONSE、frametype.ACK、frametype.DUP_ACK
-  * base:进制类型，base.NONE、base.DEC、base.HEX、base.OCT、base.DEC_HEX、base.HEX_DEC、base.UNIT_STRING、base.RANGE_STRING之一。
-  * mask:要使用的位掩码。
-  * description:字段的描述。
- + 返回：新创建的 新创建的 ProtoField 对象。
+   + 创建一个新的 ProtoField 对象用于协议字段。
+   + 参数：
+      * name:字段的实际名称（出现在树中的字符串）。
+      * abbr:字段的过滤器名称（过滤器中使用的字符串）。
+      * type:类型，ftypes.BOOLEAN、ftypes.CHAR、ftypes.UINT8、ftypes.UINT16、
+      ftypes.UINT24、ftypes.UINT32、ftypes.UINT64、ftypes.INT8、ftypes.INT16、ftypes.INT24、ftypes.INT32、ftypes.INT64、ftypes.FLOAT、ftypes.DOUBLE、ftypes.ABSOLUTE_TIME、ftypes.RELATIVE_TIME、ftypes.STRING、ftypes.STRINGZ、ftypes.UINT_STRING、ftypes.ETHER、ftypes.BYTES、ftypes.UINT_BYTES、ftypes.IPv4、ftypes.IPv6、ftypes.IPXNET、ftypes.FRAMENUM、ftypes.PCRE、ftypes.GUID、ftypes.OID、ftypes.PROTOCOL、ftypes.REL_OID、ftypes.SYSTEM_ID、ftypes.EUI64、ftypes.NONE之一。
+      * valuestring:包含与值相对应的文本的表，或者包含与值 ({min, max, "string"}) 相对应的范围字符串值表的表，或者包含值的单位名称的表如果基数是后续base之一，或者如果字段类型是 ftypes.FRAMENUM。base.RANGE_STRING、base.UNIT_STRING、frametype.NONE、frametype.REQUEST、frametype.RESPONSE、frametype.ACK、frametype.DUP_ACK
+      * base:进制类型，base.NONE、base.DEC、base.HEX、base.OCT、base.DEC_HEX、base.HEX_DEC、base.UNIT_STRING、base.RANGE_STRING之一。
+      * mask:要使用的位掩码。
+      * description:字段的描述。
+   + 返回：新创建的 新创建的 ProtoField 对象。
 - **ProtoField.char(abbr, [name], [base], [valuestring], [mask], [description])**
 - **ProtoField.uint8(abbr, [name], [base], [valuestring], [mask], [description])**
 - **ProtoField.uint16(abbr, [name], [base], [valuestring], [mask], [description])**
@@ -324,26 +324,26 @@ Wireshark 中的新协议。协议有多种用途。主要是解析协议，但�
 - **ProtoField.ipv6(abbr, [name], [description])**
 
 - **ProtoField.type**
- + 字段的类型。
+   + 字段的类型。
 - **ProtoField.abbr**
- + 字段的缩写名称。
+   + 字段的缩写名称。
 - **ProtoField.name**
- + 字段的实际名称。
+   + 字段的实际名称。
 - **ProtoField.base**
- + 字段的进制类型。
+   + 字段的进制类型。
 - **ProtoField.valuestring**
- + 字段的值字符串。
+   + 字段的值字符串。
 - **ProtoField.mask**
- + 字段的位掩码。
+   + 字段的位掩码。
 - **ProtoField.description**
- + 字段的描述。
+   + 字段的描述。
 
 #### 2.1.8 全局函数 Global Functions
 
 - **register_postdissector(proto, [allfields])**
- + 将 Proto 协议（带有解析器函数）设为后解析器。解剖后的每一帧都会调用它。
+   + 将 Proto 协议（带有解析器函数）设为后解析器。解剖后的每一帧都会调用它。
 - **dissect_tcp_pdus(tvb, tree, min_header_size, get_len_func, dissect_func, [desegment])**
- + 让 TCP 层为 TCP 段中的每个 PDU 调用给定的 Lua 解析函数，其长度由给定的 get_len_func 函数返回。
+   + 让 TCP 层为 TCP 段中的每个 PDU 调用给定的 Lua 解析函数，其长度由给定的 get_len_func 函数返回。
 
 ### 2.2 获取解析数据
 #### 2.2.1 字段 Field 
@@ -352,20 +352,20 @@ Wireshark 中的新协议。协议有多种用途。主要是解析协议，但�
 创建后，它会在回调函数中使用，以生成 FieldInfo 对象。
 
 - **Field.new(fieldname)**
- + 创建一个字段提取器。
- + 参数：
-  * fieldname:字段的过滤器名称（例如 ip.addr）
- + 返回：字段提取器
+   + 创建一个字段提取器。
+   + 参数：
+      * fieldname:字段的过滤器名称（例如 ip.addr）
+   + 返回：字段提取器
 
 > 必须在调用 Taps 或 Dissector 之前定义字段提取器
 {: .prompt-warning }
 
 - **Field.name**
- + 该字段的过滤器名称，或者nil。
+   + 该字段的过滤器名称，或者nil。
 - **Field.display**
- + 该字段的完整显示名称，或 nil。
+   + 该字段的完整显示名称，或 nil。
 - **Field.type**
- + 该字段的 ftype ，或者nil。
+   + 该字段的 ftype ，或者nil。
 
 #### 2.2.2 字段信息 FieldInfo
 从解析的数据包数据中提取的字段。 FieldInfo 对象只能在解析器、后解析器、启发式解析器和 Tap 的回调函数中使用。
@@ -373,23 +373,23 @@ Wireshark 中的新协议。协议有多种用途。主要是解析协议，但�
 FieldInfo 可以通过预先使用 Field.new() 或 Field() 在现有的 Wireshark 字段上调用，也可以在 Lua 创建的新字段上调用一个 ProtoField。
 
 - **fieldinfo.len**
- + 该字段的长度。
+   + 该字段的长度。
 - **fieldinfo.offset**
- + 该字段的偏移量。
+   + 该字段的偏移量。
 - **fieldinfo.value**
- + 该字段的值。
+   + 该字段的值。
 - **fieldinfo.label**
- + 表示该字段的字符串。
+   + 表示该字段的字符串。
 - **fieldinfo.display**
- + 该字段的字符串显示如 GUI 中所示。
+   + 该字段的字符串显示如 GUI 中所示。
 - **fieldinfo.type**
- + 内部字段类型，一个与 ftype 值之一匹配的数字。
+   + 内部字段类型，一个与 ftype 值之一匹配的数字。
 - **fieldinfo.little_endian**
- + 该字段是否采用小端编码（布尔值）。
+   + 该字段是否采用小端编码（布尔值）。
 - **fieldinfo.big_endian**
- + 该字段是否采用大端编码（布尔值）。
+   + 该字段是否采用大端编码（布尔值）。
 - **fieldinfo.name**
- + 该字段的过滤器名称。
+   + 该字段的过滤器名称。
 
 #### 2.2.3 全局函数
 
@@ -402,20 +402,20 @@ FieldInfo 可以通过预先使用 Field.new() 或 Field() 在现有的 Wireshar
 代表一个地址。
 
 - **Address.ip(hostname)**
- + 创建表示 IPv4 地址的地址对象。
-  + 参数：
-  * hostname:IP 主机的地址或名称。
- + 返回：地址对象。
+   + 创建表示 IPv4 地址的地址对象。
+   + 参数：
+      * hostname:IP 主机的地址或名称。
+   + 返回：地址对象。
 - **Address.ipv6(hostname)**
- + 创建表示 IPv6 地址的地址对象。
-  + 参数：
-  * hostname:IP 主机的地址或名称。
- + 返回：地址对象。
+   + 创建表示 IPv6 地址的地址对象。
+   + 参数：
+      * hostname:IP 主机的地址或名称。
+   + 返回：地址对象。
 - **Address.ether(eth)**
- + 创建表示以太网地址的地址对象。
-  + 参数：
-  * eth:以太网地址。
- + 返回：地址对象。
+   + 创建表示以太网地址的地址对象。
+   + 参数：
+      * eth:以太网地址。
+   + 返回：地址对象。
 
 #### 2.3.2 列 Column
 数据包列表中的一列。
@@ -430,27 +430,27 @@ NSTime代表一个nstime_t。这是一个具有秒和纳秒的对象。
 Packet information数据包信息。
 
 - **pinfo.visited**
- + 该数据包是否已被访问过。
+   + 该数据包是否已被访问过。
 - **pinfo.number**
- + 当前文件中该数据包的编号。
+   + 当前文件中该数据包的编号。
 - **pinfo.len**
- + 帧的长度。
+   + 帧的长度。
 - **pinfo.caplen**
- + 捕获的帧长度。
+   + 捕获的帧长度。
 - **pinfo.curr_proto**
- + 我们正在解析哪个协议。
+   + 我们正在解析哪个协议。
 - **pinfo.desegment_offset**
- + tvbuff 中的偏移量，下次调用时解析器将继续处理该偏移量。
+   + tvbuff 中的偏移量，下次调用时解析器将继续处理该偏移量。
 - **pinfo.port_type**
- + .src_port 和 .dst_port 的端口类型。
+   + .src_port 和 .dst_port 的端口类型。
 - **pinfo.src_port**
- + 该数据包的源端口。
+   + 该数据包的源端口。
 - **pinfo.dst_port**
- + 该数据包的目标端口。
+   + 该数据包的目标端口。
 - **pinfo.net_src**
- + 该数据包的网络层源地址。
+   + 该数据包的网络层源地址。
 - **pinfo.net_dst**
- + 该数据包的网络层目标地址。
+   + 该数据包的网络层目标地址。
 
 #### 2.3.6 私有表 PrivateTable
 PrivateTable代表pinfo→private_table。主要调试使用。
@@ -459,11 +459,11 @@ PrivateTable代表pinfo→private_table。主要调试使用。
 
 #### 2.4.1 字节数组 ByteArray
 - **ByteArray.new([hexbytes], [separator])**
- + 创建一个新的 ByteArray 对象。
- + 参数：
-  * hexbytes:由十六进制字节组成的字符串，如“00 B1 A2”或“1a2b3c4d”。
-  * separator:十六进制字节/单词之间的字符串分隔符（默认=“”），或者如果使用布尔值 true ，则第一个参数被视为原始二进制数据
- + 返回：新的 ByteArray 对象。
+   + 创建一个新的 ByteArray 对象。
+   + 参数：
+      * hexbytes:由十六进制字节组成的字符串，如“00 B1 A2”或“1a2b3c4d”。
+      * separator:十六进制字节/单词之间的字符串分隔符（默认=“”），或者如果使用布尔值 true ，则第一个参数被视为原始二进制数据
+   + 返回：新的 ByteArray 对象。
 
 > 从版本 1.11.3 开始，如果第二个参数是布尔值 true ，则第一个参数将被视为要使用的原始 Lua 字节字符串，而不是十六进制字符串。
 {: .prompt-info }
@@ -477,33 +477,33 @@ Tvb 代表数据包的缓冲区。它作为参数传递给侦听器和解析器�
 {: .prompt-warning }
 
 - **tvb:reported_len()**
- + 获取 Tvb 的报告长度（网络上的长度）。
+   + 获取 Tvb 的报告长度（网络上的长度）。
 - **tvb:captured_len()**
- + 获取 Tvb 的捕获长度（捕获过程中保存的数量）。
+   + 获取 Tvb 的捕获长度（捕获过程中保存的数量）。
 - **tvb:len()**
- + 获取 Tvb 的报告长度（网络上的长度）。
+   + 获取 Tvb 的报告长度（网络上的长度）。
 - **tvb:reported_length_remaining([offset])**
- + 获取到 Tvb 末尾的数据包数据的报告（未捕获）长度；如果偏移量超出 Tvb 末尾，则获取 0。
+   + 获取到 Tvb 末尾的数据包数据的报告（未捕获）长度；如果偏移量超出 Tvb 末尾，则获取 0。
 - **tvb:bytes([offset], [length])**
- + 从 Tvb 获取 ByteArray 。
- + 参数：
-  * offset:距 Tvb 开头的偏移量（以八位字节为单位）。默认为 0。
-  * length:范围的长度（以八位字节为单位）。默认为 Tvb 结束。
- + 返回：ByteArray 对象或 nil。
+   + 从 Tvb 获取 ByteArray 。
+   + 参数：
+      * offset:距 Tvb 开头的偏移量（以八位字节为单位）。默认为 0。
+      * length:范围的长度（以八位字节为单位）。默认为 Tvb 结束。
+   + 返回：ByteArray 对象或 nil。
 - **tvb:offset()**
- + 返回子 Tvb 的原始偏移量（从源 Tvb 的开头）。
+   + 返回子 Tvb 的原始偏移量（从源 Tvb 的开头）。
 - **tvb:range([offset], [length])**
- + 从此 Tvb 创建一个 TvbRange 。
- + 参数：
-  * offset:距 Tvb 开头的偏移量（以八位字节为单位）。默认为 0。
-  * length:范围的长度（以八位字节为单位）。默认为 -1，指定 Tvb 中的剩余字节。
- + 返回：TVB范围
+   + 从此 Tvb 创建一个 TvbRange 。
+   + 参数：
+      * offset:距 Tvb 开头的偏移量（以八位字节为单位）。默认为 0。
+      * length:范围的长度（以八位字节为单位）。默认为 -1，指定 Tvb 中的剩余字节。
+   + 返回：TVB范围
 - **tvb:raw([offset], [length])**
- + 从此 Tvb 创建一个 TvbRange 。
- + 参数：
-  * offset:第一个字节的位置。默认值为 0，即第一个字节。
-  * length:要获取的段的长度。默认值为 -1，或 Tvb 中的剩余字节。
- + 返回：Tvb 中二进制字节的 Lua 字符串。
+   + 从此 Tvb 创建一个 TvbRange 。
+   + 参数：
+      * offset:第一个字节的位置。默认值为 0，即第一个字节。
+      * length:要获取的段的长度。默认值为 -1，或 Tvb 中的剩余字节。
+   + 返回：Tvb 中二进制字节的 Lua 字符串。
 
 #### 2.4.3 Tvb的可用范围 TvbRange
 TvbRange 表示 Tvb 的可用范围，用于从生成它的 Tvb 中提取数据。
@@ -511,21 +511,21 @@ TvbRange 表示 Tvb 的可用范围，用于从生成它的 Tvb 中提取数据�
 TvbRange 是通过调用 Tvb 创建的（例如“tvb(offset,length)”）。长度默认为 -1，表示使用到 Tvb 末尾的字节。如果 TvbRange 范围超出 Tvb 的范围，则创建将导致运行时错误。
 
 - **tvbrange:uint()**
- + 从 TvbRange 获取 Big Endian（网络顺序）无符号整数。该范围必须为 1-4 个八位字节长。
+   + 从 TvbRange 获取 Big Endian（网络顺序）无符号整数。该范围必须为 1-4 个八位字节长。
 - **tvbrange:le_uint()**
- + 从 TvbRange 获取 Little Endian 无符号整数。该范围必须为 1-4 个八位字节长。
+   + 从 TvbRange 获取 Little Endian 无符号整数。该范围必须为 1-4 个八位字节长。
 - **tvbrange:uint64()**
- + 从 TvbRange 获取 Big Endian（网络顺序）无符号 64 位整数，作为 UInt64 对象。该范围必须为 1-8 个八位字节长。
+   + 从 TvbRange 获取 Big Endian（网络顺序）无符号 64 位整数，作为 UInt64 对象。该范围必须为 1-8 个八位字节长。
 - **tvbrange:int()**
- + 从 TvbRange 获取 Little Endian 有符号整数。该范围必须为 1-4 个八位字节长。
+   + 从 TvbRange 获取 Little Endian 有符号整数。该范围必须为 1-4 个八位字节长。
 - **tvbrange:int64()**
- + 从 TvbRange 获取 Big Endian（网络顺序）带符号的 64 位整数，作为 Int64 对象。该范围必须为 1-8 个八位字节长。
+   + 从 TvbRange 获取 Big Endian（网络顺序）带符号的 64 位整数，作为 Int64 对象。该范围必须为 1-8 个八位字节长。
 - **tvbrange:float()**
- + 从 TvbRange 获取 Little Endian 浮点数。该范围必须为 4 或 8 个八位字节长。
+   + 从 TvbRange 获取 Little Endian 浮点数。该范围必须为 4 或 8 个八位字节长。
 - **tvbrange:ipv4()**
- + 从 TvbRange 获取 IPv4 地址作为 Address 对象。
+   + 从 TvbRange 获取 IPv4 地址作为 Address 对象。
 - **tvbrange:ipv6()**
- + 从 TvbRange 获取 IPv6 Address 对象。
+   + 从 TvbRange 获取 IPv6 Address 对象。
 
 ### 2.5 将信息添加到解析树
 #### 2.5.1 树项 TreeItem 
@@ -536,29 +536,29 @@ TreeItem 代表 Wireshark 的数据包详细信息窗格和 TShark 的数据包�
 在某些情况下，为了提高性能，树并未真正添加到其中。例如，当前未在 Wireshark 的可见窗口窗格中显示/选择的数据包，或者未使用 -V 开关调用 TShark。然而，“add”类型 TreeItem 函数仍然可以被调用，并且仍然返回 TreeItem 对象 - 但信息并没有真正添加到树中。因此，您通常不需要担心是否有一棵真正的树。如果由于某种原因您需要知道它，您可以使用 TreeItem.visible 属性 getter 来检索状态。
 
 - **treeitem:add_packet_field(protofield, [tvbrange], encoding, [label])**
- + 将给定 ProtoField 对象的新子树添加到此树项，并返回新子 TreeItem 。与 TreeItem:add() 和 TreeItem:add_le() 不同， ProtoField 参数不是可选的，并且不能是 Proto 对象。相反，此函数始终使用 ProtoField 来确定要从传入的 TvbRange 中提取的字段类型，并在 GUI 的“数据包字节”窗格中突出显示相关字节（如果有）是GUI）等。如果没有给出 TvbRange ，则不会突出显示任何字节，并且无法确定该字段的值；在这种情况下， ProtoField 必须已定义/创建为不具有长度，否则会发生错误。然而，出于向后兼容性的原因，仍然必须给出 encoding 参数。与 TreeItem:add() 和 TreeItem:add_le() 不同，此函数通过将 encoding 参数设置为 ENC_BIG_ENDIAN 来执行大端和小端解码或 ENC_LITTLE_ENDIAN 。
- + 参数：
-  * protofield:要添加到树中的 ProtoField 字段对象。
-  * tvbrange:此树项覆盖/表示的数据包中的字节数 TvbRange 。
-  * encoding:TvbRange 中的字段编码。
-  * label:要附加到创建的 TreeItem 的一个或多个字符串。
- + 返回：新的子元素 TreeItem ，字段提取的值或 nil，以及偏移量或 nil。
+   + 将给定 ProtoField 对象的新子树添加到此树项，并返回新子 TreeItem 。与 TreeItem:add() 和 TreeItem:add_le() 不同， ProtoField 参数不是可选的，并且不能是 Proto 对象。相反，此函数始终使用 ProtoField 来确定要从传入的 TvbRange 中提取的字段类型，并在 GUI 的“数据包字节”窗格中突出显示相关字节（如果有）是GUI）等。如果没有给出 TvbRange ，则不会突出显示任何字节，并且无法确定该字段的值；在这种情况下， ProtoField 必须已定义/创建为不具有长度，否则会发生错误。然而，出于向后兼容性的原因，仍然必须给出 encoding 参数。与 TreeItem:add() 和 TreeItem:add_le() 不同，此函数通过将 encoding 参数设置为 ENC_BIG_ENDIAN 来执行大端和小端解码或 ENC_LITTLE_ENDIAN 。
+   + 参数：
+      * protofield:要添加到树中的 ProtoField 字段对象。
+      * tvbrange:此树项覆盖/表示的数据包中的字节数 TvbRange 。
+      * encoding:TvbRange 中的字段编码。
+      * label:要附加到创建的 TreeItem 的一个或多个字符串。
+   + 返回：新的子元素 TreeItem ，字段提取的值或 nil，以及偏移量或 nil。
 - **treeitem:add([protofield], [tvbrange], [value], [label])**
- + 向此树项目添加一个子项目，返回新的子项目 TreeItem 。如果 ProtoField 表示数值（int、uint 或 float），则将其视为 Big Endian（网络顺序）值。该函数具有复杂的形式：'treeitem:add([protofield,] [tvbrange,] value], label)'，这样如果第一个参数是 ProtoField 或 Proto ，第二个参数是 TvbRange ，第三个参数给出，它是一个值；但如果第二个参数是非 TvbRange ，那么它就是值（而不是用“nil”填充该参数，这对此函数无效）。如果第一个参数是非 ProtoField 和非 Proto ，则该参数可以是 TvbRange 或标签，并且该值不在使用。
- + 参数：
-  * protofield:要添加到树中的 ProtoField 字段对象。
-  * tvbrange:此树项覆盖/表示的数据包中的字节数 TvbRange 。
-  * value:该字段的值，而不是 ProtoField/Proto 值。
-  * label:用于树项目标签的一个或多个字符串，而不是 ProtoField/Proto 字符串。
- + 返回：新的子 TreeItem。
+   + 向此树项目添加一个子项目，返回新的子项目 TreeItem 。如果 ProtoField 表示数值（int、uint 或 float），则将其视为 Big Endian（网络顺序）值。该函数具有复杂的形式：'treeitem:add([protofield,] [tvbrange,] value], label)'，这样如果第一个参数是 ProtoField 或 Proto ，第二个参数是 TvbRange ，第三个参数给出，它是一个值；但如果第二个参数是非 TvbRange ，那么它就是值（而不是用“nil”填充该参数，这对此函数无效）。如果第一个参数是非 ProtoField 和非 Proto ，则该参数可以是 TvbRange 或标签，并且该值不在使用。
+   + 参数：
+      * protofield:要添加到树中的 ProtoField 字段对象。
+      * tvbrange:此树项覆盖/表示的数据包中的字节数 TvbRange 。
+      * value:该字段的值，而不是 ProtoField/Proto 值。
+      * label:用于树项目标签的一个或多个字符串，而不是 ProtoField/Proto 字符串。
+   + 返回：新的子 TreeItem。
 - **treeitem:add_le([protofield], [tvbrange], [value], [label])**
- + 向此树项目添加一个子项目，返回新的子项目 TreeItem 。如果 ProtoField 表示数值（int、uint 或 float），则将其视为 Little  Endian值。该函数具有复杂的形式：'treeitem:add_le([protofield,] [tvbrange,] value], label)'，这样如果第一个参数是 ProtoField 或 Proto ，第二个参数是 TvbRange ，第三个参数给出，它是一个值；但如果第二个参数是非 TvbRange ，那么它就是值（而不是用“nil”填充该参数，这对此函数无效）。如果第一个参数是非 ProtoField 和非 Proto ，则该参数可以是 TvbRange 或标签，并且该值不在使用。
- + 参数：
-  * protofield:要添加到树中的 ProtoField 字段对象。
-  * tvbrange:此树项覆盖/表示的数据包中的字节数 TvbRange 。
-  * value:该字段的值，而不是 ProtoField/Proto 值。
-  * label:用于树项目标签的一个或多个字符串，而不是 ProtoField/Proto 字符串。
- + 返回：新的子 TreeItem。
+   + 向此树项目添加一个子项目，返回新的子项目 TreeItem 。如果 ProtoField 表示数值（int、uint 或 float），则将其视为 Little  Endian值。该函数具有复杂的形式：'treeitem:add_le([protofield,] [tvbrange,] value], label)'，这样如果第一个参数是 ProtoField 或 Proto ，第二个参数是 TvbRange ，第三个参数给出，它是一个值；但如果第二个参数是非 TvbRange ，那么它就是值（而不是用“nil”填充该参数，这对此函数无效）。如果第一个参数是非 ProtoField 和非 Proto ，则该参数可以是 TvbRange 或标签，并且该值不在使用。
+   + 参数：
+      * protofield:要添加到树中的 ProtoField 字段对象。
+      * tvbrange:此树项覆盖/表示的数据包中的字节数 TvbRange 。
+      * value:该字段的值，而不是 ProtoField/Proto 值。
+      * label:用于树项目标签的一个或多个字符串，而不是 ProtoField/Proto 字符串。
+   + 返回：新的子 TreeItem。
 
 ## 3. Lua示例
 ```lua
@@ -607,9 +607,9 @@ local proto_foo = Proto("foo", "Foo Protocol")
 ```
 
 一个简单的lua代码可以分为三部分：
-1、创建Proto对象
-2、创建dissector方法
-3、注册解析器
+1. 创建Proto对象
+2. 创建dissector方法
+3. 注册解析器
 
 ****
 
