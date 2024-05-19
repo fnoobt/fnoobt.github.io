@@ -228,7 +228,7 @@ msbuild /m /p:Configuration=RelWithDebInfo wireshark_nsis.vcxproj
 
 构建 Wireshark 安装程序。如果对可执行文件进行签名，则应在`wireshark_nsis_prep`和`wireshark_nsis`步骤之间进行签名。若要对安装程序进行签名，应将签名批处理脚本放在路径上。它必须命名为`sign-wireshark.bat`。它应该由 CMake 自动检测，要始终需要签名，请设置 `-DENABLE_SIGNED_NSIS=On` CMake选项。
 
-生成的安装程序位于`C:\Development\wireshark\wsbuild64\packaging\nsis`目录，在其它机器上安装测试。
+生成的安装程序位于`C:\Development\wsbuild64\packaging\nsis`目录，在其它机器上安装测试。
 
 ## 问题与解决方案
 
