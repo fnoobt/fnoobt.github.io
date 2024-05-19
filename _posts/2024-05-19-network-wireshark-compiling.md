@@ -9,15 +9,15 @@ tags: [network,wireshark,compile]
 ## 编译环境搭建
 
 ### 1、推荐：安装 Chocolatey
-[Chocolatey](https://chocolatey.org/)是一个Windows的原生包管理器，[支持的软件包列表](https://community.chocolatey.org/packages)。它支持传统的 Windows 包和 Python 包。
+[Chocolatey](https://chocolatey.org/)是一个Windows的原生包管理器，在[Chocolatey社区包存储库](https://community.chocolatey.org/packages)可以查看支持的包。它支持 Windows 软件包和 Python 包。
 
-[官方安装方法](https://chocolatey.org/install),在Windows 10上以管理员身份运行打开Windows PowerShell，执行如下命令：
+[官方安装方法](https://chocolatey.org/install)，在Windows 10上以管理员身份运行打开`Windows PowerShell`，执行如下命令：
 
 ```bash
 Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 ```
 
-Chocolatey 倾向于将软件包安装到自己的路径 （%ChocolateyInstall%） 中，尽管软件包可以自由使用自己的首选项。您可以使用命令 `choco install` （或其简写 `cinst` ）安装 Chocolatey 软件包。
+Chocolatey 倾向于将软件包安装到自己的路径（%ChocolateyInstall%）中，尽管软件包可以自由使用自己的首选项。您可以使用命令 `choco install` （或其简写 `cinst` ）安装 Chocolatey 软件包。
 ```bash
 rem Flex is required.
 choco install -y winflexbison3
@@ -30,9 +30,9 @@ choco install -y git cmake python3
 {: .prompt-info }
 
 ### 2、安装 Microsoft Visual Studio
-下载并安装[Microsoft Visual Studio 2022 Community Edition](https://visualstudio.microsoft.com/zh-hans/thank-you-downloading-visual-studio/?sku=Community&channel=Release&version=VS2022&source=VSLandingPage&cid=2030&passive=false#installvs)。如果您愿意，可以下载并安装[Microsoft Visual Studio 2019 Community Edition](https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=Community&rel=16)。以下示例适用于 Visual Studio 2022，但可以适用于 Visual Studio 2019。这些是下载所有其他必需部分（相当大的部分）的小型实用程序。
+下载并安装[Microsoft Visual Studio 2022 Community Edition](https://visualstudio.microsoft.com/zh-hans/thank-you-downloading-visual-studio/?sku=Community&channel=Release&version=VS2022&source=VSLandingPage&cid=2030&passive=false#installvs)。如果您愿意，可以下载并安装[Microsoft Visual Studio 2019 Community Edition](https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=Community&rel=16)。
 
-选中`Desktop development with C++`复选框，以下是必选项
+需要安装的插件以 Visual Studio 2022为例（Visual Studio 2019也可以参考）。选中`Desktop development with C++`复选框，以下是必选项
 
 - `MSVC …​ VS 2022 C++`项，其中`…​ build tools (Latest)`
 - `Windows 10 SDK`
@@ -45,9 +45,9 @@ Wireshark 主应用程序使用 Qt 窗口化工具包。要安装Qt，请转到[
 
 在选择组件`Select Components`页面中，选择所需的Qt版本。我们推荐最新的 LTS 版本，稳定的 Windows 安装程序目前附带 Qt 6.7.1。选择以下组件：
 
-- MSVC 2019 64-bit
-- Qt 5 Compatibility Module
-- Qt Debug Information Files (包含可用于调试的PDB文件)
+- `MSVC 2019 64-bit`
+- `Qt 5 Compatibility Module`
+- `Qt Debug Information Files` (包含可用于调试的PDB文件)
 - 在 `Additional Libraries`下，选择`Qt Multimedia` 以支持在RTP Player对话框中播放流的高级控件
 - 您可以取消选择所有其他组件，例如`Qt Charts`或`Android xxxx`，因为它们不是必需的。
 
@@ -59,7 +59,7 @@ Qt 6 是构建 Wireshark 的默认选项，但 Wireshark 支持 Qt 5.12 及更�
 在[Qt官方发布](https://download.qt.io/official_releases/qt/)中，选择相应版本，离线安装。
 
 > QT 5.15 之后不再支持直接下载安装包，需下载源码编译安装。
-{: .prompt-info }
+{: .prompt-warning }
 
 ### 4、安装 Python
 从 [Python官方](https://www.python.org/downloads/) 获取 Python 3 安装程序并安装 Python。其安装位置因安装程序中选择的选项和要安装的 Python 版本而异。以Python3.10为例，常见的安装目录是:
@@ -98,7 +98,7 @@ Asciidoctor 可以直接作为 Ruby 脚本运行，也可以通过 Java 包装�
 
 您可以使用 Chocolatey 安装 AsciidoctorJ、Xsltproc 和 DocBook。AsciidoctorJ 需要 Java 运行时，并且有很多可供选择。Chocolatey 目前不支持替代包依赖项，包括对 Java 的依赖项。因此，安装 asciidoctorj 软件包不会自动安装 Java 运行时，您必须单独安装一个。
 
-在Windows 10上以管理员身份运行打开Windows PowerShell，执行如下命令：
+在Windows 10上以管理员身份运行打开`Windows PowerShell`，执行如下命令：
 ```bash
 choco install -y <your favorite Java runtime>
 choco install -y asciidoctorj xsltproc docbook-bundle
@@ -126,10 +126,10 @@ choco install -y activeperl
 
 ### 1、安装和准备源代码
 
-> 在你开始为自己的项目破解 Wireshark 源代码之前，确保 Wireshark 至少编译和运行一次是个好主意。此示例使用 Git 扩展，但任何其他 Git 客户端也应该可以工作。
+> 在你开始为自己的项目编译 Wireshark 源代码之前，最好至少编译和运行一次 Wireshark。
 {: .prompt-info }
 
-**下载源代码**：使用命令行或 Git 扩展将 Wireshark 源代码下载到 `C:\Development\wireshark` 中：
+**下载源代码**：使用命令行或 Git 将 Wireshark 源代码下载到 `C:\Development\wireshark` 中：
 ```bash
 cd C:\Development
 git clone https://gitlab.com/wireshark/wireshark.git
@@ -138,7 +138,8 @@ git clone https://gitlab.com/wireshark/wireshark.git
 ### 2、打开 Visual Studio 命令提示符
 从`开始`菜单中，导航到`Visual Studio 2022`文件夹，然后选择适合要进行的生成的命令提示符，例如，64 位版本的`x64 Native Tools Command Prompt for VS 2022`。
 
-所有后续操作都在此命令提示符窗口中进行。
+> 所有后续操作都在此命令提示符窗口中进行。
+{: .prompt-info }
 
 #### 设置环境变量
 使用适合您安装的路径和值设置以下环境变量：
@@ -147,7 +148,7 @@ rem Let CMake determine the library download directory name under
 rem WIRESHARK_BASE_DIR or set it explicitly by using WIRESHARK_LIB_DIR.
 rem Set *one* of these.
 set WIRESHARK_BASE_DIR=C:\Development
-rem set WIRESHARK_LIB_DIR=c:\wireshark-x64-libs
+rem set WIRESHARK_LIB_DIR=C:\wireshark-x64-libs
 rem Set the Qt installation directory
 set WIRESHARK_QT6_PREFIX_PATH=C:\Qt\6.7.1\msvc2019_64
 rem Append a custom string to the package version. Optional.
@@ -170,7 +171,10 @@ CMake 用于处理源代码树中的CMakeLists.txt文件，并生成适合您系
 cmake -G "Visual Studio 17 2022" -A x64 ..\wireshark
 ```
 
-根据需要调整 Visual Studio 版本和Wireshark 源代码树的路径。要使用其他生成器，请修改 -G 参数。 cmake -G 列出了所有 CMake 支持的生成器，Wireshark仅支持 Visual Studio，不支持 32 位版本。
+根据需要调整 Visual Studio 版本和Wireshark 源代码树的路径。要使用其他生成器，请修改 -G 参数。 cmake -G 列出了所有 CMake 支持的生成器，Wireshark仅支持 Visual Studio，不支持 32 位版本。比如Visual Studio 2019的命令为：
+```bash 
+cmake -G "Visual Studio 16 2019" -A x64 ..\wireshark
+```
 
 在config的过程中，会自动下载依赖包，位于`C:\Development\wireshark-win64-libs`目录。
 
@@ -225,6 +229,14 @@ msbuild /m /p:Configuration=RelWithDebInfo wireshark_nsis.vcxproj
 构建 Wireshark 安装程序。如果对可执行文件进行签名，则应在`wireshark_nsis_prep`和`wireshark_nsis`步骤之间进行签名。若要对安装程序进行签名，应将签名批处理脚本放在路径上。它必须命名为`sign-wireshark.bat`。它应该由 CMake 自动检测，要始终需要签名，请设置 `-DENABLE_SIGNED_NSIS=On` CMake选项。
 
 生成的安装程序位于`C:\Development\wireshark\wsbuild64\packaging\nsis`目录，在其它机器上安装测试。
+
+## 问题与解决方案
+
+### error C2220: 以下警告被视为错误
+在Visual Studio中，将警告视为错误是一个提高代码质量的设置，它强制开发人员解决编译过程中出现的所有警告，以确保代码更加健壮和标准合规。如果遇到`error C2220: 以下警告被视为错误`，修改`CMakeLists.txt`中的`set(WERROR_COMMON_FLAGS "/WX")`为`set(WERROR_COMMON_FLAGS "/WX-")`
+
+- `/WX` 或 `是 (/WX)`：这表示所有警告都被当作错误处理。
+- `/WX-` 或 `否 (/WX-)`：这表示警告不会导致编译失败。
 
 ****
 
