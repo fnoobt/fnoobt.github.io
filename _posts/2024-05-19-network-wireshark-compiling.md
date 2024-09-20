@@ -238,6 +238,29 @@ msbuild /m /p:Configuration=RelWithDebInfo wireshark_nsis.vcxproj
 - `/WX` 或 `是 (/WX)`：这表示所有警告都被当作错误处理。
 - `/WX-` 或 `否 (/WX-)`：这表示警告不会导致编译失败。
 
+### 打包找不到文件
+如果在打包的时候遇到以下类型的报错，找不到`androiddump.html`这个文件，但是可以找到`androiddump.exe`文件，这是因为在window中使用的是exe文件，没有html文件。
+```yaml
+File: "D:\project\wireshark\wsbuild64\run\RelWithDebInfo\androiddump.html" -> no files found.
+Usage: File [/nonfatal] [/a] ([/r] [/x filespec [...]] filespec [...] |
+/oname=outfile one_file_only)
+Error in macro InstallExtcap on macroline 3
+Error in script "wireshark.nsi" on line 1150 -- aborting creation process
+```
+
+需要将`InstallExtcap`宏定义进行修改，确保它能够正确处理传入的参数，并在指定的路径下找到相应的文件。
+```yaml
+!macro InstallExtcap EXTCAP_NAME
+
+  SetOutPath $INSTDIR
+  #修改 File "${STAGING_DIR}\${EXTCAP_NAME}.html"
+  File "${STAGING_DIR}\${EXTCAP_NAME}.exe"
+  SetOutPath $INSTDIR\extcap\wireshark
+  File "${STAGING_DIR}\extcap\wireshark\${EXTCAP_NAME}.exe"
+```
+
+重新打包
+
 ****
 
 本文参考
