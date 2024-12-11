@@ -8,8 +8,8 @@ tags: [vps,linux,ubuntu,misago]
 
 Misago 是一个用 Python 和 Django 开发的现代开源论坛（BBS）软件。它旨在提供强大、灵活、且用户友好的社区解决方案。
 
-# 介绍
-## Misago 的主要特性
+## 介绍
+### Misago 的主要特性
 1. 现代化设计：
  - 支持响应式设计，适配桌面和移动设备。
  - 界面简洁美观，符合当代设计风格。
@@ -36,19 +36,19 @@ Misago 是一个用 Python 和 Django 开发的现代开源论坛（BBS）软件
 7. 国际化支持：
  - 内置多语言支持，可以方便地添加或切换语言。
 
-## 适合的使用场景
+### 适合的使用场景
 - 社区论坛：搭建任何形式的在线社区，比如技术支持论坛、兴趣小组等。
 - 内部讨论平台：企业内部团队的讨论工具。
 - 替代传统论坛：需要迁移或升级到现代论坛平台的用户。
 
-# 安装
-## 1. 更新系统包
+## 安装
+### 1. 更新系统包
 ```bash
 sudo apt update
 sudo apt upgrade -y
 ```
 
-## 2. 安装必备依赖
+### 2. 安装必备依赖
 Misago 需要 Python 和 PostgreSQL 数据库等支持，运行以下命令安装：
 ```bash
 sudo apt install -y python3 python3-pip python3-dev python3-venv \
@@ -67,7 +67,7 @@ python3 --version
 sudo apt install python3.11 python3.11-venv python3.11-dev
 ```
 
-## 3. 创建 Misago 用户
+### 3. 创建 Misago 用户
 ```bash
 # 创建 misago 用户
 sudo adduser misago_user
@@ -79,7 +79,7 @@ su - misago_user
 > 将 `misago_user` 替换为你想创建的misago用户名
 {: .prompt-info }
 
-## 4. 设置 PostgreSQL 数据库
+### 4. 设置 PostgreSQL 数据库
 ```bash
 # 切换到 PostgreSQL 管理账户, 并进入 PostgreSQL 命令行，这两步可以分开
 sudo -u postgres psql
@@ -105,7 +105,7 @@ GRANT ALL PRIVILEGES ON DATABASE misago_db TO misago_user;
 sudo -i -u postgres psql -c "\l"
 ```
 
-## 5. 克隆 Misago 源代码
+### 5. 克隆 Misago 源代码
 从官方 GitHub 仓库获取最新代码：
 ```bash
 #下载整个项目
@@ -119,7 +119,7 @@ cd Misago
 git checkout 0.39.x
 ```
 
-## 6. 创建和激活虚拟环境
+### 6. 创建和激活虚拟环境
 在Misago目录下，为Misago创建一个虚拟环境，使Misago安装与系统上的其他Python包隔离。
 ```bash
 # 如果默认是3.11及以上
@@ -131,44 +131,44 @@ python3.11 -m venv misagoenv
 source misagoenv/bin/activate
 ```
 
-## 7. 安装 Python 依赖
+### 7. 安装 Python 依赖
 使用 pip 安装 Misago 所需的依赖项：
 ```bash
 pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-## 8. 运行数据库迁移
+### 8. 运行数据库迁移
 ```bash
 python manage.py migrate
 ```
 
-## 9. 创建管理员账户
+### 9. 创建管理员账户
 ```bash
 python manage.py createsuperuser
 ```
 
 此处需要按提示输入用户名、电子邮件和密码。
 
-## 10. 更新静态文件
+### 10. 更新静态文件
 ```bash
 python manage.py collectstatic
 ```
 
-## 11. 启动服务
+### 11. 启动服务
 运行以下命令启动 Misago 的服务：
 ```bash
 python manage.py runserver 0.0.0.0:8000
 ```
 
 > 添加`0.0.0.0:8000`作为参数，才可以实现局域网设备的访问
-{: .prompt-info }
+{: .prompt-warning }
 
 默认情况下，Misago会运行在 [http://localhost:8000](http://localhost:8000)。
 管理员界面[http://localhost:8000/admincp/](http://localhost:8000/admincp/)。
 
-## 12. 问题解决
-### 12.1 数据库迁移时提示`permission denied to create extension "hstore"`
+### 12. 问题解决
+#### 12.1 数据库迁移时提示`permission denied to create extension "hstore"`
 解决方法：启用 `hstore` 扩展
 ```bash
 # 切换到 PostgreSQL 管理账户, 并进入 PostgreSQL 命令行
@@ -178,7 +178,7 @@ sudo -u postgres psql
 CREATE EXTENSION IF NOT EXISTS hstore;
 ```
 
-### 12.2 数据库迁移时提示`permission denied to create extension "btree_gin"`
+#### 12.2 数据库迁移时提示`permission denied to create extension "btree_gin"`
 解决方法：启用 `btree_gin` 扩展
 ```bash
 # 切换到 PostgreSQL 管理账户, 并进入 PostgreSQL 命令行
@@ -188,6 +188,6 @@ sudo -u postgres psql
 CREATE EXTENSION IF NOT EXISTS btree_gin;
 ```
 
-### 12.3 中文支持
+#### 12.3 中文支持
 Misago 从 0.39.1 开始原生支持简体中文，在`misago/locale/zh_Hans/LC_MESSAGES`目录下存放`django.po`文件和编译生成的`djangojs.mo`文件。
 
