@@ -76,8 +76,24 @@ sudo adduser misago_user
 su - misago_user
 ```
 
-> 将 `misago_user` 替换为你想创建的misago用户名
+> 将 `misago_user` 替换为你想创建的 Misago 用户名
 {: .prompt-info }
+
+之所以需要创建 Misago 用户，是因为 Misago 在配置文件中默认获取环境变量值，这些参数也可以手动修改。
+```python
+DATABASES = {
+    "default": {
+        # Misago requires PostgreSQL to run
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.environ.get("POSTGRES_DB"),
+        "USER": os.environ.get("POSTGRES_USER"),
+        "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
+        "HOST": os.environ.get("POSTGRES_HOST"),
+        "PORT": 5432,
+    }
+}
+```
+{: file='devproject/settings.py'}
 
 ### 4. 设置 PostgreSQL 数据库
 ```bash
@@ -97,7 +113,7 @@ GRANT ALL PRIVILEGES ON DATABASE misago_db TO misago_user;
 \q
 ```
 
-> 将 `misago_user` 替换为你的系统用户名, 将 `your_secure_password` 替换为你的密码。
+> 将 `misago_user` 替换为你的系统用户名, 将 `your_secure_password` 替换为你的密码，两者需要与`devproject/settings.py`{: .filepath}中一致。
 {: .prompt-info }
 
 回到普通用户后，你可以使用以下命令验证数据库和用户是否已正确创建：
@@ -164,8 +180,8 @@ python manage.py runserver 0.0.0.0:8000
 > 添加`0.0.0.0:8000`作为参数，才可以实现局域网设备的访问
 {: .prompt-warning }
 
-默认情况下，Misago会运行在 [http://localhost:8000](http://localhost:8000)。
-管理员界面[http://localhost:8000/admincp/](http://localhost:8000/admincp/)。
+默认情况下，Misago会运行在 `http://localhost:8000`。
+管理员界面`http://localhost:8000/admincp/`。
 
 ### 12. 问题解决
 #### 12.1 数据库迁移时提示`permission denied to create extension "hstore"`
@@ -189,5 +205,18 @@ CREATE EXTENSION IF NOT EXISTS btree_gin;
 ```
 
 #### 12.3 中文支持
-Misago 从 0.39.1 开始原生支持简体中文，在`misago/locale/zh_Hans/LC_MESSAGES`目录下存放`django.po`文件和编译生成的`djangojs.mo`文件。
+Misago 从 0.39.1 开始原生支持简体中文，在`misago/locale/zh_Hans/LC_MESSAGES`{: .filepath}目录下存放`django.po`文件和编译生成的`djangojs.mo`文件。
 
+Misago 默认通过获取环境变量选择系统使用的语言：
+```python
+LANGUAGE_CODE = os.environ.get("LANGUAGE_CODE", "") or "en-us"
+```
+{: file='devproject/settings.py'}
+
+如果需要强制使用中文，需要修改为：
+```python
+LANGUAGE_CODE = 'zh-hans'
+```
+{: file='devproject/settings.py'}
+
+此外设置时区等操作都在`devproject/settings.py`{: .filepath}目录下。
