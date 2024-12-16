@@ -121,7 +121,7 @@ struct zapi_route {
 ```
 {: file='bgpd/bgp-zebra.c -- bgp_zebra_announce()'}
 
-按照前面初始化阶段的分析，我们知道zebra为BGP创建的zebra_apic线程会被唤醒，执行fd可读的事件回调函数zserv_read。
+按照前面初始化阶段的分析，我们知道zebra为BGP创建的zebra_apic线程会被唤醒，执行fd可读的事件回调函数`zserv_read`。
 
 ```c
 static void zserv_client_event(struct zserv *client,
@@ -218,7 +218,7 @@ void zserv_event(struct zserv *client, enum zserv_event event)
 ```
 {: file='zebra/zserv.c '}
 
-我们先看看zserv_process_messages函数的注释，然后继续跟踪消息的处理：
+我们先看看`zserv_process_messages`函数的注释，然后继续跟踪消息的处理：
 
 ```c
 /*
@@ -595,7 +595,7 @@ struct route_node {
 ```
 {: file='lib/table.h'}
 
-结合前面给出的nexthop,整个路由表项的处理就是由`route_table` \ `route_node` \ `route_entry` 组织而成的，route_table包含了一个二叉树结构来保存所有的路由前缀和下一跳路由表项，prefix结构保持了路由前缀的长度和值，用来做最长前缀匹配，那说好的mtire树呢? 好吧，我们不太可能把成千上万的路由表项塞给linux内核，够用就行。
+结合前面给出的nexthop,整个路由表项的处理就是由`route_table` \ `route_node` \ `route_entry` 组织而成的，`route_table`包含了一个二叉树结构来保存所有的路由前缀和下一跳路由表项，prefix结构保持了路由前缀的长度和值，用来做最长前缀匹配，那说好的mtire树呢? 好吧，我们不太可能把成千上万的路由表项塞给linux内核，够用就行。
 
 整体的数据结构关系如下图所示：
 
@@ -623,7 +623,7 @@ static void rib_addnode(struct route_node *rn,
 
 rib_addnode 直接调用 rib_link 继续处理，首先会在 route_node 的info字段生成一个 rib_dest_t 的结构体，上面的图也已经画了出来，同时会把route_node里面的route_entry使用链表连接起来，表示同一个前缀的不同路由。
 
-然后会判断是否有重分发的配置，如果bgp的路由重分发到ospf等，本次不分析，如果没有重分发，那么直接调用rib_queue_add入zebrad.mq work queue处理，当work queue调度处理的时候，会调回调函数`meta_queue_process`继续处理
+然后会判断是否有重分发的配置，如果bgp的路由重分发到ospf等，本次不分析，如果没有重分发，那么直接调用`rib_queue_add`入zebrad.mq work queue处理，当work queue调度处理的时候，会调回调函数`meta_queue_process`继续处理
 
 ```c
 /*
@@ -725,7 +725,7 @@ int rib_queue_add(struct route_node *rn)
 ```
 {: file='zebra/zebra_rib.c'}
 
-前面可知，消息被enqueue了mq的work queue，当zebra的mq的work queue被调度的时候，meta_queue_process回调函数会被执行，for循环执行一个就退出，是为了实现subq的绝对优先级调度。
+前面可知，消息被enqueue了mq的work queue，当zebra的mq的work queue被调度的时候，`meta_queue_process`回调函数会被执行，for循环执行一个就退出，是为了实现subq的绝对优先级调度。
 
 ```c
 /* Dispatch the meta queue by picking and processing the next node from
@@ -764,7 +764,7 @@ static wq_item_status meta_queue_process(struct work_queue *dummy, void *data)
 ```
 {: file='zebra/zebra_rib.c'}
 
-`process_subq` 取出头结点的存放的`struct route_node`，然后直接调用rib_process继续处理route_node，其核心思想是遍历route_node的所有的route_entry根据规则选择最优的路由，然后使用这个最优的路由继续处理，`rib_choose_best`的原则在函数里面也说的很清楚。
+`process_subq` 取出头结点的存放的`struct route_node`，然后直接调用`rib_process`继续处理`route_node`，其核心思想是遍历`route_node`的所有的`route_entry`根据规则选择最优的路由，然后使用这个最优的路由继续处理，`rib_choose_best`的原则在函数里面也说的很清楚。
 
 ```c
 /* Check if 'alternate' RIB entry is better than 'current'. */

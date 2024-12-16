@@ -268,33 +268,33 @@ WebDriverWait 的初始化参数说明如下：
 
 expected_conditions 模块提供了一组预定义的条件给 `WebDriverWait` 使用（即可作为 `until()` 或 `until_not()` 中的 `method` 参数）：
 
-|                预期条件                |                                      说明                                      |
-|:--------------------------------------:|:------------------------------------------------------------------------------:|
-|                title_is                |                               页面的标题是某内容                               |
-|             title_contains             |                              页面的标题包含某内容                              |
-|                url_to_be               |                           当前的 url 是否为指定的内容                          |
-|              url_contains              |                          当前的 url 是否包含指定的内容                         |
-|               url_matches              |                      当前的 url 是否符合提供的正则表达式。                     |
-|               url_changes              |                          当前的 url 是否不是指定的内容                         |
-|              visibility_of             |                          某元素出现在 DOM 树里面并可见                         |
-|      visibility_of_element_located     |                          某元素出现在 DOM 树里面并可见                         |
-|   visibility_of_all_elements_located   |   定位某类元素，判断是否都可见。如果都可见，返回所有元素；否则，返回 false。   |
-|   visibility_of_any_elements_located   |                定位某类元素，判断是否可见。返回可见的所有元素。                |
-|     invisibility_of_element_located    |                       某元素不可见或没有出现在 DOM 树里面                      |
-|              staleness_of              |                判断某元素是否仍在 DOM 树，可判断页面是否已经刷新               |
-|       presence_of_element_located      |     某元素出现在 DOM 树里面（不表示其是可见的），如果存在的话，返回单个元素    |
-|    presence_of_all_elements_located    | 某类元素出现在 DOM 树里面（不表示其是可见的），如果存在的话，返回的是一个 list |
-|      text_to_be_present_in_element     |                             某个元素文本包含某文字                             |
-|   text_to_be_present_in_element_value  |                             某个元素的值包含某文字                             |
-|         element_to_be_clickable        |                           某元素是可见的，并且可点击                           |
-|         element_to_be_selected         |                                某元素是可选择的                                |
-|  element_located_selection_state_to_be |                定位某元素，判断某元素的选中状态是否等于给定的值                |
-|     element_located_to_be_selected     |                           定位某元素，判断是否被选中                           |
+|                预期条件                |                                      说明                           |
+|:--------------------------------------:|:-------------------------------------------------------------------|
+|                title_is                |                               页面的标题是某内容                   |
+|             title_contains             |                              页面的标题包含某内容                   |
+|                url_to_be               |                           当前的 url 是否为指定的内容               |
+|              url_contains              |                          当前的 url 是否包含指定的内容               |
+|               url_matches              |                      当前的 url 是否符合提供的正则表达式。             |
+|               url_changes              |                          当前的 url 是否不是指定的内容                 |
+|              visibility_of             |                          某元素出现在 DOM 树里面并可见                   |
+|      visibility_of_element_located     |                          某元素出现在 DOM 树里面并可见                     |
+|   visibility_of_all_elements_located   |   定位某类元素，判断是否都可见。<br>如果都可见，返回所有元素；否则，返回 false。 |
+|   visibility_of_any_elements_located   |                定位某类元素，判断是否可见。返回可见的所有元素。              |
+|     invisibility_of_element_located    |                       某元素不可见或没有出现在 DOM 树里面                 |
+|              staleness_of              |                判断某元素是否仍在 DOM 树，可判断页面是否已经刷新             |
+|       presence_of_element_located      |     某元素出现在 DOM 树里面（不表示其是可见的），<br>如果存在的话，返回单个元素 |
+|    presence_of_all_elements_located    | 某类元素出现在 DOM 树里面（不表示其是可见的），<br>如果存在的话，返回的是一个 list|
+|      text_to_be_present_in_element     |                             某个元素文本包含某文字                        |
+|   text_to_be_present_in_element_value  |                             某个元素的值包含某文字                     |
+|         element_to_be_clickable        |                           某元素是可见的，并且可点击                    |
+|         element_to_be_selected         |                                某元素是可选择的                         |
+|  element_located_selection_state_to_be |                定位某元素，判断某元素的选中状态是否等于给定的值             |
+|     element_located_to_be_selected     |                           定位某元素，判断是否被选中                  |
 |      element_selection_state_to_be     |           某元素的选中状态是否等于给定的值，可以用来判断选中或没选中           |
-|            alert_is_present            |                                  出现一个弹框                                  |
-|          new_window_is_opened          |                             一个新的 window 被打开                             |
-| frame_to_be_available_and_switch_to_it |                       某 frame 是可得到的，并已经切换为它                      |
-|         number_of_windows_to_be        |                        window 的数量是否等于一个指定的值                       |
+|            alert_is_present            |                                  出现一个弹框                     |
+|          new_window_is_opened          |                             一个新的 window 被打开                  |
+| frame_to_be_available_and_switch_to_it |                       某 frame 是可得到的，并已经切换为它            |
+|         number_of_windows_to_be        |                        window 的数量是否等于一个指定的值            |
 
 #### 三种等待方式的比较
 
