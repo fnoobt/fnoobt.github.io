@@ -37,29 +37,29 @@ KMS是密钥管理服务（Key Management Server），是自从Windows Vista后�
 
 ### GVLK KEY
 
-#### Windows 11
+#### Windows 11/10
 
 | 操作系统版本                                        | KMS 客户端产品密钥            |
 |:----------------------------------------------------|:------------------------------|
-| Windows 11 专业版 Windows 10 专业版                 | W269N-WFGWX-YVC9B-4J6C9-T83GX |
-| Windows 11 专业版 N Windows 10 专业版 N             | MH37W-N47XK-V7XM9-C7227-GCQG9 |
-| Windows 11 专业工作站版 Windows 10 专业工作站版     | NRG8B-VKK3Q-CXVCJ-9G2XF-6Q84J |
-| Windows 11 专业工作站版 N Windows 10 专业工作站版 N | 9FNHH-K3HBT-3W4TD-6383H-6XYWF |
-| Windows 11 专业教育版 Windows 10 专业教育版         | 6TP4R-GNPTD-KYYHQ-7B7DP-J447Y |
-| Windows 11 专业教育版 N Windows 10 专业教育版 N     | YVWGF-BXNMC-HTQYQ-CPQ99-66QFC |
-| Windows 11 教育版 Windows 10 教育版                 | NW6C2-QMPVW-D7KKK-3GKT6-VCFB2 |
-| Windows 11 教育版 N Windows 10 教育版 N             | 2WH4N-8QGBV-H22JP-CT43Q-MDWWJ |
-| Windows 11 企业版 Windows 10 企业版                 | NPPR9-FWDCX-D2C8J-H872K-2YT43 |
-| Windows 11 企业版 N Windows 10 企业版 N             | DPH2V-TTNVB-4X9Q3-TJR4H-KHJW4 |
-| Windows 11 企业版 G Windows 10 企业版 G             | YYVX9-NTFWV-6MDM3-9PT4T-4M68B |
-| Windows 11 企业版 G N Windows 10 企业版 G N         | 44RPN-FTY23-9VTTB-MP9BX-T84FV |
+| Windows 11 专业版 <br> Windows 10 专业版                 | W269N-WFGWX-YVC9B-4J6C9-T83GX |
+| Windows 11 专业版 N <br> Windows 10 专业版 N             | MH37W-N47XK-V7XM9-C7227-GCQG9 |
+| Windows 11 专业工作站版 <br> Windows 10 专业工作站版     | NRG8B-VKK3Q-CXVCJ-9G2XF-6Q84J |
+| Windows 11 专业工作站版 N <br> Windows 10 专业工作站版 N | 9FNHH-K3HBT-3W4TD-6383H-6XYWF |
+| Windows 11 专业教育版 <br> Windows 10 专业教育版         | 6TP4R-GNPTD-KYYHQ-7B7DP-J447Y |
+| Windows 11 专业教育版 N <br> Windows 10 专业教育版 N     | YVWGF-BXNMC-HTQYQ-CPQ99-66QFC |
+| Windows 11 教育版 <br> Windows 10 教育版                 | NW6C2-QMPVW-D7KKK-3GKT6-VCFB2 |
+| Windows 11 教育版 N <br> Windows 10 教育版 N             | 2WH4N-8QGBV-H22JP-CT43Q-MDWWJ |
+| Windows 11 企业版 <br> Windows 10 企业版                 | NPPR9-FWDCX-D2C8J-H872K-2YT43 |
+| Windows 11 企业版 N <br> Windows 10 企业版 N             | DPH2V-TTNVB-4X9Q3-TJR4H-KHJW4 |
+| Windows 11 企业版 G <br> Windows 10 企业版 G             | YYVX9-NTFWV-6MDM3-9PT4T-4M68B |
+| Windows 11 企业版 G N <br> Windows 10 企业版 G N         | 44RPN-FTY23-9VTTB-MP9BX-T84FV |
 
 #### Windows 10
 
 | 操作系统版本                                        | KMS 客户端产品密钥            |
 |:----------------------------------------------------|:------------------------------|
-| Windows 10 企业版 LTSC 2021 Windows 10 企业版 LTSC 2019     | M7XTQ-FN8P6-TTKYV-9D4CC-J462D |
-| Windows 10 企业版 N LTSC 2021 Windows 10 企业版 N LTSC 2019 | 92NFX-8DJQP-P6BBQ-THF9C-7CG2H |
+| Windows 10 企业版 LTSC 2021 <br> Windows 10 企业版 LTSC 2019     | M7XTQ-FN8P6-TTKYV-9D4CC-J462D |
+| Windows 10 企业版 N LTSC 2021 <br> Windows 10 企业版 N LTSC 2019 | 92NFX-8DJQP-P6BBQ-THF9C-7CG2H |
 | Windows 10 企业版 LTSB 2016                                 | DCPHK-NFMTC-H88MJ-PFHPY-QJ4BJ |
 | Windows 10 企业版 N LTSB 2016                               | QFFDN-GRT3P-VKWWX-X7T3R-8B639 |
 | Windows 10 企业版 2015 LTSB                                 | WNMTR-4C88C-JK8YV-HQ7T2-76DF9 |
@@ -168,13 +168,23 @@ slmgr /dlv
 
 2. 安装对应GVLK密钥（如果是从VLSC下载VL版本已经内置，不需要安装）
 ```bash
-slmgr /ipk xxxxx-xxxxx-xxxxx-xxxxx-xxxxx
+slmgr /ipk <KMS_Client_Key>
+```
+
+替换 `<KMS_Client_Key>` 为对应 Windows 版本的 KMS 客户端密钥。例如：
+```bash
+slmgr /ipk M7XTQ-FN8P6-TTKYV-9D4CC-J462D
 ```
 
 > 注意：VL版本的镜像文件名是`SW_DVD`开头。MSDN下的是测试版本不是VL版本。
 {: .prompt-info }
 
 3. 设置KMS服务器地址
+```bash
+slmgr /skms <kms_server_address>
+```
+
+例如，如果你的 KMS 服务器地址是 `kms.example.com`，命令为：
 ```bash
 slmgr /skms kms.example.com
 ```
@@ -184,9 +194,15 @@ slmgr /skms kms.example.com
 slmgr /ato
 ```
 
-5. 查询过期时间
+5. 检查激活状态
+查询过期时间
 ```bash
 slmgr /xpr
+```
+
+验证激活状态
+```bash
+slmgr /dli
 ```
 
 更多命令可以输入`slmgr`后回车查看。
@@ -197,22 +213,58 @@ slmgr /xpr
 
 [安装最新VL版office快捷指南](https://blog.03k.org/post/dowload-vloffice.html)
 
-首先找到你`的OSPP.VBS`所在的目录，一般是office安装所在目录`Program Files\Microsoft Office\OfficeXX`{: .filepath}，找不到的建议安装一个Everything或者使用windows自带的文件搜索框搜索一下，把`OSPP.VBS`拖到运行对话框即可快速获取文件路径以便复制。
+1. 进入 Office 安装目录（通常office安装所在目录是`Program Files\Microsoft Office\OfficeXX`{: .filepath}），该目录包含`OSPP.VBS`，例如：
+```bash
+cd "C:\Program Files (x86)\Microsoft Office\Office16"
+```
 
-设置KMS服务器地址
+或者
+```bash
+cd "C:\Program Files\Microsoft Office\Office16"
+```
+
+根据 Office 版本修改路径：
+- **Office 2016/2019/2021**：`Office16`
+- **Office 2013**：`Office15`
+
+2. 设置KMS服务器
+```bash
+cscript ospp.vbs /sethst:<kms_server_address>
+```
+
+例如：
 ```bash
 cscript ospp.vbs /sethst:kms.example.com
 ```
 
-手动执行激活请求(KMS服务正常的话，打开任意office组件也会自动请求激活)
+3. 手动激活Office(KMS服务正常的话，打开任意office组件会自动请求激活)
 ```bash
 cscript ospp.vbs /act
 ```
 
 如果提示看到successful的字样，那么就是激活成功了。更多命令可以输入`cscript ospp.vbs`后回车查看。
 
+4. 检查激活状态
+```bash
+cscript ospp.vbs /dstatus
+```
+
 ## 版本转换
-批量版本的商业镜像文件是SW_开头的ISO。对于Win10 1703+或者对应Server，你可以直接更换对应的GVLK KEY来更改系统的版本。但很多版本在发行的时候其实内置的证书不全，更改KEY会提示非核心版本，比如一些出厂安装了家庭版的笔记本，缺了个远程桌面功能，想改成专业版或者企业版，是不是只能重装呢？其实可以添加补全证书即可转换。这个方法也适用于转换其他奇奇怪怪的版本，比如EnterpriseG。
+批量版本的商业镜像文件是`SW_`开头的ISO。对于Win10 1703+或者对应Server，你可以直接更换对应的GVLK KEY来更改系统的版本。但很多版本在发行的时候其实内置的证书不全，更改KEY会提示非核心版本，比如一些出厂安装了家庭版的笔记本，缺了个远程桌面功能，想改成专业版或者企业版，是不是只能重装呢？其实可以添加补全证书即可转换。这个方法也适用于转换其他奇奇怪怪的版本，比如EnterpriseG。
+
+### 检查当前版本
+> 以下操作需要使用管理员权限的命令行CMD
+{: .prompt-info }
+
+查看当前的 Windows 版本和激活状态
+```bash
+slmgr /dlv
+```
+
+这会显示当前的激活方式、密钥通道（例如 Retail、MAK、Volume 等）和其他详细信息。
+
+### 切换到 GVLK
+GVLK 是微软为支持 KMS 激活提供的通用客户端密钥，不同版本的 Windows 有不同的 GVLK。你可以在[常见Windows/Office 版本密钥](#常见windowsoffice-版本密钥)中找到对应的密钥。
 
 1. 找到一台目标版本的电脑或者镜像，把`\Windows\System32\spp\tokens\skus`{: .filepath}文件夹复制出来。
 2. 把上面的文件夹覆盖到要转换的系统的相同位置，补全许可证。
