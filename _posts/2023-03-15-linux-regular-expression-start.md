@@ -163,5 +163,5 @@ tags: [正则表达式]
 
 本文参考
 
-> 1. [正则表达式\|菜鸟教程](https://www.runoob.com/regexp/regexp-tutorial.html)
+> 1. [正则表达式|菜鸟教程](https://www.runoob.com/regexp/regexp-tutorial.html)
 > 2. [常用正则表达式大全](https://zhuanlan.zhihu.com/p/33683962)

@@ -37,4 +37,6 @@ tags: [图标]
 
 ****
 
-> [原文出处](https://chirpy.cotes.page/posts/customize-the-favicon/)
+本文参考
+
+> 1. [Customize the Favicon](https://chirpy.cotes.page/posts/customize-the-favicon/)

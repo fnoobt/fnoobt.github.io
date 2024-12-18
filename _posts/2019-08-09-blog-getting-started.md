@@ -148,7 +148,9 @@ $ docker run -it --rm \
 
 ****
 
-> [原文出处](https://chirpy.cotes.page/posts/getting-started/)
+本文参考
+
+> 1. [Getting Started](https://chirpy.cotes.page/posts/getting-started/)
 
 [nodejs]: https://nodejs.org/
 [starter]: https://github.com/cotes2020/chirpy-starter

@@ -82,5 +82,7 @@ NF所识别的IP地域信息：美国
 
 ****
 
-> [测速](https://www.vpsgo.com/vps-test-scripts.html)
+本文参考
+
+> 1. [测速](https://www.vpsgo.com/vps-test-scripts.html)
 

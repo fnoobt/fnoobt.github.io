@@ -120,4 +120,6 @@ pm2 restart hbbr
 
 ****
 
-[官方文档](https://rustdesk.com/docs/en/self-host/install/)
+本文参考
+
+> 1. [官方文档](https://rustdesk.com/docs/en/self-host/install/)

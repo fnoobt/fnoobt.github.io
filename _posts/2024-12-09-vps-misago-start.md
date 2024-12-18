@@ -220,3 +220,11 @@ LANGUAGE_CODE = 'zh-hans'
 {: file='devproject/settings.py'}
 
 此外设置时区等操作都在`devproject/settings.py`{: .filepath}目录下。
+
+****
+
+本文参考
+
+> 1. [Misago 开源项目文件结构](https://blog.csdn.net/gitblog_01142/article/details/141076364)
+> 2. [官方文档](https://misago.gitbook.io/docs/setup/misago)
+> 3. [使用语言不是英文的问题](https://github.com/rafalp/Misago/issues/1426)

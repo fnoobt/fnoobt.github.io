@@ -143,4 +143,6 @@ _Post JSON数据到服务端_
 
 ****
 
-> [原文出处](https://www.jianshu.com/p/4350065bdffe)
+本文参考
+
+> 1. [前端与后端的数据交互](https://www.jianshu.com/p/4350065bdffe)

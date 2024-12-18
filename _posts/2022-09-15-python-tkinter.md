@@ -423,4 +423,6 @@ window.mainloop()
 
 ****
 
-> [原文出处](https://blog.csdn.net/weixin_56177871/article/details/124256679)  
+本文参考
+
+> 1. [python tkinter详解](https://blog.csdn.net/weixin_56177871/article/details/124256679)  

@@ -120,4 +120,6 @@ Documentation, README ---- 帮助、说明文档。
 
 ****
 
-> [原文出处](https://zhuanlan.zhihu.com/p/635315467)
+本文参考
+
+> 1. [Linux内核](https://zhuanlan.zhihu.com/p/635315467)

@@ -414,4 +414,6 @@ echo 'No more line numbers!'
 
 ****
 
-> [原文出处](https://chirpy.cotes.page/posts/write-a-new-post/)
+本文参考
+
+> 1. [Writing a New Post](https://chirpy.cotes.page/posts/write-a-new-post/)

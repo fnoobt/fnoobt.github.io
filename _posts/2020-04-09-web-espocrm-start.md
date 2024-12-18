@@ -29,4 +29,6 @@ Fatal error: Uncaught Error: Failed opening required 'vendor/autoload.php' (incl
 
 ****
 
-> [原文出处](https://docs.espocrm.com/administration/server-configuration/)
+本文参考
+
+> 1. [Server Configuration for EspoCRM](https://docs.espocrm.com/administration/server-configuration/)

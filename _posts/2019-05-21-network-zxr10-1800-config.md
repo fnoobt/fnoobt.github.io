@@ -67,4 +67,6 @@ ZXR10#write   // 保存配置
 
 ****
 
-> [原文出处](https://wenku.baidu.com/view/2db13e6e93c69ec3d5bbfd0a79563c1ec5dad729.html?_wkts_=1690290012826&bdQuery=ZXR10+1800%E8%B7%AF%E7%94%B1%E5%99%A8%E9%85%8D%E7%BD%AE)
+本文参考
+
+> 1. [ZXR10 1800路由器配置](https://wenku.baidu.com/view/2db13e6e93c69ec3d5bbfd0a79563c1ec5dad729.html?_wkts_=1690290012826&bdQuery=ZXR10+1800%E8%B7%AF%E7%94%B1%E5%99%A8%E9%85%8D%E7%BD%AE)

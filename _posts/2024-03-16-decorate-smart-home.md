@@ -104,4 +104,4 @@ Home Assistant也是一个可以实现本地化的方式。
 
 本文参考
 
-> 1. [装修](https://baijiahao.baidu.com)
+> 1. [装修](https://fnoobt.github.io/posts/decorate-start/)

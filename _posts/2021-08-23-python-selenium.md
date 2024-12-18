@@ -574,9 +574,11 @@ driver.switch_to.alert.accept()
 
 ****
 
-> [原文出处](https://blog.csdn.net/benzhujie1245com/article/details/117089767?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_baidulandingword~default-0-117089767-blog-126447599.235^v38^pc_relevant_sort&spm=1001.2101.3001.4242.1&utm_relevant_index=3)  
-> [Selenium官方文档](https://www.selenium.dev/selenium/docs/api/py/api.html)  
-> [Selenium with Python文档](https://selenium-python.readthedocs.io/index.html)  
+本文参考
+
+> 1. [Python Selenium 基础入门](https://blog.csdn.net/benzhujie1245com/article/details/117089767?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_baidulandingword~default-0-117089767-blog-126447599.235^v38^pc_relevant_sort&spm=1001.2101.3001.4242.1&utm_relevant_index=3)  
+> 2. [Selenium官方文档](https://www.selenium.dev/selenium/docs/api/py/api.html)  
+> 3. [Selenium with Python文档](https://selenium-python.readthedocs.io/index.html)  
 
 [​Firefox]:https://github.com/mozilla/geckodriver/releases
 [Chrome]:https://chromedriver.storage.googleapis.com/index.html

@@ -26,4 +26,4 @@ tags: [linux,stat]
 
 本文参考
 
-> [lclc](https://www.cnblogs.com/lcword/p/13541931.html)
+> 1. [lclc](https://www.cnblogs.com/lcword/p/13541931.html)

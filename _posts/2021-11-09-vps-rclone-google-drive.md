@@ -266,4 +266,6 @@ systemctl status rclone
 
 ****
 
-> [原文出处](https://www.nbmao.com/archives/3765)
+本文参考
+
+> 1. [Debian10使用rclone挂载Google云端硬盘网盘](https://www.nbmao.com/archives/3765)

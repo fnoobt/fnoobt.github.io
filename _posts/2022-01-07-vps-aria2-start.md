@@ -106,4 +106,8 @@ service aria2 restart
 /root/.aria2c/upload.sh
 ```
 
-更多信息可参见[Aria2 + Rclone 实现 OneDrive、Google Drive 等网盘离线下载](https://p3terx.com/archives/offline-download-of-onedrive-gdrive.html)
+****
+
+本文参考
+
+> 1. [Aria2 + Rclone 实现 OneDrive、Google Drive 等网盘离线下载](https://p3terx.com/archives/offline-download-of-onedrive-gdrive.html)

@@ -62,7 +62,9 @@ img_path: '/assets/img/commons/ai/'
 
 ****
 
-> [原文出处](https://razeen.me/posts/ai-how-to-register-chatgpt/)
+本文参考
+
+> 1. [如何5分钟内1块钱注册 ChatGPT](https://razeen.me/posts/ai-how-to-register-chatgpt/)
 
 [MicrosoftSignup]: https://signup.live.com/signup
 [smsActivate]: https://sms-activate.org/cn

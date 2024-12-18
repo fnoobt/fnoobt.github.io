@@ -33,4 +33,4 @@ img_path: '/assets/img/commons/decorate/'
 
 本文参考
 
-> 1. [装修](https://baijiahao.baidu.com)
+> 1. [装修](https://fnoobt.github.io/posts/decorate-start/)
