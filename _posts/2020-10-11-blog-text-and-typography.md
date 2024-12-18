@@ -317,8 +317,7 @@ _将呈现为：_
 ```
 
 ### 指定语言
-
-使用```` ```{language} ````，您将获得一个带有语法高亮显示的代码块：
+代码块的语法高亮使用 Jekyll 默认的语法高亮工具 `Rouge` 。使用```` ```{language} ````，您将获得一个带有语法高亮显示的代码块：
 
 ````markdown
 ```bash
@@ -337,6 +336,45 @@ if [ $? -ne 0 ]; then
   #do the needful / exit
 fi;
 ```
+
+#### Rouge 支持的语言和格式:
+
+|    Rouge 分类    | 支持的语言/格式 |        标识符        |
+|:----------------:|:---------------:|:--------------------:|
+| 通用编程语言     | Ruby            | ruby, rb             |
+|                  | Python          | python, py           |
+|                  | JavaScript      | javascript, js       |
+|                  | Java            | java                 |
+|                  | C               | c                    |
+|                  | C++             | cpp, cxx, cc         |
+|                  | C#              | csharp, cs           |
+|                  | Go              | go                   |
+|                  | Rust            | rust                 |
+|                  | Swift           | swift                |
+|                  | PHP             | php                  |
+|                  | Kotlin          | kotlin               |
+|                  | TypeScript      | typescript, ts       |
+|                  | Shell           | shell, sh, bash, zsh |
+| 标记语言         | HTML            | html                 |
+|                  | XML             | xml                  |
+|                  | Markdown        | markdown, md         |
+|                  | YAML            | yaml                 |
+|                  | JSON            | json                 |
+|                  | TOML            | toml                 |
+| 配置文件和工具   | INI 文件        | ini                  |
+|                  | Dockerfile      | dockerfile           |
+|                  | Makefile        | makefile             |
+|                  | NGINX 配置      | nginx                |
+|                  | Apache 配置     | apache               |
+|                  | PowerShell      | powershell           |
+| 数据库与查询语言 | SQL             | sql                  |
+|                  | PL/pgSQL        | pgsql                |
+| 科学与数据分析   | R               | r                    |
+|                  | MATLAB          | matlab               |
+| 其他格式         | Diff 文件       | diff                 |
+|                  | CSV 数据        | csv                  |
+|                  | 日志文件        | log                  |
+|                  | Plaintext       | plaintext            |
 
 ### 特定文件名
 
@@ -451,7 +489,8 @@ _全屏宽度和中心对齐_
 ```
 
 ![Desktop View](/assets/img/commons/demo/mockup.png){: width="972" height="589" .w-50 .left}
-有些人非常明智。但是，给拍卖商除尘也无妨。你可以选择一个大湖，你可以闻到猫的味道。为了装饰车轮，钻石谷将是那样的。Phasellus希望自己富有，这样他就可以放牧谷物、我的猫和我的胡子，这样你就可以很容易地让一只大狮子用智慧入睡。这辆车不需要时间驾驶。任何身体都没有最大的自由。所有的紫罗兰都希望它是不同的凸起。你根本没有家具，根本没有家具。没有智慧就没有什么可喝的，但生命是一片被诅咒的树叶。
+豫章故郡，洪都新府。星分翼轸(zhěn)，地接衡庐。襟三江而带五湖，控蛮荆而引瓯（ōu）越。物华天宝，龙光射牛斗之墟；人杰地灵，徐孺下陈蕃(fān)之榻。雄州雾列，俊采星驰，台隍(huáng)枕夷夏之交，宾主尽东南之美。都督阎公之雅望，棨(qǐ )戟遥临；宇文新州之懿(yì)范，襜(chān )帷(wéi)暂驻。十旬休假，胜友如云；千里逢迎，高朋满座。腾蛟起凤，孟学士之词宗；紫电清霜，王将军之武库。家君作宰，路出名区；童子何知，躬逢胜饯。  
+时维九月，序属三秋。潦（lǎo）水尽而寒潭清，烟光凝而暮山紫。俨(yǎn)骖騑(cān fēi)于上路，访风景于崇阿(ē)。临帝子之长洲，得天人之旧馆。层峦耸翠，上出重霄；飞阁流丹，下临无地。鹤汀（tīng）凫(fú )渚（zhǔ），穷岛屿之萦(yíng)回；桂殿兰宫，即冈峦之体势。
 
 ### 向右浮动
 
@@ -460,7 +499,8 @@ _全屏宽度和中心对齐_
 ```
 
 ![Desktop View](/assets/img/commons/demo/mockup.png){: width="972" height="589" .w-50 .right}
-Praesent maximus aliquam sapien. Sed vel neque in dolor pulvinar auctor. Maecenas pharetra, sem sit amet interdum posuere, tellus lacus eleifend magna, ac lobortis felis ipsum id sapien. Proin ornare rutrum metus, ac convallis diam volutpat sit amet. Phasellus volutpat, elit sit amet tincidunt mollis, felis mi scelerisque mauris, ut facilisis leo magna accumsan sapien. In rutrum vehicula nisl eget tempor. Nullam maximus ullamcorper libero non maximus. Integer ultricies velit id convallis varius. Praesent eu nisl eu urna finibus ultrices id nec ex. Mauris ac mattis quam. Fusce aliquam est nec sapien bibendum, vitae malesuada ligula condimentum.
+披绣闼（tà），俯雕甍(méng )。山原旷其盈视，川泽纡(yū)其骇瞩。闾(lǘ)阎(yán) 扑地，钟鸣鼎食之家；舸（gě)舰弥津，青雀黄龙之舳（zhú）。云销雨霁(jì)，彩彻区明。落霞与孤鹜(wù)齐飞，秋水共长天一色。渔舟唱晚，响穷彭蠡（lǐ）之滨；雁阵惊寒，声断衡阳之浦。  
+遥襟甫畅，逸兴遄(chuán)飞。爽籁发而清风生，纤歌凝而白云遏(è)。睢(suī)园绿竹，气凌彭泽之樽；邺(yè)水朱华，光照临川之笔。四美具，二难并。穷睇眄(dì miǎn)于中天，极娱游于暇日。天高地迥(jiǒng)，觉宇宙之无穷；兴尽悲来，识盈虚之有数。望长安于日下，目吴会（kuài）于云间。地势极而南溟(míng)深，天柱高而北辰远。关山难越，谁悲失路之人；萍水相逢，尽是他乡之客。怀帝阍(hūn)而不见，奉宣室以何年。
 
 ### 暗/亮模式和阴影
 
@@ -475,6 +515,12 @@ Praesent maximus aliquam sapien. Sed vel neque in dolor pulvinar auctor. Maecena
 ![dark mode only](/assets/img/commons/demo/devtools-dark.png){: .dark .w-75 .shadow .rounded-10 w='1212' h='668' }
 
 ## 视频
+
+```markdown
+{% include embed/youtube.html id='Balreaj8Yqs' %}
+```
+
+_将呈现为：_
 
 {% include embed/youtube.html id='Balreaj8Yqs' %}
 
