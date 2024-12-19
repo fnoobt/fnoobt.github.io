@@ -8,7 +8,7 @@ img_path: '/assets/img/commons/decorate/'
 ---
 
 ## 空调
-1. 28 m<sup>2</sup> 以下选挂机，30 m<sup>2</sup> 以上选柜机。x^2^、10^{20}、$E=mc^2$、$$E=mc^2$$
+1. 28 m<sup>2</sup> 以下选挂机，30 m<sup>2</sup> 以上选柜机。
 2. 买变频，不买定频
 3. 制冷量买高不买低
 4. 制冷剂选R410或R32，不选R22
