@@ -8,6 +8,18 @@ tags: [vps,linux,ubuntu,misago]
 
 Misago 是一个用 Python 和 Django 开发的现代开源论坛（BBS）软件。它旨在提供强大、灵活、且用户友好的社区解决方案。
 
+$$E = mc^2$$
+
+\( x^2 + y^2 = z^2 \)
+
+x^2
+
+x^{10}
+
+x_i^2
+
+x^{\text{max}}
+
 ## 介绍
 ### Misago 的主要特性
 1. 现代化设计：
