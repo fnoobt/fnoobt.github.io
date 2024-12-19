@@ -3,7 +3,7 @@ title: Clash订阅转换服务搭建
 author: fnoobt
 date: 2022-10-13 18:32:00 +0800
 categories: [VPS,服务搭建]
-tags: [v2ray,sub-Web,subConverter,clash]
+tags: [v2ray,sub-web,subconverter,clash]
 ---
 
 想把V2ray的订阅节点放在Clash中使用，需要使用Github上的开源转换面板，但是在使用别的现成面板担心数据隐私的泄露，于是自己着手搭建一个前端面板。  
