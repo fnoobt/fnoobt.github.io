@@ -3,7 +3,7 @@ title:  FRR 交叉编译
 author: fnoobt
 date: 2024-12-27 10:17:00 +0800
 categories: [Network,路由协议]
-tags: [network,,frr,cross compiling]
+tags: [network,,frr,cross-compiling]
 ---
 
 FRR 能够交叉编译到许多不同的架构。只要有了足够的工具链，这个过程就相当简单，但在尝试编译 FRR 或其依赖项之前，必须小心谨慎地验证此工具链的正确性。要注意的是构建工具的构建过程中的小疏忽可能会导致问题，会导致这些问题变得难以诊断。
