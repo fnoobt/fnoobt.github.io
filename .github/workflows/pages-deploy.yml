@@ -32,6 +32,7 @@ jobs:
         with:
           fetch-depth: 0
           submodules: recursive
+          submodules-depth: 1  # 拉取子模块的最新版本
           # If using the 'assets' git submodule from Chirpy Starter, uncomment above
           # (See: https://github.com/cotes2020/chirpy-starter/tree/main/assets)
 
