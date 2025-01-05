@@ -32,7 +32,7 @@ adb shell settings put global captive_portal_mode 0
 
 **或者**设置光临为连接小米（MIUI）的服务器检测
 ```bash
-adb shell settings put global captive_portal_https_url http://connect.rom.miui.com/generate_204
+adb shell settings put global captive_portal_https_url https://connect.rom.miui.com/generate_204
 ```
 
 重新在头显中关闭再打开WIFI，此时wifi状态会变成已连接，就可以进行投屏了

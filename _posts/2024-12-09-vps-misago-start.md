@@ -180,8 +180,8 @@ python manage.py runserver 0.0.0.0:8000
 > 添加`0.0.0.0:8000`作为参数，才可以实现局域网设备的访问
 {: .prompt-warning }
 
-默认情况下，Misago会运行在 `http://localhost:8000`。
-管理员界面`http://localhost:8000/admincp/`。
+默认情况下，Misago会运行在 `localhost:8000`。
+管理员界面`localhost:8000/admincp/`。
 
 ### 12. 问题解决
 #### 12.1 数据库迁移时提示`permission denied to create extension "hstore"`

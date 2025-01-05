@@ -43,7 +43,7 @@ $ uname -r
 
 ## 2.使用ELRepo仓库
 
-这里使用[ ELRepo 仓库](http://elrepo.org/tiki/tiki-index.php)，ELRepo 仓库是基于社区的用于企业级 Linux 仓库，提供对 RedHat Enterprise（RHEL）和其他基于 RHEL的 Linux 发行版（CentOS、Scientific、Fedora 等）的支持。ELRepo 聚焦于和硬件相关的软件包，包括文件系统驱动、显卡驱动、网络驱动、声卡驱动和摄像头驱动等。:
+这里使用ELRepo 仓库 _elrepo.org/tiki/tiki-index.php_，ELRepo 仓库是基于社区的用于企业级 Linux 仓库，提供对 RedHat Enterprise（RHEL）和其他基于 RHEL的 Linux 发行版（CentOS、Scientific、Fedora 等）的支持。ELRepo 聚焦于和硬件相关的软件包，包括文件系统驱动、显卡驱动、网络驱动、声卡驱动和摄像头驱动等。:
 
 ### 导入ELRepo仓库的公共密钥：
 
@@ -67,7 +67,7 @@ CentOS团队从官方镜像中移除CentOS 8的所有包，但软件包仍在官
 
 ```bash
 $ sudo sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*
-$ sudo sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos
+$ sudo sed -i 's|#baseurl=https://mirror.centos.org|baseurl=https://vault.centos.org|g' /etc/yum.repos
 ```
 
 ### 启用 ELRepo 源仓库，将显示可用的系统内核安装包：
@@ -189,7 +189,7 @@ $ yum install yum-utils
 
 ## 9.参考文献
 
-- [ELRepo官网](http://elrepo.org/tiki/index.php)  
+- [ELRepo官网](https://elrepo.org/tiki/index.php)  
 - [Centos7升级内核版本](https://www.cnblogs.com/xzkzzz/p/9627658.html)
 
 ****

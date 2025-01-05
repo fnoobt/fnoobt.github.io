@@ -192,7 +192,7 @@ sudo netstat -lnp |grep zabbix
 ```
 
 ### 网页配置
-通过 http://server_ip/zabbix 按照页面提示进行配置
+通过 https://server_ip/zabbix 按照页面提示进行配置
 
 ### Centos下载Zabbix6.0储存库（二进制安装方式）
 ```bash
@@ -207,7 +207,7 @@ ls
 
 可通过`sed`修改源为清华同方源
 ```bash
-sudo sed -i 's#http://repo.zabbix.com#https://mirrors.tuna.tsinghua.edu.cn#' /etc/yum.repos.d/zabbix.repo 
+sudo sed -i 's#https://repo.zabbix.com#https://mirrors.tuna.tsinghua.edu.cn#' /etc/yum.repos.d/zabbix.repo 
 ```
 
 清空缓存，安装组件

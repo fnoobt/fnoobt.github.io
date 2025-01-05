@@ -16,8 +16,8 @@ tags: [flash,刷机,newifi,padavan]
 
 ## 刷入不死Breed
 
-1. 初始化路由器，不联网登录路由器管理后台<http://192.168.99.1>设置登录密码；
-2. 连接路由器LAN口，访问<http://192.168.99.1/newifi/ifiwen_hss.html>，激活`SSH`(回车后网页会出现*succss*,既代表激活成功)；
+1. 初始化路由器，不联网登录路由器管理后台_192.168.99.1_设置登录密码；
+2. 连接路由器LAN口，访问_192.168.99.1/newifi/ifiwen_hss.html_，激活`SSH`(回车后网页会出现*succss*,既代表激活成功)；
 3. 下载Breed文件[newifi-d2-jail-break.ko](https://s.razeen.cn/firmwares/newifi-d2-jail-break.ko)，需要最新的可以到[Index of Breed](https://breed.hackpascal.net/)下载;
 4. WinScp工具上传Breed模块到路由器`/tmp`目录（SCP协议），或使用命令行上传 `scp newifi-d2-jail-break.ko root@192.168.99.1:/tmp`
 5. ssh 登陆路由器后台，输入命令 `cd /tmp && insmod newifi-d2-jail-break.ko` 开始刷入;
@@ -37,7 +37,7 @@ tags: [flash,刷机,newifi,padavan]
 1. 到<kbd>固件更新</kbd>页面，勾选`固件`，再点击<kbd>浏览</kbd>，选择对应的固件，最后进行<kbd>上传</kbd>。
 2. 固件上传完成后，到 **Breed Web 恢复控制台**更新确认界面，点击<kbd>更新</kbd>。
 3. 等待更新完成，设备重启
-4. 在浏览器中输入 <http://192.168.123.1>，输入用户名及密码，Padavan系统默认用户名 `admin`，密码 `admin`。
+4. 在浏览器中输入 _192.168.123.1_，输入用户名及密码，Padavan系统默认用户名 `admin`，密码 `admin`。
 
 >更新breed版本在**Breed Web 恢复控制台**<kbd>固件更新</kbd>页面勾选`Bootloader`选择bin文件升级即可。
 {: .prompt-tip }

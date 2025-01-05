@@ -16,13 +16,13 @@ tags: [network,bgp]
 
 本文档是互联网工程任务组 (Internet Engineering Task Force，IETF) 的产品。 它代表了IETF社区的共识。 它已接受公众审查，并已被互联网工程指导小组 (Internet Engineering Steering Group，IESG) 批准发布。并非 IESG 批准的所有文件都是任何级别互联网标准的候选文件； 请参阅[RFC 5741 第2节](https://datatracker.ietf.org/doc/html/rfc5741#section-2)。
 
-有关本文档当前状态、任何勘误表以及如何提供反馈的信息，请访问<http://www.rfc-editor.org/info/rfc7209>。
+有关本文档当前状态、任何勘误表以及如何提供反馈的信息，请访问<https://www.rfc-editor.org/info/rfc7209>。
 
 ## 版权声明
 
 版权所有 (c) 2014 IETF Trust 和文档作者。 版权所有。
 
-本文件受本文件发布之日生效的 [BCP 78](https://datatracker.ietf.org/doc/html/bcp78) 和 [IETF 信托基金有关 IETF 文件的法律规定](http://trustee.ietf.org/license-info) 的约束。请仔细阅读这些文件，因为它们描述了您与本文件相关的权利和限制。从本文档中提取的代码组件必须包括信托法律条款第 4.e 节中所述的简化 BSD 许可证文本，并且不提供简化 BSD 许可证中所述的保证。
+本文件受本文件发布之日生效的 [BCP 78](https://datatracker.ietf.org/doc/html/bcp78) 和 [IETF 信托基金有关 IETF 文件的法律规定](https://trustee.ietf.org/license-info) 的约束。请仔细阅读这些文件，因为它们描述了您与本文件相关的权利和限制。从本文档中提取的代码组件必须包括信托法律条款第 4.e 节中所述的简化 BSD 许可证文本，并且不提供简化 BSD 许可证中所述的保证。
 
 
 ## 1. 简介

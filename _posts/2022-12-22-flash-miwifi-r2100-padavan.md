@@ -10,11 +10,11 @@ tags: [flash,刷机,miwifi,ac2100,padavan]
 
 ### 1.下载降级固件：
 
-[红米AC2100降级固件](http://cdn.cnbj1.fds.api.mi-img.com/xiaoqiang/rom/rm2100/miwifi_rm2100_firmware_d6234_2.0.7.bin)
+[红米AC2100降级固件](https://cdn.cnbj1.fds.api.mi-img.com/xiaoqiang/rom/rm2100/miwifi_rm2100_firmware_d6234_2.0.7.bin)
 
-[小米AC2100降级固件](http://cdn.cnbj1.fds.api.mi-img.com/xiaoqiang/rom/r2100/miwifi_r2100_firmware_4b519_2.0.722.bin)
+[小米AC2100降级固件](https://cdn.cnbj1.fds.api.mi-img.com/xiaoqiang/rom/r2100/miwifi_r2100_firmware_4b519_2.0.722.bin)
 
-下载完成后进入后台 <http://192.168.31.1> --> <kbd>常用设置</kbd> --> <kbd>系统状态</kbd> --> <kbd>手动升级</kbd>  
+下载完成后进入后台 <192.168.31.1> --> <kbd>常用设置</kbd> --> <kbd>系统状态</kbd> --> <kbd>手动升级</kbd>  
 加载固件，清除数据 --> <kbd>开始升级</kbd>
 
 ### 2.下载Padavan固件：
@@ -26,7 +26,7 @@ tags: [flash,刷机,miwifi,ac2100,padavan]
 ### 获取stok
 首先需要确保路由器有网络，有网络才能自动下载BREED。
 
-登录192.168.31.1进入路由器管理界面，复制当前地址 `http://192.168.31.1/cgi-bin/luci/;stok=XXXXXXXXXXXXX/web/home#router` 中`XXXXXXXXXXXXX`的部分。  
+登录192.168.31.1进入路由器管理界面，复制当前地址 `192.168.31.1/cgi-bin/luci/;stok=XXXXXXXXXXXXX/web/home#router` 中`XXXXXXXXXXXXX`的部分。  
 每次登录 `stok=` 之后的一串字符都会改变，每次登录需要重新复制。
 
 将第一步复制下来的字符串替换掉以下链接的`XXXXXXXXXXXXX`部分之后复制到浏览器打开，跳转页面会显示返回 {"code":0}，如果显示其他则可能是没有进行路由器降级或者stok过期，请重新尝试或恢复出厂设置。
@@ -34,13 +34,13 @@ tags: [flash,刷机,miwifi,ac2100,padavan]
 ### 检查NAND坏块（可不执行）
 路由器开机超过一小时建议先重启。运行代码后，你路由器的2.4g WiFi名称会改名成：比如  "ESMT"，"Toshiba"，"Toshiba 90 768"。 90和768是坏块。 如果ESMT或者Toshiba后面没数字，那恭喜你，没有坏块！！！
 ```
-http://192.168.31.1/cgi-bin/luci/;stok=XXXXXXXXXXXXX/api/misystem/set_config_iotdev?bssid=Xiaomi&user_id=longdike&ssid=%0A%5B%20-z%20%22%24(dmesg%20%7C%20grep%20ESMT)%22%20%5D%20%26%26%20B%3D%22Toshiba%22%20%7C%7C%20B%3D%22ESMT%22%0Auci%20set%20wireless.%24(uci%20show%20wireless%20%7C%20awk%20-F%20'.'%20'%2Fwl1%2F%20%7Bprint%20%242%7D').ssid%3D%22%24B%20%24(dmesg%20%7C%20awk%20'%2FBad%2F%20%7Bprint%20%245%7D')%22%0A%2Fetc%2Finit.d%2Fnetwork%20restart%0A
+192.168.31.1/cgi-bin/luci/;stok=XXXXXXXXXXXXX/api/misystem/set_config_iotdev?bssid=Xiaomi&user_id=longdike&ssid=%0A%5B%20-z%20%22%24(dmesg%20%7C%20grep%20ESMT)%22%20%5D%20%26%26%20B%3D%22Toshiba%22%20%7C%7C%20B%3D%22ESMT%22%0Auci%20set%20wireless.%24(uci%20show%20wireless%20%7C%20awk%20-F%20'.'%20'%2Fwl1%2F%20%7Bprint%20%242%7D').ssid%3D%22%24B%20%24(dmesg%20%7C%20awk%20'%2FBad%2F%20%7Bprint%20%245%7D')%22%0A%2Fetc%2Finit.d%2Fnetwork%20restart%0A
 ```
 
 ### 在线刷Breed
 你可以先检查NAND坏块，不检查也没关系。Bootloader那里肯定不会有坏块，不然官方Uboot也会出问题的。
 ```
-http://192.168.31.1/cgi-bin/luci/;stok=XXXXXXXXXXXXX/api/misystem/set_config_iotdev?bssid=Xiaomi&user_id=longdike&ssid=%0Acd%20%2Ftmp%0Acurl%20-o%20B%20-O%20https%3A%2F%2Fbreed.hackpascal.net%2Fr1286%2520%255b2020-10-09%255d%2Fbreed-mt7621-xiaomi-r3g.bin%20-k%20-g%0A%5B%20-z%20%22%24(sha256sum%20B%20%7C%20grep%20242d42eb5f5aaa67ddc9c1baf1acdf58d289e3f792adfdd77b589b9dc71eff85)%22%20%5D%20%7C%7C%20mtd%20-r%20write%20B%20Bootloader%0A
+192.168.31.1/cgi-bin/luci/;stok=XXXXXXXXXXXXX/api/misystem/set_config_iotdev?bssid=Xiaomi&user_id=longdike&ssid=%0Acd%20%2Ftmp%0Acurl%20-o%20B%20-O%20https%3A%2F%2Fbreed.hackpascal.net%2Fr1286%2520%255b2020-10-09%255d%2Fbreed-mt7621-xiaomi-r3g.bin%20-k%20-g%0A%5B%20-z%20%22%24(sha256sum%20B%20%7C%20grep%20242d42eb5f5aaa67ddc9c1baf1acdf58d289e3f792adfdd77b589b9dc71eff85)%22%20%5D%20%7C%7C%20mtd%20-r%20write%20B%20Bootloader%0A
 ```
 
 路由器开始下载 Breed 进行刷写，大约需要1~3分钟进行重启，等待路由器指示灯由蓝色变为橘黄色，然后再次变为蓝色进入系统，此时Breed已经刷入完毕。
@@ -52,7 +52,7 @@ http://192.168.31.1/cgi-bin/luci/;stok=XXXXXXXXXXXXX/api/misystem/set_config_iot
 打开[SHA256文件HASH值](https://crypot.51strive.com/sha256_checksum.html) 将刚才下载的文件添加进去，生成生成HASH值。  
 将以下字符串中##################的部分替换为新生成的HASH值。再次替换XXXX部分以后复制到浏览器打开即可。
 ```
-http://192.168.31.1/cgi-bin/luci/;stok=XXXXXXXXXXXXX/api/misystem/set_config_iotdev?bssid=xiaomi&user_id=longdike&ssid=%0Acd%20%2Ftmp%0Acurl%20-o%20B%20-O%20https%3A%2F%2Fbreed.hackpascal.net%2Fbreed-mt7621-xiaomi-r3g.bin%20-k%0A%5B%20-z%20%22%24(sha256sum%20B%20%7C%20grep%20##################)%22%20%5D%20%7C%7C%20mtd%20-r%20write%20B%20Bootloader%0A
+192.168.31.1/cgi-bin/luci/;stok=XXXXXXXXXXXXX/api/misystem/set_config_iotdev?bssid=xiaomi&user_id=longdike&ssid=%0Acd%20%2Ftmp%0Acurl%20-o%20B%20-O%20https%3A%2F%2Fbreed.hackpascal.net%2Fbreed-mt7621-xiaomi-r3g.bin%20-k%0A%5B%20-z%20%22%24(sha256sum%20B%20%7C%20grep%20##################)%22%20%5D%20%7C%7C%20mtd%20-r%20write%20B%20Bootloader%0A
 ```
 2. 网络问题或者下载的Breed固件损坏，请多尝试几次。
 3. Stok后面的字段过期，请重新获取。
@@ -78,7 +78,7 @@ http://192.168.31.1/cgi-bin/luci/;stok=XXXXXXXXXXXXX/api/misystem/set_config_iot
 1. 到<kbd>固件更新</kbd>页面，勾选`固件`，再点击<kbd>浏览</kbd>，选择对应的固件，最后进行<kbd>上传</kbd>。
 2. 固件上传完成后，到 **Breed Web 恢复控制台**更新确认界面，点击<kbd>更新</kbd>。
 3. 等待更新完成，设备重启
-4. 在浏览器中输入 <http://192.168.123.1>，输入用户名及密码，Padavan系统默认用户名 `admin`，密码 `admin`。
+4. 在浏览器中输入 <192.168.123.1>，输入用户名及密码，Padavan系统默认用户名 `admin`，密码 `admin`。
 
 >更新breed版本在**Breed Web 恢复控制台**<kbd>固件更新</kbd>页面勾选`Bootloader`选择bin文件升级即可。
 {: .prompt-tip }

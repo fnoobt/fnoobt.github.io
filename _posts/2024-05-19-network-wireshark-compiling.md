@@ -113,7 +113,7 @@ choco install -y winflexbison3
 ```
 
 ### 9、可选：安装 Perl
-如果需要，您可以从 [strawberryperl](http://strawberryperl.com/)或[activestate](https://www.activestate.com/)获取 Perl 安装程序并安装到默认位置。
+如果需要，您可以从 [strawberryperl](https://strawberryperl.com/)或[activestate](https://www.activestate.com/)获取 Perl 安装程序并安装到默认位置。
 
 或者，您可以使用 Chocolatey 安装 Perl:
 ```bash

@@ -70,4 +70,4 @@ _Padavan web应用交互逻辑_
 本文参考
 
 > 1. [Padavan插件开发笔记](https://b.coz.moe/posts/tech/how-to-build-a-padavan-plugin/)
-> 2. [Padavan源码分析](http://foxhome.top/2021/04/29/435.html)
+> 2. [Padavan源码分析](https://foxhome.top/2021/04/29/435.html)

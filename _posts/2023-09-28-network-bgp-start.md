@@ -172,7 +172,7 @@ Community属于可选传递属性，是一种路由标记，类似于一种标�
 
 Community属性值长度为32个比特，也就是4个字节，可用十进制表示，也常用（AS号：编号），其中AS号是高位2字节，编号是低位2字节。
 
-FRR给出了Well-Known的Community值，具体可参考[Community](http://docs.frrouting.org/en/latest/bgp.html#communities-attribute)
+FRR给出了Well-Known的Community值，具体可参考[Community](https://docs.frrouting.org/en/latest/bgp.html#communities-attribute)
 
 |      Community      |                 描述                 |                    描述                   |
 |:-------------------:|:------------------------------------:|:-----------------------------------------:|

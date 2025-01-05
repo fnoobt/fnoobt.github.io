@@ -180,8 +180,8 @@ deb [arch=i386,amd64] https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy-updates
 deb [arch=i386,amd64] https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy-backports main restricted universe multiverse
 # deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy-backports main restricted universe multiverse
 
-deb [arch=i386,amd64] http://security.ubuntu.com/ubuntu/ jammy-security main restricted universe multiverse
-# deb-src http://security.ubuntu.com/ubuntu/ jammy-security main restricted universe multiverse
+deb [arch=i386,amd64] https://security.ubuntu.com/ubuntu/ jammy-security main restricted universe multiverse
+# deb-src https://security.ubuntu.com/ubuntu/ jammy-security main restricted universe multiverse
 
 deb [arch=arm64] https://mirrors.aliyun.com/ubuntu-ports/ jammy main restricted universe multiverse
 deb [arch=arm64] https://mirrors.aliyun.com/ubuntu-ports/ jammy-security main restricted universe multiverse

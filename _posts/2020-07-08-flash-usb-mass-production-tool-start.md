@@ -36,7 +36,7 @@ U盘插到电脑上，U盘图标显示灰色，双击打开提示：`请将磁�
 
 ### 2.下载对应的量产工具
 
-ChipGenius检测出U盘主控是一芯的chipYC2019，`FFC1179 = FC2279 = ChipYC2019` 他们的工具都是共用的，对应的量产工具为FirstChip Mass-Product Tools，在[FirstChip官网](http://www.szfirstchip.com/col.jsp?id=142)下载对应的量产工具版本：[FirstChip_MpTools_20220601](http://14013833.s21d.faiusrd.com/0/ABUIABBQGAAgkuGRlQYojJfJkwM?f=FirstChip_MpTools_20220601.rar&v=1656489317)  
+ChipGenius检测出U盘主控是一芯的chipYC2019，`FFC1179 = FC2279 = ChipYC2019` 他们的工具都是共用的，对应的量产工具为FirstChip Mass-Product Tools，在FirstChip官网www.szfirstchip.com/col.jsp?id=142下载对应的量产工具版本：FirstChip_MpTools_20220601，地址：14013833.s21d.faiusrd.com/0/ABUIABBQGAAgkuGRlQYojJfJkwM?f=FirstChip_MpTools_20220601.rar&v=1656489317  
 如果是其他主控需要用[其他量产工具](https://www.upantool.com/liangchan/)
 
 ### 3.开始量产

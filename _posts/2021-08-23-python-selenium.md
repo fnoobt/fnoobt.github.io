@@ -467,7 +467,7 @@ ActionChains(driver)\
 from selenium import webdriver
 
 driver = webdriver.Chrome()
-driver.get('http://www.baidu.com/')
+driver.get('https://www.baidu.com/')
 
 # 最大化当前窗口
 driver.maximize_window()
