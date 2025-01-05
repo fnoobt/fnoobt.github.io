@@ -192,6 +192,7 @@ defaults:
     values:
       layout: page
       permalink: /:title/
+
 sass:
   style: compressed
 
