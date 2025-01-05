@@ -15,7 +15,7 @@ openEuler Embedded是基于openEuler社区**面向嵌入式场景**的Linux版�
 openEuler Embedded采用yocto构建，同时设计了基于Python的元工具 oebuild 以简化相对复杂的yocto构建流程。按照以下步骤可以快速构建出一个openEuler Embedded镜像。
 
 > 当前 **仅支持在x86_64位的Linux环境** 下使用 oebuild 进行构建，且需在 **普通用户** 下进行 oebuild 的安装运行。更多关于 oebuild 的介绍请参阅 [oebuild 介绍](https://embedded.pages.openeuler.org/master/oebuild/userguide/install/index.html#oebuild-install) 章节。
-> openEuler Embedded 的 CI 会归档最新的构建镜像。若希望快速获取可用的镜像，请访问 [dailybuild](121.36.84.172/dailybuild/EBS-openEuler-Mainline/) ，在 dailybuild/EBS-openEuler-Mainline/openeuler-xxxx-xx-xx/embedded_img 中可以下载镜像。
+> openEuler Embedded 的 CI 会归档最新的构建镜像。若希望快速获取可用的镜像，请访问 dailybuild 地址_121.36.84.172/dailybuild/EBS-openEuler-Mainline_，在 dailybuild/EBS-openEuler-Mainline/openeuler-xxxx-xx-xx/embedded_img 中可以下载镜像。
 {: .prompt-info }
 
 #### 1. 安装必要的主机包
