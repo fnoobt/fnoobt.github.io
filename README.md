@@ -1,18 +1,51 @@
-# Chirpy Starter
+<div align="center">
 
-[![Gem Version](https://img.shields.io/gem/v/jekyll-theme-chirpy)][gem]&nbsp;
-[![GitHub license](https://img.shields.io/github/license/cotes2020/chirpy-starter.svg?color=blue)][mit]
+  # 小白的博客
 
-When installing the [**Chirpy**][chirpy] theme through [RubyGems.org][gem], Jekyll can only read files in the folders
-`_data`, `_layouts`, `_includes`, `_sass` and `assets`, as well as a small part of options of the `_config.yml` file
-from the theme's gem. If you have ever installed this theme gem, you can use the command
-`bundle info --path jekyll-theme-chirpy` to locate these files.
+  一个Jekyll主题博客，记录学习。
 
-The Jekyll team claims that this is to leave the ball in the user’s court, but this also results in users not being
-able to enjoy the out-of-the-box experience when using feature-rich themes.
+  [![Gem Version](https://img.shields.io/gem/v/jekyll-theme-chirpy)](https://rubygems.org/gems/jekyll-theme-chirpy) [![GitHub license](https://img.shields.io/github/license/cotes2020/chirpy-starter.svg?color=blue)][mit]
 
-To fully use all the features of **Chirpy**, you need to copy the other critical files from the theme's gem to your
-Jekyll site. The following is a list of targets:
+  [**Live Demo →**][demo]
+
+</div>
+
+## 特征
+
+<details>
+  <summary>
+    <i>单击以查看功能</i>
+  </summary>
+  <p>
+
+  - 亮/暗主题模式
+  - 本地化的UI语言
+  - 置顶帖子
+  - 分级类别
+  - 热门标签
+  - 目录
+  - 帖子的最后修改日期
+  - 语法高亮
+  - 数学表达式
+  - Mermaid 图和流程图
+  - 亮/暗模式图像
+  - 嵌入视频
+  - Disqus / Utterances / Giscus 评论
+  - 搜索
+  - Atom源
+  - 谷歌分析
+  - SEO和性能优化
+  
+  </p>
+</details>
+
+## 主题
+
+当通过[RubyGems.org][gem]安装[**Chirpy**][chirpy]主题时，Jekyll只能读取文件夹`/_data`、`/_layouts`、`/includes`、`/_sass`和`/assets`中的文件，以及主题的gem中 `/_config.yml` 文件的一小部分选项。如果您曾经安装过这个主题gem，则可以使用该命令 `bundle info --path jekyll-theme-chirpy` 来定位这些文件。
+
+Jekyll团队声称，这是为了将球留在用户的球场上，但这也导致用户在使用功能丰富的主题时无法享受开箱即用的体验。
+
+要充分使用**Chirpy**的所有功能，您需要将主题的gem中的其他关键文件复制到您的Jekyll网站。以下是目标列表：
 
 ```shell
 .
@@ -22,22 +55,35 @@ Jekyll site. The following is a list of targets:
 └── index.html
 ```
 
-To save you time, and also in case you lose some files while copying, we extract those files/configurations of the
-latest version of the **Chirpy** theme and the [CD][CD] workflow to here, so that you can start writing in minutes.
+为了节省您的时间，也为了防止您在复制时丢失一些文件，我们将最新版本的**Chirpy**主题和[CD][CD]工作流的文件/配置提取到此处，以便您可以在几分钟内开始写作。
 
-## Usage
+## 先决条件
 
-Check out the [theme's docs](https://github.com/cotes2020/jekyll-theme-chirpy/wiki).
+按照[Jekyll Docs](https://jekyllrb.com/docs/installation/)中的说明完成基本环境的安装。还需要安装[Git](https://git-scm.com/)。
 
-## Contributing
+## 安装
 
-This repository is automatically updated with new releases from the theme repository. If you encounter any issues or want to contribute to its improvement, please visit the [theme repository][chirpy] to provide feedback.
+登录GitHub并[**使用此模板**][use-template]生成一个全新的存储库，并将其命名为`USERNAME.github.io`，其中`USERNAME`表示您的GitHub用户名。
 
-## License
+然后将其克隆到本地计算机并运行：
 
-This work is published under [MIT][mit] License.
+```
+$ bundle
+```
 
+本地运行预览命令 `bundle exec jekyll s` 或 `jekyll server`.
+
+## 用法
+
+请参阅 [主题文档](https://github.com/cotes2020/jekyll-theme-chirpy#documentation).
+
+## 许可证
+
+本作品在 [MIT][mit] 许可下发布。
+
+[demo]: https://fnoobt.github.io
 [gem]: https://rubygems.org/gems/jekyll-theme-chirpy
 [chirpy]: https://github.com/cotes2020/jekyll-theme-chirpy/
+[use-template]: https://github.com/cotes2020/chirpy-starter/generate
 [CD]: https://en.wikipedia.org/wiki/Continuous_deployment
 [mit]: https://github.com/cotes2020/chirpy-starter/blob/master/LICENSE
