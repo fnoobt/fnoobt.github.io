@@ -136,9 +136,12 @@ sudo apt-get install qemu-system-arm
 #进入目录
 cd output/<构建时间戳>
 
-qemu-system-aarch64 -M virt-4.0 -m 1G -cpu cortex-a57 -nographic \
+sudo qemu-system-aarch64 -M virt-4.0 -m 1G -cpu cortex-a57 -nographic \
     -kernel zImage \
-    -initrd openeuler-image-qemu-aarch64-*.rootfs.cpio.gz
+    -initrd openeuler-image-qemu-aarch64-*.rootfs.cpio.gz \
+    -netdev bridge,br=br_qemu,id=net0 -device virtio-net-pci,netdev=net0 \
+    -device virtio-9p-device,fsdev=fs1,mount_tag=host \
+    -fsdev local,security_model=passthrough,id=fs1,path=/home/protocol/project 
 ```
 
 QEMU运行成功并登录后，将会呈现openEuler Embedded的Shell。
@@ -153,6 +156,127 @@ QEMU就会退出并回到启动时的目录。
 > 由于标准根文件系统镜像进行了安全加固，因此第一次启动时，需要为登录用户名root设置密码，且密码强度有相应要求，需要 **数字、字母、特殊字符组合最少8位**，例如openEuler@2023
 {: .prompt-info }
 
+## QEMU使用
+
+```bash
+# ubuntu安装QEMU
+sudo apt-get install qemu-system-arm
+
+# qemu执行命令
+qemu-system-aarch64 -M virt-4.0 -m 1G -cpu cortex-a57 -nographic \
+    -kernel zImage \
+    -initrd openeuler-image-qemu-aarch64-*.rootfs.cpio.gz \
+    -netdev bridge,br=br_qemu,id=net0 -device virtio-net-pci,netdev=net0 \
+    -device virtio-9p-device,fsdev=fs1,mount_tag=host \
+    -fsdev local,security_model=passthrough,id=fs1,path=/home/protocol/project 
+```
+
+### 使能互联网
+```bash
+出栈
+虚拟机网卡（eth0）-> 虚拟机网卡（vnet0）->网桥（br）---- iptable forward -----宿主机网卡（enp1s0）->发出
+入栈
+虚拟机网卡（eth0）<- 虚拟机网卡（vnet0）<-网桥（br）---- iptable forward -----宿主机网卡（enp1s0）<-收到
+```
+
+#### 宿主机中
+```bash
+# 新增一个网桥，网桥名称可改，但后续需保持一致
+sudo brctl addbr br_qemu
+# 网桥作为QEMU中openEuler Embedded的网关，需要配置IP地址（可改，但后续需保持一致）
+sudo ifconfig br_qemu 192.168.122.1/24
+# 启动网桥
+sudo ifconfig br_qemu up
+# 将ip forward功能打开
+sudo sysctl -w net.ipv4.ip_forward=1
+
+# 配置iptables，ens33为宿主机的网卡名称
+sudo iptables -A FORWARD -i br_qemu -o ens33 -j ACCEPT
+sudo iptables -A FORWARD -o br_qemu -i ens33 -j ACCEPT
+sudo iptables -t nat -A POSTROUTING -s 192.168.122.0/24 -j MASQUERADE # NAT地址转换
+```
+
+启动QEMU时添加netdev
+```bash
+sudo qemu-system-aarch64 -M virt-4.0 -m 1G -cpu cortex-a57 -nographic \
+    -kernel zImage \
+    -initrd openeuler-image-qemu-aarch64-*.rootfs.cpio.gz \
+    -netdev bridge,br=br_qemu,id=net0 -device virtio-net-pci,netdev=net0
+```
+
+其中， `-netdev` 选项中 `br` 参数为宿主机上新建的网桥名称。 `-device` 选项中 `netdev` 参数为 `-netdev` 指定的 `id`， 指定了设备应该连接到的后端。
+
+#### 配置openEuler Embedded网卡
+```bash
+ifconfig eth0 192.168.122.11 netmask 255.255.255.0
+ip route add default via 192.168.122.1 dev eth0
+```
+
+其中，192.168.122.11可以更改为任意的未被占用的局域网地址。但是，需要保证与宿主机的网桥在同一个网段。 ip route 添加默认网关的作用是，当openEuler Embedded需要访问互联网时，将数据包转发到宿主机的网桥上，再由宿主机的网桥转发到互联网。
+
+#### 配置DNS
+```bash
+# 修改DNS配置文件
+vi /etc/resolv.conf
+# 添加DNS服务器地址
+nameserver 114.114.114.114
+```
+
+## 共享文件系统
+过共享文件系统，可以使得运行 QEMU 仿真器的宿主机和 openEuler Embedded 共享文件，这样在宿主机上交叉编译的程序，拷贝到共享目录中，即可在 openEuler Embedded 上运行。注意 QEMU 必须支持 virtfs，即配置了 `--enable-virtfs`。
+假设将宿主机的 `/tmp/project ` 目录作为共享目录，使能共享文件系统功能的操作指导如下：
+
+### 启动QEMU时添加fsdev，运行如下命令：
+```bash
+sudo qemu-system-aarch64 -M virt-4.0 -m 1G -cpu cortex-a57 -nographic \
+    -kernel zImage \
+    -initrd openeuler-image-qemu-aarch64-*.rootfs.cpio.gz \
+    -device virtio-9p-device,fsdev=fs1,mount_tag=host \
+    -fsdev local,security_model=passthrough,id=fs1,path=/tmp/project 
+```
+
+### 映射文件系统
+在 openEuler Embedded 启动并登录之后，需要运行如下命令，映射(mount)共享文件系统：
+```bash
+mkdir project
+mount -t 9p -o trans=virtio,version=9p2000.L host ~/project
+```
+
+## 安装dnf
+```bash
+# 下载dnf
+wget https://repo.openeuler.openatom.cn/openEuler-24.03-LTS/everything/aarch64/Packages/dnf-4.16.2-3.oe2403.noarch.rpm
+
+# 将 .rpm 文件转换为 .cpio 格式，解压到当前目录
+rpm2cpio dnf-4.16.2-3.oe2403.noarch.rpm | cpio -idmv
+
+rm -rf ./lib/ld-linux-aarch64.so.1
+rm -rf ./lib64/libc.so.6
+
+cp -r etc/* /etc/
+cp -r lib64/* /lib64/
+cp -r run/* /run/
+cp -r sbin/* /sbin/
+cp -r var/* /var/
+cp -r usr/* /usr/
+
+# 将 /bin/sh 符号链接到 /bin/bash
+ln -sf /bin/bash /bin/sh
+
+# 导入 GPG 公钥
+rpm --import https://repo.openeuler.openatom.cn/openEuler-24.03-LTS/everything/aarch64/RPM-GPG-KEY-openEuler
+
+# 手动安装 rpm 包
+rpm -ivh rpm-*.rpm
+
+# 安装 dnf
+rpm -ivh dnf-*.rpm
+
+# 查找链接对应的库，在已安装的系统上，先用find查找所在的文件路径
+find / -name libgcrypt.so.20
+# 再用rpm -qf查找对应的库
+rpm -qf /usr/lib64/libgcrypt.so.20
+```
 
 ****
 
