@@ -151,6 +151,7 @@ qemu-system-aarch64 -M virt \
     -device virtio-blk-device,drive=hd0 \
     -netdev user,id=net0 -device virtio-net-device,netdev=net0
 ```
+
 `-kernel`指定了内核镜像，`-append`提供了内核命令行参数，`-drive`指定了根文件系统的镜像文件，`-netdev`和`-device`设置了网络设备。调整这些选项以匹配你的实际情况，`-dtb` 指定设备树文件路径，`-initrd` 指定初始化RAM磁盘（根文件系统），`-nographic` 表示不使用图形界面，输出到终端。
 
 ****
