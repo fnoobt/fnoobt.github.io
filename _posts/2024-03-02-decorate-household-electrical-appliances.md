@@ -5,7 +5,7 @@ date: 2024-03-02 17:54:00 +0800
 categories: [Decorate,装修]
 tags: [decorate,家电]
 math: true
-img_path: '/assets/img/commons/decorate/'
+media_subpath: '/assets/img/commons/decorate/'
 ---
 
 ## 空调

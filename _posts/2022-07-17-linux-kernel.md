@@ -4,7 +4,7 @@ author: fnoobt
 date: 2022-07-17 21:36:00 +0800
 categories: [Linux,kernel]
 tags: [linux,kernel]
-img_path: '/assets/img/commons/linux/kernel/'
+media_subpath: '/assets/img/commons/linux/kernel/'
 ---
 
 ## 一、前言

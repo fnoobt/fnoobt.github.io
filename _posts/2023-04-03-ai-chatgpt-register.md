@@ -4,7 +4,7 @@ author: fnoobt
 date: 2023-04-03 14:31:00 +0800
 categories: [AI,AI教程]
 tags: [ai,chatgpt]
-img_path: '/assets/img/commons/ai/'
+media_subpath: '/assets/img/commons/ai/'
 ---
 
 随着ChatGPT的爆火，我们也见识到了ChatGPT的能力，拥有一个AI助手来助力我们工作学习终于变成了一件可以实现的事情。

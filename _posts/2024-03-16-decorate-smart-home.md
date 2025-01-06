@@ -4,7 +4,7 @@ author: fnoobt
 date: 2024-03-16 17:29:00 +0800
 categories: [Decorate,装修]
 tags: [decorate,智能家居]
-img_path: '/assets/img/commons/decorate/'
+media_subpath: '/assets/img/commons/decorate/'
 ---
 
 ## 灯光系统

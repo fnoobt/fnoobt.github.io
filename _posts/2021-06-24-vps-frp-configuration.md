@@ -4,7 +4,7 @@ author: fnoobt
 date: 2021-06-24 09:56:00 +0800
 categories: [VPS,服务搭建]
 tags: [linux,vps,frp]
-img_path: '/assets/img/commons/vps/'
+media_subpath: '/assets/img/commons/vps/'
 ---
 
 

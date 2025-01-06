@@ -4,7 +4,7 @@ author: fnoobt
 date: 2021-08-23 09:35:00 +0800
 categories: [Python,selenium]
 tags: [python,selenium]
-img_path: '/assets/img/commons/python'
+media_subpath: '/assets/img/commons/python'
 ---
 
 ## 一、Python Selenium 简介和环境配置
@@ -83,16 +83,16 @@ driver = webdriver.Chrome(executable_path=r'.\chromedriver.exe')
 
 Selenium 提供了以下几种定位元素的方法：
 
-|            描述            |             查找一个元素            |             查找多个元素             |
-|:--------------------------:|:-----------------------------------:|:------------------------------------:|
-|      通过 ID 定位元素      |         find_element_by_id()        |         find_elements_by_id()        |
-|     通过 Name 定位元素     |        find_element_by_name()       |        find_elements_by_name()       |
-|     通过 XPath 定位元素    |       find_element_by_xpath()       |       find_elements_by_xpath()       |
+|            描述            |            查找一个元素             |             查找多个元素             |
+| :------------------------: | :---------------------------------: | :----------------------------------: |
+|      通过 ID 定位元素      |        find_element_by_id()         |        find_elements_by_id()         |
+|     通过 Name 定位元素     |       find_element_by_name()        |       find_elements_by_name()        |
+|    通过 XPath 定位元素     |       find_element_by_xpath()       |       find_elements_by_xpath()       |
 | 通过完整链接文本定位超链接 |     find_element_by_link_text()     |     find_elements_by_link_text()     |
 | 通过部分链接文本定位超链接 | find_element_by_partial_link_text() | find_elements_by_partial_link_text() |
-|     通过标签名定位元素     |      find_element_by_tag_name()     |      find_elements_by_tag_name()     |
-|      通过类名定位元素      |     find_element_by_class_name()    |     find_elements_by_class_name()    |
-|    通过CSS选择器定位元素   |    find_element_by_css_selector()   |    find_elements_by_css_selector()   |
+|     通过标签名定位元素     |     find_element_by_tag_name()      |     find_elements_by_tag_name()      |
+|      通过类名定位元素      |    find_element_by_class_name()     |    find_elements_by_class_name()     |
+|   通过CSS选择器定位元素    |   find_element_by_css_selector()    |   find_elements_by_css_selector()    |
 
 >**注意：**查找一个元素的方法仅仅只返回第一个匹配上的元素，查找多个元素的方法会返回所有匹配上的元素。它们的使用方法基本一致。
 {: .prompt-tip }
@@ -268,33 +268,33 @@ WebDriverWait 的初始化参数说明如下：
 
 expected_conditions 模块提供了一组预定义的条件给 `WebDriverWait` 使用（即可作为 `until()` 或 `until_not()` 中的 `method` 参数）：
 
-|                预期条件                |                                      说明                           |
-|:--------------------------------------:|:-------------------------------------------------------------------|
-|                title_is                |                               页面的标题是某内容                   |
-|             title_contains             |                              页面的标题包含某内容                   |
-|                url_to_be               |                           当前的 url 是否为指定的内容               |
-|              url_contains              |                          当前的 url 是否包含指定的内容               |
-|               url_matches              |                      当前的 url 是否符合提供的正则表达式。             |
-|               url_changes              |                          当前的 url 是否不是指定的内容                 |
-|              visibility_of             |                          某元素出现在 DOM 树里面并可见                   |
-|      visibility_of_element_located     |                          某元素出现在 DOM 树里面并可见                     |
-|   visibility_of_all_elements_located   |   定位某类元素，判断是否都可见。<br>如果都可见，返回所有元素；否则，返回 false。 |
-|   visibility_of_any_elements_located   |                定位某类元素，判断是否可见。返回可见的所有元素。              |
-|     invisibility_of_element_located    |                       某元素不可见或没有出现在 DOM 树里面                 |
-|              staleness_of              |                判断某元素是否仍在 DOM 树，可判断页面是否已经刷新             |
-|       presence_of_element_located      |     某元素出现在 DOM 树里面（不表示其是可见的），<br>如果存在的话，返回单个元素 |
-|    presence_of_all_elements_located    | 某类元素出现在 DOM 树里面（不表示其是可见的），<br>如果存在的话，返回的是一个 list|
-|      text_to_be_present_in_element     |                             某个元素文本包含某文字                        |
-|   text_to_be_present_in_element_value  |                             某个元素的值包含某文字                     |
-|         element_to_be_clickable        |                           某元素是可见的，并且可点击                    |
-|         element_to_be_selected         |                                某元素是可选择的                         |
-|  element_located_selection_state_to_be |                定位某元素，判断某元素的选中状态是否等于给定的值             |
-|     element_located_to_be_selected     |                           定位某元素，判断是否被选中                  |
-|      element_selection_state_to_be     |           某元素的选中状态是否等于给定的值，可以用来判断选中或没选中           |
-|            alert_is_present            |                                  出现一个弹框                     |
-|          new_window_is_opened          |                             一个新的 window 被打开                  |
-| frame_to_be_available_and_switch_to_it |                       某 frame 是可得到的，并已经切换为它            |
-|         number_of_windows_to_be        |                        window 的数量是否等于一个指定的值            |
+|                预期条件                | 说明                                                                               |
+| :------------------------------------: | :--------------------------------------------------------------------------------- |
+|                title_is                | 页面的标题是某内容                                                                 |
+|             title_contains             | 页面的标题包含某内容                                                               |
+|               url_to_be                | 当前的 url 是否为指定的内容                                                        |
+|              url_contains              | 当前的 url 是否包含指定的内容                                                      |
+|              url_matches               | 当前的 url 是否符合提供的正则表达式。                                              |
+|              url_changes               | 当前的 url 是否不是指定的内容                                                      |
+|             visibility_of              | 某元素出现在 DOM 树里面并可见                                                      |
+|     visibility_of_element_located      | 某元素出现在 DOM 树里面并可见                                                      |
+|   visibility_of_all_elements_located   | 定位某类元素，判断是否都可见。<br>如果都可见，返回所有元素；否则，返回 false。     |
+|   visibility_of_any_elements_located   | 定位某类元素，判断是否可见。返回可见的所有元素。                                   |
+|    invisibility_of_element_located     | 某元素不可见或没有出现在 DOM 树里面                                                |
+|              staleness_of              | 判断某元素是否仍在 DOM 树，可判断页面是否已经刷新                                  |
+|      presence_of_element_located       | 某元素出现在 DOM 树里面（不表示其是可见的），<br>如果存在的话，返回单个元素        |
+|    presence_of_all_elements_located    | 某类元素出现在 DOM 树里面（不表示其是可见的），<br>如果存在的话，返回的是一个 list |
+|     text_to_be_present_in_element      | 某个元素文本包含某文字                                                             |
+|  text_to_be_present_in_element_value   | 某个元素的值包含某文字                                                             |
+|        element_to_be_clickable         | 某元素是可见的，并且可点击                                                         |
+|         element_to_be_selected         | 某元素是可选择的                                                                   |
+| element_located_selection_state_to_be  | 定位某元素，判断某元素的选中状态是否等于给定的值                                   |
+|     element_located_to_be_selected     | 定位某元素，判断是否被选中                                                         |
+|     element_selection_state_to_be      | 某元素的选中状态是否等于给定的值，可以用来判断选中或没选中                         |
+|            alert_is_present            | 出现一个弹框                                                                       |
+|          new_window_is_opened          | 一个新的 window 被打开                                                             |
+| frame_to_be_available_and_switch_to_it | 某 frame 是可得到的，并已经切换为它                                                |
+|        number_of_windows_to_be         | window 的数量是否等于一个指定的值                                                  |
 
 #### 三种等待方式的比较
 
@@ -312,19 +312,19 @@ expected_conditions 模块提供了一组预定义的条件给 `WebDriverWait` �
 
 一般来说，webdriver 中比较常用的操作元素的方法有下面几个：
 
-|       方法      |                   说明                   |
-|:---------------:|:----------------------------------------:|
-|       text      |            属性值，元素的文本            |
-|     tag_name    |           属性值，元素的标签名           |
-|       size      |            属性值，元素的大小            |
+|      方法       |                   说明                   |
+| :-------------: | :--------------------------------------: |
+|      text       |            属性值，元素的文本            |
+|    tag_name     |           属性值，元素的标签名           |
+|      size       |            属性值，元素的大小            |
 |     click()     |                 点击元素                 |
 |   send_keys()   |           在元素上模拟按键输入           |
-|     submit()    |       提交元素的内容，如果可以的话       |
+|    submit()     |       提交元素的内容，如果可以的话       |
 |     clear()     | 清除元素的内容，如果其是一个文本输入元素 |
-|   is_enabled()  |       元素当前是否处于 enable 状态       |
+|  is_enabled()   |       元素当前是否处于 enable 状态       |
 |  is_selected()  |        元素当前是否处于被选中状态        |
 | get_attribute() |             获取元素的属性值             |
-|  get_property() |             获取元素的属性值             |
+| get_property()  |             获取元素的属性值             |
 
 参考代码：
 
@@ -375,16 +375,16 @@ search_input.send_keys(Keys.CONTROL,'a')
 现在我们已经了解到可以通过 `send_keys()` 向文本框中输入文字，但是其他元素呢？我们可以对元素一个个进行单独操作，这不是一个好的方法。因此 **WebDriver** 提供了一个叫 `Select` 的类，可以完成这些操作。
 
 |            方法            |               说明               |
-|:--------------------------:|:--------------------------------:|
-|           options          |         属性，所有选择项         |
+| :------------------------: | :------------------------------: |
+|          options           |         属性，所有选择项         |
 |    all_selected_options    |     属性，所有被选中的选择项     |
-|    first_selected_option   |    属性，第一个被选中的选择项    |
-|      select_by_value()     |        通过值选择对应选项        |
-|      select_by_index()     |       通过索引选择对应选项       |
+|   first_selected_option    |    属性，第一个被选中的选择项    |
+|     select_by_value()      |        通过值选择对应选项        |
+|     select_by_index()      |       通过索引选择对应选项       |
 |  select_by_visible_text()  |     通过文本内容选择对应选项     |
 |       deselect_all()       | 清除所有选择。仅当支持多选时有效 |
-|     deselect_by_value()    |      通过值取消选择对应选项      |
-|     deselect_by_index()    |     通过索引取消选择对应选项     |
+|    deselect_by_value()     |      通过值取消选择对应选项      |
+|    deselect_by_index()     |     通过索引取消选择对应选项     |
 | deselect_by_visible_text() |   通过文本内容取消选择对应选项   |
 
 参考代码：
@@ -402,25 +402,25 @@ driver.get(url)
 
 **WebDriver** 通过 `ActionChains` 类提供了一些鼠标和键盘操作相关的方法：
 
-|              方法             |                                            说明                                            |
-|:-----------------------------:|:------------------------------------------------------------------------------------------:|
+|             方法              |                                            说明                                            |
+| :---------------------------: | :----------------------------------------------------------------------------------------: |
 |           perform()           |                            执行所有存储在 ActionChains 中的操作                            |
 |        reset_actions()        |                            清除所有存储在 ActionChains 中的操作                            |
 |            click()            |         在指定元素上进行点击操作。如果没有指定元素，在当前鼠标所在位置进行点击操作         |
-|        click_and_hold()       |                                  在指定元素上按住鼠标左键                                  |
+|       click_and_hold()        |                                  在指定元素上按住鼠标左键                                  |
 |        context_click()        | 在指定元素上进行鼠标右键点击操作。如果没有指定元素，在当前鼠标所在位置进行鼠标右键点击操作 |
-|         double_click()        |         在指定元素上进行双击操作。如果没有指定元素，在当前鼠标所在位置进行双击操作         |
+|        double_click()         |         在指定元素上进行双击操作。如果没有指定元素，在当前鼠标所在位置进行双击操作         |
 |        drag_and_drop()        |                   在源元素上按住鼠标左键，然后移动到目标元素上并释放鼠标                   |
 |   drag_and_drop_by_offset()   |                     在源元素上按住鼠标左键，然后移动指定偏移并释放鼠标                     |
-|           key_down()          |            只发送一个按键，而不释放它。其只能与辅助按键（control、Alt 和 Shift）           |
-|            key_up()           |                                      释放一个辅助按键                                      |
-|        move_by_offset()       |                          将鼠标从当前位置按照指定的偏移量进行移动                          |
+|          key_down()           |           只发送一个按键，而不释放它。其只能与辅助按键（control、Alt 和 Shift）            |
+|           key_up()            |                                      释放一个辅助按键                                      |
+|       move_by_offset()        |                          将鼠标从当前位置按照指定的偏移量进行移动                          |
 |       move_to_element()       |                                 将鼠标移动到指定元素的中间                                 |
 | move_to_element_with_offset() |                将鼠标移动到指定元素的指定坐标上，元素的左上角坐标为（0, 0）                |
 |            pause()            |                                  暂定指定时间内的所有输入                                  |
 |           release()           |                                 释放在指定元素上的按住操作                                 |
-|          send_keys()          |                                发送按键到当前被 focus 的元素                               |
-|     send_keys_to_element()    |                                    发送按键到指定的元素                                    |
+|          send_keys()          |                               发送按键到当前被 focus 的元素                                |
+|    send_keys_to_element()     |                                    发送按键到指定的元素                                    |
 
 参考代码：
 
@@ -450,16 +450,16 @@ ActionChains(driver)\
 
 **WebDriver** 提供了一些操作浏览器的基本方法：
 
-|        方法       |               说明               |
-|:-----------------:|:--------------------------------:|
+|       方法        |               说明               |
+| :---------------: | :------------------------------: |
 | minimize_window() |          最小化当前窗口          |
 | maximize_window() |          最大化当前窗口          |
 | set_window_size() |        设置当前窗口的大小        |
-|       back()      |          控制浏览器后退          |
+|      back()       |          控制浏览器后退          |
 |     forward()     |          控制浏览器前进          |
 |     refresh()     |           刷新当前页面           |
 |      close()      |   关闭当前窗口，只关闭单个窗口   |
-|       quit()      | 退出相关的驱动程序和关闭所有窗口 |
+|      quit()       | 退出相关的驱动程序和关闭所有窗口 |
 
 参考代码如下：
 
@@ -494,8 +494,8 @@ driver.quit()
 
 在 Web 应用中会遇到 `frame/iframe` 表单嵌套页面的情况，**WebDriver** 只能在一个页面上对元素识别与定位，对于 `frame/iframe` 表单嵌套页面上的元素无法直接定位。**WebDriver** 提供了如下方法来进行 `frame/iframe` 之间的切换：
 
-|             方法            |            说明           |
-|:---------------------------:|:-------------------------:|
+|            方法             |           说明            |
+| :-------------------------: | :-----------------------: |
 |      switch_to.frame()      | 切换到指定的 frame/iframe |
 | switch_to.default_content() | 切换到默认的 frame/iframe |
 
@@ -503,11 +503,11 @@ driver.quit()
 
 在浏览器操作过程中，会存在多个窗口的情况，这时就需要进行窗口切换。**WebDriver** 提供了如下方法：
 
-|          方法         |                说明                |
-|:---------------------:|:----------------------------------:|
+|         方法          |                说明                |
+| :-------------------: | :--------------------------------: |
 | current_window_handle |      属性，获取当前窗口的句柄      |
-|     window_handles    | 属性，获取当前会话中的所有窗口句柄 |
-|   switch_to.window()  |        切换到指定句柄的窗口        |
+|    window_handles     | 属性，获取当前会话中的所有窗口句柄 |
+|  switch_to.window()   |        切换到指定句柄的窗口        |
 
 参考代码：
 
@@ -536,10 +536,10 @@ for handle in driver.window_handles:
 
 **WebDriver** 提供了对弹窗的处理。具体做法：首先，使用 `WebDriver.switch_to.alert` 获取到弹窗；然后，使用 `text`、`accept()`、`dismiss()` 和 `send_keys()` 等方法进行操作。
 
-|     方法    |            说明            |
-|:-----------:|:--------------------------:|
-|     text    | 属性，返回弹窗中的文字信息 |
-|   accept()  |        接受现有弹框        |
+|    方法     |            说明            |
+| :---------: | :------------------------: |
+|    text     | 属性，返回弹窗中的文字信息 |
+|  accept()   |        接受现有弹框        |
 |  dismiss()  |        取消现有弹框        |
 | send_keys() |       发送文本至弹框       |
 

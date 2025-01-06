@@ -16,13 +16,13 @@ tags: [vps,linux,linaro,phytinum,embedded,kernel,cross-compiles]
 
 本文使用[linaro6.3.1版本](https://releases.linaro.org/components/toolchain/binaries/6.3-2017.02/aarch64-linux-gnu/)
 
-1. `gcc-linaro-6.3.1-2017.02-x86_64_aarch64-linux-gnu.tar.xz`:
+1. `gcc-linaro-6.3.1-2017.02-x86_64_aarch64-linux-gnu.tar.xz`:  
 这是 Linaro 提供的 GCC 交叉编译器工具链，支持从 x86_64 架构生成 aarch64 (ARM64) 架构的二进制文件。包含 `gcc`、`g++` 等工具和链接器 `ld`。
-2. `runtime-gcc-linaro-6.3.1-2017.02-aarch64-linux-gnu.tar.xz`:
+2. `runtime-gcc-linaro-6.3.1-2017.02-aarch64-linux-gnu.tar.xz`:  
 包含运行时库（如 C 库、标准 C++ 库等），这些库需要在目标平台（aarch64-linux-gnu）上存在，以便执行由上述 GCC 工具链编译的应用程序。
-3. `sysroot-glibc-linaro-2.23-2017.02-aarch64-linux-gnu.tar.xz`:
+3. `sysroot-glibc-linaro-2.23-2017.02-aarch64-linux-gnu.tar.xz`:  
 包含了一个完整的 ARM64 系统根文件系统（sysroot），其中包括头文件和库文件，用于交叉编译时链接和和查找库文件。包含 `glibc 2.23` 版本的动态库和头文件。Glibc 是 GNU C 库的一部分，它提供了 C 语言标准库的实现，是 Linux 系统中的一个重要组成部分。
-4. `*.asc`:
+4. `*.asc`:  
 对应文件的签名文件，用于验证文件的完整性和真实性。验证方法`gpg --verify *.asc`。
 
 通常，在交叉编译环境中，交叉编译器用于生成二进制可执行文件，而 runtime 和 sysroot 文件则提供了在目标平台上运行这些生成的可执行文件所需的运行时支持和库。确保这些文件版本与您的项目和目标平台的要求相匹配。
@@ -57,7 +57,7 @@ cd phytium-linux-kernel-kernel-6.6_v3.0
 make ARCH=arm64 CROSS_COMPILE=${CROSS_COMPILE} SYSROOT=${SYSROOT} defconfig
 
 # 交叉编译内核，编译完成后，内核镜像通常位于arch/aarch64/boot/Image
-make ARCH=arm64 CROSS_COMPILE=${CROSS_COMPILE} SYSROOT=${SYSROOT} -j4
+make ARCH=arm64 CROSS_COMPILE=${CROSS_COMPILE} SYSROOT=${SYSROOT} -j8
 
 # 编译内核模块，生成的内核模块将放置在 lib/modules/$(kernel_version)
 make ARCH=arm64 CROSS_COMPILE=${CROSS_COMPILE} SYSROOT=${SYSROOT} modules

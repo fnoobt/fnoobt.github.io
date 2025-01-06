@@ -4,7 +4,7 @@ author: fnoobt
 date: 2021-09-19 11:44:00 +0800
 categories: [VPS,服务搭建]
 tags: [cloudflare,warp,wgcf,vps,ipv6,linux]
-img_path: '/assets/img/commons/vps/'
+media_subpath: '/assets/img/commons/vps/'
 ---
 
 ## 下载WGCF

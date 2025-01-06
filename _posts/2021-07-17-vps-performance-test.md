@@ -4,7 +4,7 @@ author: fnoobt
 date: 2021-07-17 17:12:00 +0800
 categories: [VPS,脚本]
 tags: [vps,脚本,linux]
-img_path: '/assets/img/commons/vps'
+media_subpath: '/assets/img/commons/vps'
 ---
 
 ## bensh.sh

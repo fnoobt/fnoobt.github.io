@@ -4,7 +4,7 @@ author: fnoobt
 date: 2021-12-20 16:35:00 +0800
 categories: [Linux,Git]
 tags: [linux,git]
-img_path: '/assets/img/commons/linux/git/'
+media_subpath: '/assets/img/commons/linux/git/'
 ---
 
 ## 安装
@@ -85,17 +85,17 @@ ssh -T git@github.com
 ### Git远程操作
 常见命令如下：
 
-|                  命令名称                  |                               作用                             |
-|:------------------------------------------:|:-------------------------------------------------------------:|
-|                git remote -v               |                     查看当前所有远程地址别名                   |
-|        git remote add 别名 远程地址        |                     给远程Git仓库起别名                     |
-|             git push 别名 分支名             |                  推送本地分支上的内容到远程仓库                 |
-|             git clone 远程地址             |                    将远程仓库的内容克隆到本地                   |
-|     git fetch 远程库地址别名 远程分支名    |         将远程仓库对于分支最新内容拉取到本地仓库                 |
-|            git merge 分支名                |                    合并分支，git fetch后需要使用这个             |
-|     git pull 远程库地址别名 远程分支名     |     将远程仓库对于分支最新内容拉下来后与当前本地分支直接合并    |
-|            git branch -d 分支名            |                             删除分支                        |
-| git push 远程库地址别名 -d 远程分支名      | 删除远端仓库分支:例如删除远端的test分支 git push origin -d test |
+|               命令名称                |                              作用                               |
+| :-----------------------------------: | :-------------------------------------------------------------: |
+|             git remote -v             |                    查看当前所有远程地址别名                     |
+|     git remote add 别名 远程地址      |                       给远程Git仓库起别名                       |
+|         git push 别名 分支名          |                 推送本地分支上的内容到远程仓库                  |
+|          git clone 远程地址           |                   将远程仓库的内容克隆到本地                    |
+|  git fetch 远程库地址别名 远程分支名  |            将远程仓库对于分支最新内容拉取到本地仓库             |
+|           git merge 分支名            |                合并分支，git fetch后需要使用这个                |
+|  git pull 远程库地址别名 远程分支名   |    将远程仓库对于分支最新内容拉下来后与当前本地分支直接合并     |
+|         git branch -d 分支名          |                            删除分支                             |
+| git push 远程库地址别名 -d 远程分支名 | 删除远端仓库分支:例如删除远端的test分支 git push origin -d test |
 
 ## 初始化
 

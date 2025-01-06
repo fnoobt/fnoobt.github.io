@@ -4,7 +4,7 @@ author: fnoobt
 date: 2024-03-24 20:32:00 +0800
 categories: [Decorate,装修]
 tags: [decorate,新风系统]
-img_path: '/assets/img/commons/decorate/'
+media_subpath: '/assets/img/commons/decorate/'
 ---
 
 新风系统设备主要分为主机、管道和风口，三者虽作用不同，但都很重要！

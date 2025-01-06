@@ -6,7 +6,7 @@ categories: [Blog,演示]
 tags: [排版,markdown]
 math: true
 mermaid: true
-#img_path: '/assets/img/commons/demo/'
+#media_subpath: '/assets/img/commons/demo/'
 image:
   path: /assets/img/commons/demo/devices-mockup.png
   lqip: data:image/webp;base64,UklGRpoAAABXRUJQVlA4WAoAAAAQAAAADwAABwAAQUxQSDIAAAARL0AmbZurmr57yyIiqE8oiG0bejIYEQTgqiDA9vqnsUSI6H+oAERp2HZ65qP/VIAWAFZQOCBCAAAA8AEAnQEqEAAIAAVAfCWkAALp8sF8rgRgAP7o9FDvMCkMde9PK7euH5M1m6VWoDXf2FkP3BqV0ZYbO6NA/VFIAAAA
@@ -231,19 +231,19 @@ _将呈现为：_
 要添加表格，请使用三个或以上连字符 `—` 创建每列的标题，并使用竖线 `|` 分隔每列。
 
 ```markdown
-|不指定对齐|左对齐| 中间对齐| 右对齐 | 
-|---|:-----------|:------:|------:|
-|123456| 123456  | 123456 | 123456|
-|12345 | 12345   | 12345  | 12345 |
-|123   | 123     | 123    | 123   |
+| 不指定对齐 | 左对齐 | 中间对齐 | 右对齐 |
+| ---------- | :----- | :------: | -----: |
+| 123456     | 123456 |  123456  | 123456 |
+| 12345      | 12345  |  12345   |  12345 |
+| 123        | 123    |   123    |    123 |
 ```
 _将呈现为：_
 
-|不指定对齐|左对齐| 中间对齐| 右对齐 | 
-|---|:-----------|:------:|------:|
-|123456| 123456  | 123456 | 123456|
-|12345 | 12345   | 12345  | 12345 |
-|123   | 123     | 123    | 123   |
+| 不指定对齐 | 左对齐 | 中间对齐 | 右对齐 |
+| ---------- | :----- | :------: | -----: |
+| 123456     | 123456 |  123456  | 123456 |
+| 12345      | 12345  |  12345   |  12345 |
+| 123        | 123    |   123    |    123 |
 
 ### 使用图形界面创建表格
 
@@ -340,41 +340,41 @@ fi;
 #### Rouge 支持的语言和格式:
 
 |    Rouge 分类    | 支持的语言/格式 |        标识符        |
-|:----------------:|:---------------:|:--------------------:|
-| 通用编程语言     | Ruby            | ruby, rb             |
-|                  | Python          | python, py           |
-|                  | JavaScript      | javascript, js       |
-|                  | Java            | java                 |
-|                  | C               | c                    |
-|                  | C++             | cpp, cxx, cc         |
-|                  | C#              | csharp, cs           |
-|                  | Go              | go                   |
-|                  | Rust            | rust                 |
-|                  | Swift           | swift                |
-|                  | PHP             | php                  |
-|                  | Kotlin          | kotlin               |
-|                  | TypeScript      | typescript, ts       |
-|                  | Shell           | shell, sh, bash, zsh |
-| 标记语言         | HTML            | html                 |
-|                  | XML             | xml                  |
-|                  | Markdown        | markdown, md         |
-|                  | YAML            | yaml                 |
-|                  | JSON            | json                 |
-|                  | TOML            | toml                 |
-| 配置文件和工具   | INI 文件        | ini                  |
-|                  | Dockerfile      | dockerfile           |
-|                  | Makefile        | makefile             |
-|                  | NGINX 配置      | nginx                |
-|                  | Apache 配置     | apache               |
-|                  | PowerShell      | powershell           |
-| 数据库与查询语言 | SQL             | sql                  |
-|                  | PL/pgSQL        | pgsql                |
-| 科学与数据分析   | R               | r                    |
-|                  | MATLAB          | matlab               |
-| 其他格式         | Diff 文件       | diff                 |
-|                  | CSV 数据        | csv                  |
-|                  | 日志文件        | log                  |
-|                  | Plaintext       | plaintext            |
+| :--------------: | :-------------: | :------------------: |
+|   通用编程语言   |      Ruby       |       ruby, rb       |
+|                  |     Python      |      python, py      |
+|                  |   JavaScript    |    javascript, js    |
+|                  |      Java       |         java         |
+|                  |        C        |          c           |
+|                  |       C++       |     cpp, cxx, cc     |
+|                  |       C#        |      csharp, cs      |
+|                  |       Go        |          go          |
+|                  |      Rust       |         rust         |
+|                  |      Swift      |        swift         |
+|                  |       PHP       |         php          |
+|                  |     Kotlin      |        kotlin        |
+|                  |   TypeScript    |    typescript, ts    |
+|                  |      Shell      | shell, sh, bash, zsh |
+|     标记语言     |      HTML       |         html         |
+|                  |       XML       |         xml          |
+|                  |    Markdown     |     markdown, md     |
+|                  |      YAML       |         yaml         |
+|                  |      JSON       |         json         |
+|                  |      TOML       |         toml         |
+|  配置文件和工具  |    INI 文件     |         ini          |
+|                  |   Dockerfile    |      dockerfile      |
+|                  |    Makefile     |       makefile       |
+|                  |   NGINX 配置    |        nginx         |
+|                  |   Apache 配置   |        apache        |
+|                  |   PowerShell    |      powershell      |
+| 数据库与查询语言 |       SQL       |         sql          |
+|                  |    PL/pgSQL     |        pgsql         |
+|  科学与数据分析  |        R        |          r           |
+|                  |     MATLAB      |        matlab        |
+|     其他格式     |    Diff 文件    |         diff         |
+|                  |    CSV 数据     |         csv          |
+|                  |    日志文件     |         log          |
+|                  |    Plaintext    |      plaintext       |
 
 ### 特定文件名
 
@@ -540,21 +540,21 @@ _将呈现为：_
 
 ### 可以转义的字符
 
-| 字符 |      名称      |
-|:----:|:--------------:|
-|   \  |     反斜杠     |
-|   `  |     刻度线     |
-|   *  |      星号      |
-|   _  |     下划线     |
-|  {}  |     大括号     |
-|  []  |     中括号     |
-|  ()  |      括号      |
-|   #  |      井号      |
-|   +  |      加号      |
-|   -  | 减号（连字符） |
-|   .  |       点       |
-|   !  |     感叹号     |
-|  \|  |      竖线      |
+| 字符  |      名称      |
+| :---: | :------------: |
+|   \   |     反斜杠     |
+|   `   |     刻度线     |
+|   *   |      星号      |
+|   _   |     下划线     |
+|  {}   |     大括号     |
+|  []   |     中括号     |
+|  ()   |      括号      |
+|   #   |      井号      |
+|   +   |      加号      |
+|   -   | 减号（连字符） |
+|   .   |       点       |
+|   !   |     感叹号     |
+|  \|   |      竖线      |
 
 ****
 

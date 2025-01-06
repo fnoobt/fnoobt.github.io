@@ -4,7 +4,7 @@ author: cotes
 date: 2019-08-09 20:55:00 +0800
 categories: [Blog,博客教程]
 tags: [开始]
-img_path: '/assets/img/commons/demo'
+media_subpath: '/assets/img/commons/demo'
 ---
 
 ## 环境要求

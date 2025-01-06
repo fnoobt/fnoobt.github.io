@@ -4,7 +4,7 @@ author: fnoobt
 date: 2024-03-31 21:16:00 +0800
 categories: [Decorate,装修]
 tags: [decorate,全屋定制]
-img_path: '/assets/img/commons/decorate/'
+media_subpath: '/assets/img/commons/decorate/'
 ---
 
 ## 板材
