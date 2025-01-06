@@ -14,7 +14,7 @@ tags: [flash,刷机,miwifi,ac2100,padavan]
 
 [小米AC2100降级固件](https://cdn.cnbj1.fds.api.mi-img.com/xiaoqiang/rom/r2100/miwifi_r2100_firmware_4b519_2.0.722.bin)
 
-下载完成后进入后台 _192.168.31.1_ --> <kbd>常用设置</kbd> --> <kbd>系统状态</kbd> --> <kbd>手动升级</kbd>  
+下载完成后进入后台 ***192.168.31.1*** --> <kbd>常用设置</kbd> --> <kbd>系统状态</kbd> --> <kbd>手动升级</kbd>  
 加载固件，清除数据 --> <kbd>开始升级</kbd>
 
 ### 2.下载Padavan固件：
@@ -78,7 +78,7 @@ tags: [flash,刷机,miwifi,ac2100,padavan]
 1. 到<kbd>固件更新</kbd>页面，勾选`固件`，再点击<kbd>浏览</kbd>，选择对应的固件，最后进行<kbd>上传</kbd>。
 2. 固件上传完成后，到 **Breed Web 恢复控制台**更新确认界面，点击<kbd>更新</kbd>。
 3. 等待更新完成，设备重启
-4. 在浏览器中输入 _192.168.123.1_ ，输入用户名及密码，Padavan系统默认用户名 `admin`，密码 `admin`。
+4. 在浏览器中输入 ***192.168.123.1*** ，输入用户名及密码，Padavan系统默认用户名 `admin`，密码 `admin`。
 
 >更新breed版本在**Breed Web 恢复控制台**<kbd>固件更新</kbd>页面勾选`Bootloader`选择bin文件升级即可。
 {: .prompt-tip }
