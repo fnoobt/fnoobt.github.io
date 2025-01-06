@@ -63,7 +63,7 @@ sudo n 14
 ```bash
 yarn serve
 ```
-这时，我们浏览器访问 https://服务器ip:8080/ 应该可以进行前端 sub-web 的预览了。
+这时，我们浏览器访问 _服务器ip:8080/_ 应该可以进行前端 sub-web 的预览了。
 
 > 记住8080端口的防火墙和安全组要开放，不可以使用域名
 {: .prompt-tip }
@@ -224,7 +224,7 @@ yarn build
 添加重定向规则，这是为了用`/sub`代替25500端口
 ```
 location /sub{
-    proxy_pass https://127.0.0.1:25500;
+    proxy_pass 127.0.0.1:25500;
     proxy_set_header Host $host;
     proxy_set_header X-Real-IP $remote_addr;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;

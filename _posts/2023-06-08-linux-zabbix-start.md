@@ -192,7 +192,7 @@ sudo netstat -lnp |grep zabbix
 ```
 
 ### 网页配置
-通过 https://server_ip/zabbix 按照页面提示进行配置
+通过网址 _server_ip/zabbix_ 按照页面提示进行配置
 
 ### Centos下载Zabbix6.0储存库（二进制安装方式）
 ```bash

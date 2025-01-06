@@ -16,8 +16,8 @@ tags: [flash,刷机,newifi,padavan]
 
 ## 刷入不死Breed
 
-1. 初始化路由器，不联网登录路由器管理后台_192.168.99.1_设置登录密码；
-2. 连接路由器LAN口，访问_192.168.99.1/newifi/ifiwen_hss.html_，激活`SSH`(回车后网页会出现*succss*,既代表激活成功)；
+1. 初始化路由器，不联网登录路由器管理后台 _192.168.99.1_ 设置登录密码；
+2. 连接路由器LAN口，访问 _192.168.99.1/newifi/ifiwen_hss.html_ ，激活`SSH`(回车后网页会出现*succss*,既代表激活成功)；
 3. 下载Breed文件[newifi-d2-jail-break.ko](https://s.razeen.cn/firmwares/newifi-d2-jail-break.ko)，需要最新的可以到[Index of Breed](https://breed.hackpascal.net/)下载;
 4. WinScp工具上传Breed模块到路由器`/tmp`目录（SCP协议），或使用命令行上传 `scp newifi-d2-jail-break.ko root@192.168.99.1:/tmp`
 5. ssh 登陆路由器后台，输入命令 `cd /tmp && insmod newifi-d2-jail-break.ko` 开始刷入;
@@ -25,7 +25,7 @@ tags: [flash,刷机,newifi,padavan]
 
 ## 进入Breed控制台
 拔掉电源，按住路由器reset按钮，然后再插入电源，等几秒，电源灯闪烁，就可以松开reset按钮了。  
-电脑上浏览器输入192.168.1.1进入**Breed Web 恢复控制台**了。
+电脑上浏览器输入 _192.168.1.1_ 进入**Breed Web 恢复控制台**了。
 
 进入 **Breed Web 恢复控制台**后，先不要急着进行升级，我们先到<kbd>固件备份</kbd>页面把`EEPROM`和`编程器固件`备份一下。
 

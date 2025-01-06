@@ -43,7 +43,7 @@ $ uname -r
 
 ## 2.使用ELRepo仓库
 
-这里使用ELRepo 仓库 _elrepo.org/tiki/tiki-index.php_，ELRepo 仓库是基于社区的用于企业级 Linux 仓库，提供对 RedHat Enterprise（RHEL）和其他基于 RHEL的 Linux 发行版（CentOS、Scientific、Fedora 等）的支持。ELRepo 聚焦于和硬件相关的软件包，包括文件系统驱动、显卡驱动、网络驱动、声卡驱动和摄像头驱动等。:
+这里使用[ELRepo 仓库](https://elrepo.org/tiki/tiki-index.php)，ELRepo 仓库是基于社区的用于企业级 Linux 仓库，提供对 RedHat Enterprise（RHEL）和其他基于 RHEL的 Linux 发行版（CentOS、Scientific、Fedora 等）的支持。ELRepo 聚焦于和硬件相关的软件包，包括文件系统驱动、显卡驱动、网络驱动、声卡驱动和摄像头驱动等。:
 
 ### 导入ELRepo仓库的公共密钥：
 
