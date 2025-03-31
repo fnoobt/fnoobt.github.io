@@ -66,6 +66,9 @@ $ bundle
 - `timezone`
 - `lang`
 
+### 社交联系方式
+社交联系选项显示在侧边栏的底部。您可以在`_data/contact.yml`{: .filepath}文件中启用或禁用特定的联系人。
+
 ### 自定义样式表
 
 如果您需要自定义样式表，请将主题的 `assets/css/style.scss`{: .filepath} 复制到Jekyll网站上的同一路径，然后在其末尾添加自定义样式。
@@ -110,9 +113,9 @@ $ docker run -it --rm \
 如果您使用的是 GitHub 免费计划，请保持站点存储库公开。
 如果您已将 `Gemfile.lock`{: .filepath} 提交到存储库，并且您的本地计算机未运行 Linux，请转到站点的根目录并更新锁定文件的平台列表：
 
-  ```console
-  $ bundle lock --add-platform x86_64-linux
-  ```
+```console
+$ bundle lock --add-platform x86_64-linux
+```
 
 接下来，配置页面服务。
 

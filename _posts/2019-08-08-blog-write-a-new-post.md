@@ -69,11 +69,21 @@ authors: [<author1_id>, <author2_id>]   # 用于多个条目
 ---
 ```
 
-
 话虽如此，关键字`author` 也可以识别多个条目。
 
 > 从文件`_data/authors.yml`{: .filepath }读取作者信息的好处是页面将具有元标记`twitter:creator`, 这丰富了[Twitter Cards](https://developer.twitter.com/en/docs/twitter-for-websites/cards/guides/getting-started#card-and-content-attribution)，并且有利于SEO.
 {: .prompt-info }
+
+## 文章描述
+默认情况下，帖子的第一句话会在主页的帖子列表、进一步阅读部分以及 RSS feed 的 XML 中显示。如果您不想显示帖子的自动生成描述，可以在前端元数据中使用 `description` 字段进行自定义，如下所示：
+
+```yaml
+---
+description: 帖子的简短摘要。
+---
+```
+
+此外， `description` 文本还会显示在文章页面的标题下方。
 
 ## 目录
 
@@ -97,31 +107,31 @@ comments: false
 ---
 ```
 
-## 数学
+## 媒体
+在 Chirpy 中将图片、音频和视频称为媒体资源。
 
-出于网站性能原因，默认情况下不会加载数学功能（由 **[MathJax](https://www.mathjax.org/)** 提供支持）。但它可以通过以下方式启用：
+### URL前缀
+有时在一篇文章中需要为多个资源定义重复的 URL 前缀，对于吧这个无聊的任务，可以通过设置以下两个参数来避免。
+
+1. 如果你使用 CDN 托管媒体文件，可以在 `_config.yml`{: .filepath}  中指定 cdn 。站点头像和帖子的媒体资源 URL 将会前缀 CDN 域名。
+
+```yaml
+cdn: https://cdn.com
+```
+
+2. 要在当前帖子/页面范围中指定资源路径前缀，请在帖子的前端事项中设置 `media_subpath` ：
 
 ```yaml
 ---
-math: true
+media_subpath: /path/to/media/
 ---
 ```
 
-## Mermaid
+`site.cdn` 和 `page.media_subpath` 这两个选项可以单独使用或结合使用，以灵活地组成最终的资源 URL： `[site.cdn/][page.media_subpath/]file.ext`
 
-[**Mermaid**](https://github.com/mermaid-js/mermaid)是一个很棒的图表生成工具。要在帖子中启用它，请将以下内容添加到 YAML 块：
+### 图像
 
-```yaml
----
-mermaid: true
----
-```
-
-然后，您可以像使用其他标记语言一样使用它：用 ```` ```mermaid ```` 和 ```` ``` ```` 围绕图形代码。可以使用[Mermaid在线编辑器](https://mermaid.live/)轻松创建详细的图表。
-
-## 图像
-
-### 标题
+#### 标题
 
 在图像的下一行添加斜体，然后它将成为标题并出现在图像的底部：
 
@@ -131,7 +141,7 @@ _Image Caption_
 ```
 {: .nolineno}
 
-### 大小
+#### 大小
 
 为了防止页面内容布局在加载图像时移动，我们应该设置每个图像的宽度和高度。
 
@@ -150,7 +160,7 @@ _Image Caption_
 ```
 {: .nolineno}
 
-### 位置
+#### 位置
 
 默认情况下，图像居中，但您可以使用类`normal`、`left`和`right`之一指定位置。
 
@@ -180,7 +190,7 @@ _Image Caption_
   ```
   {: .nolineno}
 
-### 暗/亮模式
+#### 暗/亮模式
 
 您可以在暗/亮模式下使图像遵循主题偏好。这需要您准备两个图像，一个用于暗模式，另一个用于亮模式，然后为它们指定一个特定的类（`dark` 或 `light`）：
 
@@ -189,7 +199,7 @@ _Image Caption_
 ![Dark mode only](/path/to/dark-mode.png){: .dark }
 ```
 
-### 阴影
+#### 阴影
 
 可以为程序窗口的屏幕截图添加显示阴影效果：
 
@@ -198,60 +208,11 @@ _Image Caption_
 ```
 {: .nolineno}
 
-### CDN URL
-
-如果您将图像托管在CDN上，则可以通过分配`_config.yml`{: .filepath}文件的变量`img_cdn`来节省重复写入CDN URL的时间
-
-```yaml
-img_cdn: https://cdn.com
-```
-{: file='_config.yml' .nolineno}
-
-一旦分配了`img_cdn`，CDN URL将添加到以`/`开头的所有图像（网站头像和帖子的图像）的路径中。
-
-例如，在使用图像时：
-
-```markdown
-![The flower](/path/to/flower.png)
-```
-{: .nolineno}
-
-解析结果会在图像路径之前自动添加CDN前缀`https://cdn.com`：
-
-```html
-<img src="https://cdn.com/path/to/flower.png" alt="The flower">
-```
-{: .nolineno }
-
-### 图像路径
-
-当帖子包含许多图像时，重复定义图像的路径将是一项耗时的任务。为了解决这个问题，我们可以在帖子的 YAML 块中定义此路径：
-
-```yml
----
-media_subpath: /img/path/
----
-```
-
-然后，Markdown 的图片源可以直接写入文件名：
-
-```md
-![The flower](flower.png)
-```
-{: .nolineno }
-
-输出将是：
-
-```html
-<img src="/img/path/flower.png" alt="The flower">
-```
-{: .nolineno }
-
-### 预览图像
+#### 预览图片
 
 如果你想在帖子顶部添加一张图片，请提供一张分辨率为 `1200 x 630` 的图片。请注意，如果图像纵横比不满足 `1.91 : 1` ，则图像将被缩放和裁剪。
 
-了解这些先决条件后，可以开始设置图像的属性：
+了解这些先决条件后，可以开始设置图片的属性：
 
 ```yaml
 ---
@@ -261,7 +222,7 @@ image:
 ---
 ```
 
-注意，[`media_subpath`](#图像路径)也可以传递给预览图像，也就是说，当设置了它时，属性`path`只需要图像文件名。
+注意，[`media_subpath`](#url前缀)也可以传递给预览图片，也就是说，当设置了它时，属性`path`只需要图像文件名。
 
 为了简单使用，您也可以只使用`image`来定义路径。
 
@@ -271,9 +232,9 @@ image: /path/to/image
 ---
 ```
 
-### LQIP
+#### LQIP
 
-对于预览图像：
+对于预览图片：
 
 ```yaml
 ---
@@ -282,7 +243,7 @@ image:
 ---
 ```
 
-> 您可以在帖子 _[文本和排版](/posts/blog-text-and-typography/)_ 的预览图像中观察 LQIP。
+> 您可以在帖子 _[文本和排版](/posts/blog-text-and-typography/)_ 的预览图片中观察到 LQIP。
 
 
 对于普通图像：
@@ -291,6 +252,84 @@ image:
 ![Image description](/path/to/image){: lqip="/path/to/lqip-file" }
 ```
 {: .nolineno }
+
+### 视频
+
+#### 社交媒体平台
+
+您可以使用以下语法嵌入视频：
+
+```liquid
+{% include embed/{Platform}.html id='{ID}' %}
+```
+
+其中`Platform`是平台名称的小写字母，`ID`是视频ID。
+
+下表显示了如何在给定的视频URL中获得我们需要的两个参数，您还可以了解当前支持的视频平台。
+
+| Video URL                                                                                          | Platform  | ID            |
+| -------------------------------------------------------------------------------------------------- | --------- | :------------ |
+| [https://www.**youtube**.com/watch?v=**H-B46URT4mg**](https://www.youtube.com/watch?v=H-B46URT4mg) | `youtube` | `H-B46URT4mg` |
+| [https://www.**twitch**.tv/videos/**1634779211**](https://www.twitch.tv/videos/1634779211)         | `twitch`  | `1634779211`  |
+| [https://www.**bilibili**.tv/videos/**BV1Q44y1B7Wf**](https://www.bilibili.com/video/BV1Q44y1B7Wf)         | `bilibili`  | `BV1Q44y1B7Wf`  |
+
+#### 视频文件
+如果你想直接嵌入视频文件，请使用以下语法：
+
+```liquid
+{% include embed/video.html src='{URL}' %}
+```
+
+`URL` 是一个视频文件的 URL，例如 `/path/to/sample/video.mp4` 。
+
+您还可以为嵌入的视频文件指定其他属性。以下是一份允许的属性完整列表。
+
+- `poster='/path/to/poster.png'` — 视频下载时显示的海报图片
+- `title='Text'` — 视频的标题，显示在视频下方，与图片的标题相同
+- `autoplay=true` — 视频一可以播放时就开始播放
+- `loop=true` — 到达视频结尾时自动返回到开头
+- `muted=true` — 初始时音频将被静音
+- `types` — 请指定其他视频格式的扩展名，用 `|` 分隔。请确保这些文件与您的主要视频文件位于同一目录中。
+
+考虑一个包含以上所有内容的示例：
+
+```liquid
+{%
+  include embed/video.html
+  src='/path/to/video.mp4'
+  types='ogg|mov'
+  poster='poster.png'
+  title='Demo video'
+  autoplay=true
+  loop=true
+  muted=true
+%}
+```
+
+### 音频
+如果你想直接嵌入音频文件，请使用以下语法：
+
+```liquid
+{% include embed/audio.html src='{URL}' %}
+```
+
+`URL` 是一个音频文件的 URL，例如 `/path/to/audio.mp3` 。
+
+你还可以为嵌入的音频文件指定额外的属性。以下是一份允许的属性列表。
+
+- `title='Text'` — 音频下方显示的标题，与图片的标题样式相同
+- `types` — 指定额外音频格式的扩展名，用 `|` 分隔。确保这些文件与主要音频文件位于同一目录中。
+
+考虑一个包含以上所有内容的示例：
+
+```liquid
+{%
+  include embed/audio.html
+  src='/path/to/audio.mp3'
+  types='ogg|wav|aac'
+  title='Demo audio'
+%}
+```
 
 ## 置顶帖子
 
@@ -321,7 +360,7 @@ pin: true
 ```
 {: .nolineno }
 
-### 文件路径突出显示
+### 文件路径高亮
 
 ```md
 `/path/to/a/file.extend`{: .filepath}
@@ -330,7 +369,7 @@ pin: true
 
 ### 代码块
 
-标记符号```` ``` ````可以很容易地创建如下代码块：
+Markdown符号```` ``` ````可以很容易地创建如下代码块：
 
 ````md
 ```
@@ -353,7 +392,7 @@ key: value
 
 #### 行号
 
-默认情况下，除`明文`、`控制台`和`终端`外的所有语言都将显示行号。如果要隐藏代码块的行号，请将类`nolineno`添加到其中：
+默认情况下，除`明文(plaintext)`、`控制台(console)`和`终端(terminal)`外的所有语言都将显示行号。如果要隐藏代码块的行号，请将类`nolineno`添加到其中：
 
 ````markdown
 ```shell
@@ -389,23 +428,68 @@ echo 'No more line numbers!'
 
 或者在帖子的YAML块中添加`render_with_liquid: false`（需要Jekyll 4.0或更高版本）。
 
-## 视频
+## 数学
 
-您可以使用以下语法嵌入视频：
+出于网站性能原因，默认情况下不会加载数学功能（由 **[MathJax](https://www.mathjax.org/)** 提供支持）。但它可以通过以下方式启用：
 
-```liquid
-{% include embed/{Platform}.html id='{ID}' %}
+```yaml
+---
+math: true
+---
 ```
 
-其中`Platform`是平台名称的小写字母，`ID`是视频ID。
+启用数学功能后，您可以使用以下语法添加数学方程：
 
-下表显示了如何在给定的视频URL中获得我们需要的两个参数，您还可以了解当前支持的视频平台。
+- 块数学应使用 `$$ math $$` 添加，并且在 `$$` 前后必须有空行
+  + 添加方程编号应使用 `$$\begin{equation} math \end{equation}$$`
+  + 引用方程编号应在方程块中使用 `\label{eq:label_name} `，在文本中 inline 使用时应使用 `\eqref{eq:label_name}` （请参见下面的示例）
+- 内联数学（在行中）应使用 `$$ math $$` 添加，`$$`前后不得有任何空行
+- 内联数学（在列表中）应添加 `\$$ math $$` 
 
-| Video URL                                                                                          | Platform  | ID            |
-| -------------------------------------------------------------------------------------------------- | --------- | :------------ |
-| [https://www.**youtube**.com/watch?v=**H-B46URT4mg**](https://www.youtube.com/watch?v=H-B46URT4mg) | `youtube` | `H-B46URT4mg` |
-| [https://www.**twitch**.tv/videos/**1634779211**](https://www.twitch.tv/videos/1634779211)         | `twitch`  | `1634779211`  |
+```yaml
+<!-- 块数学运算，保留所有空行 -->
 
+$$
+LaTeX_math_expression
+$$
+
+<!-- 公式编号，保留所有空行  -->
+
+$$
+\begin{equation}
+  LaTeX_math_expression
+  \label{eq:label_name}
+\end{equation}
+$$
+
+Can be referenced as \eqref{eq:label_name}.
+
+<!-- 在行中内联数学，无空行 -->
+
+"Lorem ipsum dolor sit amet, $$ LaTeX_math_expression $$ consectetur adipiscing elit."
+
+<!-- 在列表中内联数学，转义第一个“$” -->
+
+1. \$$ LaTeX_math_expression $$
+2. \$$ LaTeX_math_expression $$
+3. \$$ LaTeX_math_expression $$
+```
+
+> 从 v7.0.0 开始，MathJax 的配置选项已移到文件 `assets/js/data/mathjax.js` ，你可以根据需要更改这些选项，例如添加扩展。  
+如果是通过 `chirpy-starter` 构建站点，请从 gem 安装目录复制该文件（使用命令 `bundle info --path jekyll-theme-chirpy` 检查）到您仓库中相同目录。
+{: .prompt-tip }
+
+## Mermaid
+
+[**Mermaid**](https://github.com/mermaid-js/mermaid)是一个很棒的图表生成工具。要在帖子中启用它，请将以下内容添加到 YAML 块：
+
+```yaml
+---
+mermaid: true
+---
+```
+
+然后，您可以像使用其他 markdown 语言一样使用它：用 ```` ```mermaid ```` 和 ```` ``` ```` 围绕图形代码。可以使用[Mermaid在线编辑器](https://mermaid.live/)轻松创建详细的图表。
 
 
 ## 了解更多信息

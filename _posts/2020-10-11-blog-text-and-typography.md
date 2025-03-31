@@ -401,18 +401,32 @@ _将呈现为：_
 数学由 [**MathJax**](https://www.mathjax.org/) 提供支持:
 
 ```markdown
-$$ \sum_{n=1}^\infty 1/n^2 = \frac{\pi^2}{6} $$
+$$
+\begin{equation}
+  \sum_{n=1}^\infty 1/n^2 = \frac{\pi^2}{6}
+  \label{eq:series}
+\end{equation}
+$$
 
-当 $a \ne 0$，$ax^2 + bx + c = 0$ 有两种解决方案，它们是
+我们可以将该方程引用为 \eqref{eq:series}.
+
+当 $a \ne 0$ 时，$ax^2 + bx + c = 0$ 有两个解，分别是
 
 $$ x = {-b \pm \sqrt{b^2-4ac} \over 2a} $$
 ```
 
 _将呈现为：_
 
-$$ \sum_{n=1}^\infty 1/n^2 = \frac{\pi^2}{6} $$
+$$
+\begin{equation}
+  \sum_{n=1}^\infty 1/n^2 = \frac{\pi^2}{6}
+  \label{eq:series}
+\end{equation}
+$$
 
-当 $a \ne 0$，$ax^2 + bx + c = 0$ 有两种解决方案，它们是
+我们可以将该方程引用为 \eqref{eq:series}.
+
+当 $a \ne 0$ 时，$ax^2 + bx + c = 0$ 有两个解，分别是
 
 $$ x = {-b \pm \sqrt{b^2-4ac} \over 2a} $$
 
@@ -517,12 +531,12 @@ _全屏宽度和中心对齐_
 ## 视频
 
 ```markdown
-{% include embed/youtube.html id='Balreaj8Yqs' %}
+{% include embed/bilibili.html id='BV1bW411n7fY' %}
 ```
 
 _将呈现为：_
 
-{% include embed/youtube.html id='Balreaj8Yqs' %}
+{% include embed/bilibili.html id='BV1bW411n7fY' %}
 
 ## 转义字符
 
