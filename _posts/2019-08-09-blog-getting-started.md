@@ -5,61 +5,84 @@ date: 2019-08-09 20:55:00 +0800
 categories: [Blog,博客教程]
 tags: [开始]
 media_subpath: '/assets/img/commons/demo'
+description: 了解如何使用 Chirpy 的基础知识，通过这个全面的概述开始。你将学习如何安装、配置并使用你的第一个基于 Chirpy 的网站，以及如何将其部署到 web 服务器上。
 ---
 
-## 环境要求
-
-按照 [Jekyll 文档](https://jekyllrb.com/docs/installation/) 的说明完成基本环境的安装。还需要安装[Git](https://git-scm.com/)。
-
-## 安装
-
-### 创建新站点
+## 创建站点仓库
 
 有两种方法可以为此主题创建新的存储库：
 
 - [**使用Chirpy启动器**](#选项-1-使用chirpy启动器) - 易于升级，隔离不相关的项目文件，以便您可以专注于编写。
 - [**GitHub Fork**](#选项-2-github-fork) - 方便自定义开发，但难以升级。除非您熟悉 Jekyll 并决心调整或为该项目做出贡献，否则不建议使用此方法。
 
-#### 选项 1. 使用Chirpy启动器
+### 选项 1. 使用Chirpy启动器
 
-登录到 GitHub 并浏览到 [**Chirpy Starter**][starter], 单击按钮 <kbd>Use this template</kbd> > <kbd>Create a new repository</kbd>, 并将新存储库命名为 `USERNAME.github.io`, 其中 `USERNAME` 表示您的github用户名。
+1. 登录到 GitHub 并导航到 [**Chirpy Starter**][starter]。
+2. 单击按钮 <kbd>Use this template</kbd> > <kbd>Create a new repository</kbd>。
+3. 将新存储库命名为 `USERNAME.github.io`, 其中 `USERNAME` 表示您的github用户名（小写）。
 
-#### 选项 2. GitHub Fork
+### 选项 2. GitHub Fork
 
-登录到GitHub 以[fork **Chirpy**](https://github.com/cotes2020/jekyll-theme-chirpy/fork), 然后将其重命名为 `USERNAME.github.io` (`USERNAME` 表示您gitHub的用户名).
+1. 登录到GitHub
+2. [fork **Chirpy**](https://github.com/cotes2020/jekyll-theme-chirpy/fork),
+3. 将新的仓库重命名为 `USERNAME.github.io`，用你的小写 GitHub 用户名替换  `USERNAME`。
 
-接下来，将站点克隆到本地计算机。为了稍后构建 JavaScript 文件，我们需要安装 [Node.js][nodejs]，然后运行该工具：
+## 设置环境
+创建好仓库后，是时候设置你的开发环境了。主要有两种方法：
 
-```console
-$ bash tools/init
-```
+### 使用 Dev Containers（推荐用于 Windows）
+Dev Containers 提供一个使用 Docker 的隔离环境，这可以防止与系统发生冲突，并确保所有依赖项都在容器内进行管理。
 
-> 如果您不想在 GitHub 页面上部署站点，请在上述命令末尾附加选项`--no-gh`。
-{: .prompt-info }
+1. 安装 Docker：
+ - 在 Windows/macOS 上安装 [Docker Desktop](https://www.docker.com/products/docker-desktop/)。
+ - 在 Linux 上安装 [Docker Engine](https://docs.docker.com/engine/install/)。
+2. 安装 [VS Code](https://code.visualstudio.com/) 并添加 [Dev Containers 扩展](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)。
+3. 克隆你的仓库：
+ - 对于 Docker Desktop：启动 VS Code 并[在容器卷中克隆你的仓库](https://code.visualstudio.com/docs/devcontainers/containers#_quick-start-open-a-git-repository-or-github-pr-in-an-isolated-container-volume)。
+ - 对于 Docker Engine：在本地克隆你的仓库，然后通过 VS Code  [在容器中打开它](https://code.visualstudio.com/docs/devcontainers/containers#_quick-start-open-an-existing-folder-in-a-container)。
+4. 等待 Dev Containers 设置完成。
 
-上述命令将:
+### 本地设置（推荐用于类 Unix 操作系统）
+对于类 Unix 系统，你可以本地设置环境以获得最佳性能，尽管你也可以使用 Dev Containers 作为替代方案。
+1. 按照 [Jekyll 安装指南](https://jekyllrb.com/docs/installation/)安装 Jekyll 并确保已安装 [Git](https://git-scm.com/)。
+2. 将您的仓库克隆到本地机器。
+3. 如果您克隆了主题，请安装 Node.js 并在根目录中运行 `bash tools/init.sh` 以初始化仓库。
+4. 在你的仓库根目录运行命令 `bundle` 以安装依赖。
+
+`bash tools/init.sh`命令的作用如下:
 
 1. 查看 [最新标签][latest-tag]的代码（以确保网站的稳定性：因为默认分支的代码正在开发中）。
 2. 删除非必要的示例文件，并处理与GitHub相关的文件。
 3. 构建JavaScript文件并导出到`assets/js/dist/`{: .filepath }，然后Git跟踪它们。
 4. 自动创建一个新的提交以保存上面的更改。
 
-> 测试发现运行`bash tools/init`总会报错，无法构建JavaScript文件，建议使用第一种方法，简单可快速上手。
-{: .prompt-warning }
+> 如果您不想在 GitHub 页面上部署站点，请在`bash tools/init.sh`命令末尾附加选项`--no-gh`。
+{: .prompt-info }
 
-### 安装依赖项
-
-在首次运行本地服务器之前，请转到站点的根目录并运行：
+## 使用方法
+### 启动 Jekyll 服务器
+要在本地运行站点，请使用以下命令:
 
 ```console
-$ bundle
+$ bundle exec jekyll s
 ```
 
-## 用法
+如果在 Docker 中上述的命令不可用，可以尝试以下命令：
+
+```console
+$ docker run -it --rm \
+    --volume="$PWD:/srv/jekyll" \
+    -p 4000:4000 jekyll/jekyll \
+    jekyll serve
+```
+
+> 如果你使用了 Dev Containers，必须在 **VS Code** 终端中运行该命令。
+{: .prompt-info }
+
+几秒钟后，本地服务将在 ***127.0.0.1:4000*** 发布.
 
 ### 配置
-
-根据需要更新`_config.yml`{: .filepath}的变量。其中一些是典型的选择：
+根据需要更新`_config.yml`{: .filepath}的变量。一些典型的选项包括：
 
 - `url`
 - `avatar`
@@ -81,25 +104,6 @@ $ bundle
 
 此外，如果您想自托管静态资源，请参阅[_chirpy-static-assets_](https://github.com/cotes2020/chirpy-static-assets#readme)。
 
-### 运行本地服务器
-
-您可能希望在发布之前预览网站内容，因此只需通过以下方式运行它：
-
-```console
-$ bundle exec jekyll s
-```
-
-或者使用以下命令在 Docker 上运行站点：
-
-```console
-$ docker run -it --rm \
-    --volume="$PWD:/srv/jekyll" \
-    -p 4000:4000 jekyll/jekyll \
-    jekyll serve
-```
-
-几秒钟后，本地服务将在 ***127.0.0.1:4000*** 发布.
-
 ## 部署
 
 在部署开始之前，请检查文件 `_config.yml`{: .filepath} ，并确保`url`配置正确。此外，如果您更喜欢[**project site**](https://help.github.com/en/github/working-with-github-pages/about-github-pages#types-of-github-pages-sites)并且不使用自定义域，或者您想使用**GitHub Pages**以外的web服务器上的基本URL访问您的网站，请记住将 `baseurl` 更改为以斜杠开头的项目名称，例如 `/project-name` 。
@@ -108,10 +112,10 @@ $ docker run -it --rm \
 
 ### 使用 GitHub 操作进行部署
 
-有几件事需要做好准备。
+准备以下内容：
 
-如果您使用的是 GitHub 免费计划，请保持站点存储库公开。
-如果您已将 `Gemfile.lock`{: .filepath} 提交到存储库，并且您的本地计算机未运行 Linux，请转到站点的根目录并更新锁定文件的平台列表：
+- 如果您使用的是 GitHub 免费计划，请确保您的站点仓库是公开的。
+- 如果您已将 `Gemfile.lock`{: .filepath} 提交到存储库，并且本地机器不是运行 Linux 的系统，请转到站点的根目录并更新锁定文件的平台列表：
 
 ```console
 $ bundle lock --add-platform x86_64-linux
@@ -119,25 +123,25 @@ $ bundle lock --add-platform x86_64-linux
 
 接下来，配置页面服务。
 
-1.在GitHub上浏览到您的存储库。选择选项卡 _Settings_ ，然后单击左侧导航栏中的 _Pages_ 。然后，在 **Source** 部分（在 _Build and deployment_ 下），从下拉菜单中选择[**GitHub Actions**][pages-workflow-src]。
+1. 在GitHub上浏览到您的存储库。选择选项卡 _Settings_ ，然后单击左侧导航栏中的 _Pages_ 。然后，在 **Source** 部分（在 _Build and deployment_ 下），从下拉菜单中选择[**GitHub Actions**][pages-workflow-src]。
 ![Build source](pages-source-light.png){: .light .border .normal w='375' h='140' }
 ![Build source](pages-source-dark.png){: .dark .normal w='375' h='140' }
 
-2.将任何提交推送到GitHub以触发 _Actions_ 工作流。在存储库的 _Actions_ 选项卡中，您应该看到工作流 _Build 和 Deploy_ 正在运行。一旦构建完成并成功，站点将自动部署。
+2. 将任何提交推送到GitHub以触发 _Actions_ 工作流。在存储库的 _Actions_ 选项卡中，您应该看到工作流 _Build 和 Deploy_ 正在运行。一旦构建完成并成功，站点将自动部署。
 
 此时，您可以转到 GitHub 指示的 URL 以访问您的网站。
 
 ### 手动构建和部署
 
-在自托管服务器上，您无法享受 **GitHub Actions** 的便利。因此，应在本地计算机上生成站点，然后将站点文件上载到服务器。
+在自托管服务器上，您无法享受 **GitHub Actions** 的便利。因此，需要在本地计算机上生成站点，然后将站点文件上载到服务器。
 
-转到源项目的根目录，并按如下所示生成站点：
+转到源项目的根目录，并按以下命令构建你的站点：
 
 ```console
 $ JEKYLL_ENV=production bundle exec jekyll b
 ```
 
-或者在 Docker 上构建网站：
+如果在 Docker 中上述的命令不可用，可以尝试以下命令构建：
 
 ```console
 $ docker run -it --rm \

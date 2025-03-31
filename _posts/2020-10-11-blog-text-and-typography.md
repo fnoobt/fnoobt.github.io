@@ -430,7 +430,7 @@ $$
 
 $$ x = {-b \pm \sqrt{b^2-4ac} \over 2a} $$
 
-## Mermaid SVG
+## 图表 SVG
 
 [**Mermaid**][mermaid]是一个很棒的图表生成工具。可以使用[Mermaid在线编辑器][mermaidLive]轻松创建详细的图表。
 

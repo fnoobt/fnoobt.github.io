@@ -118,6 +118,7 @@ comments: false
 ```yaml
 cdn: https://cdn.com
 ```
+{: file="_config.yml" }
 
 2. 要在当前帖子/页面范围中指定资源路径前缀，请在帖子的前端事项中设置 `media_subpath` ：
 
@@ -442,44 +443,44 @@ math: true
 
 - 块数学应使用 `$$ math $$` 添加，并且在 `$$` 前后必须有空行
   + 添加方程编号应使用 `$$\begin{equation} math \end{equation}$$`
-  + 引用方程编号应在方程块中使用 `\label{eq:label_name} `，在文本中 inline 使用时应使用 `\eqref{eq:label_name}` （请参见下面的示例）
-- 内联数学（在行中）应使用 `$$ math $$` 添加，`$$`前后不得有任何空行
-- 内联数学（在列表中）应添加 `\$$ math $$` 
+  + 引用方程编号应在方程块中使用 `\label{eq:label_name} `，在文本中内联使用时应使用 `\eqref{eq:label_name}` （请参见下面的示例）
+- 在行中内联数学应使用 `$$ math $$` 添加，`$$`前后不得有任何空行
+- 在列表中内联数学应添加 `\$$ math $$` 
 
 ```yaml
 <!-- 块数学运算，保留所有空行 -->
 
 $$
-LaTeX_math_expression
+LaTeX 数学表达式
 $$
 
 <!-- 公式编号，保留所有空行  -->
 
 $$
 \begin{equation}
-  LaTeX_math_expression
+  LaTeX 数学表达式
   \label{eq:label_name}
 \end{equation}
 $$
 
-Can be referenced as \eqref{eq:label_name}.
+可以引用为 \eqref{eq:label_name}.
 
 <!-- 在行中内联数学，无空行 -->
 
-"Lorem ipsum dolor sit amet, $$ LaTeX_math_expression $$ consectetur adipiscing elit."
+"在一段文本中, $$ LaTeX 数学表达式 $$ 的插入是很正常的。"
 
 <!-- 在列表中内联数学，转义第一个“$” -->
 
-1. \$$ LaTeX_math_expression $$
-2. \$$ LaTeX_math_expression $$
-3. \$$ LaTeX_math_expression $$
+1. \$$ LaTeX 数学表达式 $$
+2. \$$ LaTeX 数学表达式 $$
+3. \$$ LaTeX 数学表达式 $$
 ```
 
 > 从 v7.0.0 开始，MathJax 的配置选项已移到文件 `assets/js/data/mathjax.js` ，你可以根据需要更改这些选项，例如添加扩展。  
 如果是通过 `chirpy-starter` 构建站点，请从 gem 安装目录复制该文件（使用命令 `bundle info --path jekyll-theme-chirpy` 检查）到您仓库中相同目录。
 {: .prompt-tip }
 
-## Mermaid
+## 图表
 
 [**Mermaid**](https://github.com/mermaid-js/mermaid)是一个很棒的图表生成工具。要在帖子中启用它，请将以下内容添加到 YAML 块：
 
