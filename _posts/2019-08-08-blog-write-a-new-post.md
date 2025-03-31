@@ -1,6 +1,6 @@
 ---
 title: 编辑帖子
-author: cotes
+author: fnoobt
 date: 2019-08-08 14:10:00 +0800
 categories: [Blog,博客教程]
 tags: [编辑帖子]
