@@ -24,7 +24,7 @@ wget https://cdimage.ubuntu.com/releases/24.04/release/ubuntu-24.04-live-server-
 ### 3、准备UEFI固件文件
 QEMU需要加载UEFI固件以启动ARM虚拟机，下载地址：
 ```bash
-wget http://releases.linaro.org/components/kernel/uefi-linaro/16.02/release/qemu64/QEMU_EFI.fd
+wget https://releases.linaro.org/components/kernel/uefi-linaro/16.02/release/qemu64/QEMU_EFI.fd
 ```
 
 ## 创建虚拟磁盘
