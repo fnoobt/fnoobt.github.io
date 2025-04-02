@@ -8,7 +8,7 @@ tags: [network,bgp,frr]
 
 当前面初始化完成的时候，zebra客户端线程(zebra_apic)静静等待客户端的消息，`zebra dplane`也急不可待了。
 
-本次我们以BGP 为例，当BGP 根据自己的规则优选路由后，就会发给zebra，在函数`bgp_process_main_one`里面，把路由发布出去后，就会执行fib update动作，调用bgp_zebra_announce函数发布路由到zebra里面。
+本次我们以BGP 为例，当BGP 根据自己的规则优选路由后，就会发给zebra，在函数`bgp_process_main_one`里面，把路由发布出去后，就会执行fib update动作，调用`bgp_zebra_announce`函数发布路由到zebra里面。
 
 ```c
 	/* FIB update. */
@@ -429,7 +429,7 @@ struct route_entry {
 ```
 {: file='zebra/zapi_msg.c -- zread_route_add()'}
 
-然后处理nexthop的信息,遍历所有的nexthop生成struct nexthop数据结构，我们在来认识下这个重要的数据结构
+然后处理nexthop的信息,遍历所有的nexthop生成`struct nexthop`数据结构，我们在来认识下这个重要的数据结构
 
 ```c
 /* Nexthop structure. */
@@ -537,7 +537,7 @@ Route entry填充好后，继续调用`rib_add_multipath_nhe`处理路由信息�
 ```
 {: file='zebra/zapi_msg.c -- zread_route_add()'}
 
-`process_subq_early_route_add` 先查找本次的路由表的route_table,然后在table中根据前缀查找是否有相同的route_node表项，其中srcdest_rnode_get查找如果没有node，则会生成一个新的route_node，然后加入route_table的二叉树中，然后调用rib_addnode，添加route_entry表项。
+`process_subq_early_route_add` 先查找本次的路由表的`route_table`,然后在table中根据前缀查找是否有相同的`route_node`表项，其中`srcdest_rnode_get`查找如果没有node，则会生成一个新的`route_node`，然后加入`route_table`的二叉树中，然后调用`rib_addnode`，添加`route_entry`表项。
 
 ```c
 static void process_subq_early_route_add(struct zebra_early_route *ere)
@@ -621,7 +621,7 @@ static void rib_addnode(struct route_node *rn,
 ```
 {: file='zebra/zebra_rib.c'}
 
-rib_addnode 直接调用 rib_link 继续处理，首先会在 route_node 的info字段生成一个 rib_dest_t 的结构体，上面的图也已经画了出来，同时会把route_node里面的route_entry使用链表连接起来，表示同一个前缀的不同路由。
+`rib_addnode` 直接调用 `rib_link` 继续处理，首先会在 `route_node` 的info字段生成一个 `rib_dest_t` 的结构体，上面的图也已经画了出来，同时会把`route_node`里面的`route_entry`使用链表连接起来，表示同一个前缀的不同路由。
 
 然后会判断是否有重分发的配置，如果bgp的路由重分发到ospf等，本次不分析，如果没有重分发，那么直接调用`rib_queue_add`入zebrad.mq work queue处理，当work queue调度处理的时候，会调回调函数`meta_queue_process`继续处理
 
@@ -1150,7 +1150,7 @@ static int dplane_update_enqueue(struct zebra_dplane_ctx *ctx)
 
 `zebra_dplane_start`创建了zebra dplane的线程， 线程的事件回调函数`dplane_thread_loop`，在这个函数里面会出队所有的消息，并调用注册的数据面的回调函数，本次路由的回调函数是`kernel_dplane_process_func`，然后调用`kernel_route_update`，继续调用`netlink_route_multipath`，构造路由的netlink消息，下发给内核，下发的路由会设置NEXTHOP_FLAG_FIB。
 
-同时调用netlink_parse_info处理内核的处理结果
+同时调用`netlink_parse_info`处理内核的处理结果
 
 ```c
 /*

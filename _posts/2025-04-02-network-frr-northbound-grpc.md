@@ -226,7 +226,7 @@ supported_modules {
 supported_encodings: JSON
 supported_encodings: XML
 
-<lib xmlns="https://frrouting.org/yang/interface">
+<lib xmlns="http://frrouting.org/yang/interface">
   <interface>
     <name>lo</name>
     <vrf>default</vrf>
@@ -238,7 +238,7 @@ supported_encodings: XML
       <metric>0</metric>
       <phy-address>00:00:00:00:00:00</phy-address>
     </state>
-    <zebra xmlns="https://frrouting.org/yang/zebra">
+    <zebra xmlns="http://frrouting.org/yang/zebra">
       <state>
         <up-count>0</up-count>
         <down-count>0</down-count>
@@ -256,7 +256,7 @@ supported_encodings: XML
       <metric>0</metric>
       <phy-address>f2:62:2e:f3:4c:e4</phy-address>
     </state>
-    <zebra xmlns="https://frrouting.org/yang/zebra">
+    <zebra xmlns="http://frrouting.org/yang/zebra">
       <state>
         <up-count>0</up-count>
         <down-count>0</down-count>

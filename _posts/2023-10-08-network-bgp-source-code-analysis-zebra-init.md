@@ -27,7 +27,7 @@ zebra，翻译是斑马，它负责管理其他所有协议进程的路由信息
 +--------------+        +------------------+        +--------------+
 ```
 
-Zebra的初始化在`zebra/main.c`里面，查看main函数即可
+Zebra的初始化在`zebra/main.c`{: .filepath }里面，查看main函数即可
 
 ## frr_init
 `frr_init`创建zebra主进程的master数据结构，用来做事件驱动，我们可以看下`event_loop`的数据结构。

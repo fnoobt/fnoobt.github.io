@@ -6,9 +6,9 @@ categories: [Network,路由协议]
 tags: [network,bgp,frr]
 ---
 
-本文，我们分析 BGP 和 层3隧道 相关的命令处理
+本文，我们分析 BGP 和层3隧道相关的命令处理
 
-```bash
+```yaml
 router bgp 200
 	no bgp default ipv4-unicast
 	no bgp default show-hostname
@@ -41,7 +41,6 @@ router bgp 200
 	  exit-address-family
 	!
 ```
-{: file='bgpd/bgp_route.c'}
 
 ## label export auto
 配置label export auto 后，执行如下的命令
@@ -436,7 +435,7 @@ int bgp_nlri_parse(struct peer *peer, struct attr *attr,
 ```
 {: file='bgpd/bgp_packet.c'}
 
-bgp_nlri_parse 函数里面由于前面解析的 safi 是 SAFI_MPLS_VPN ，所以NLRI的处理会是 bgp_nlri_parse_vpn 函数，主要处理过程如下，可以结合上面的报文一起看代码处理过程：
+`bgp_nlri_parse` 函数里面由于前面解析的 safi 是 SAFI_MPLS_VPN ，所以NLRI的处理会是 `bgp_nlri_parse_vpn` 函数，主要处理过程如下，可以结合上面的报文一起看代码处理过程：
 1. 清理的前缀结构
 2. 获取前缀长度
 3. 针对数据包数据\IP地址存储\地址族的最大位长度进行健全性检查
@@ -634,7 +633,7 @@ done:
 ```
 {: file='bgpd/bgp_mplsvpn.c'}
 
-bgp_update 前面分析的时候，大概过程已经分析过了，下面会分析下，前面忽略的L3VPN相关的处理过程。
+`bgp_update` 前面分析的时候，大概过程已经分析过了，下面会分析下，前面忽略的L3VPN相关的处理过程。
 - `has_valid_label`处理会变成1，因为前面传入了解析出来的label值
 
 ```c
@@ -909,7 +908,7 @@ struct bpacket *subgroup_update_packet(struct update_subgroup *subgrp)
 ```
 {: file='bgpd/bgp_updgrp_packet.c'}
 
-发送的时候如果报文里面nexthop属性为0的话，bpacket_reformat_for_peer 这个函数会改nexthop的IP地址
+发送的时候如果报文里面nexthop属性为0的话，`bpacket_reformat_for_peer` 这个函数会改nexthop的IP地址
 
 ****
 

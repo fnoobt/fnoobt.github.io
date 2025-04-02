@@ -94,9 +94,8 @@ update-grub
 检查 `-netdev user` 参数是否正确映射端口
 在虚拟机内执行 `dhclient eth0` 手动获取 IP
 
-
 ****
 
 本文参考
 
-> 1. [linaro交叉编译工具链下载与使用笔记](https://blog.csdn.net/yjkhtddx/article/details/134676016)
+> [QEMU创建arm64的ubuntu22.04虚拟机](https://blog.csdn.net/weixin_40837318/article/details/136737347)
