@@ -3,7 +3,7 @@ title: RFC 9252：基于 IPv6 分段路由 (SRv6) 的 BGP 覆盖服务
 author: fnoobt
 date: 2023-10-20 19:29:00 +0800
 categories: [Network,路由协议]
-tags: [network,bgp]
+tags: [network,bgp,srv6]
 ---
 
 ## 摘要

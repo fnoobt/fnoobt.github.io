@@ -3,7 +3,7 @@ title: RFC 7209：以太网VPN（EVPN）的要求
 author: fnoobt
 date: 2023-10-19 15:21:00 +0800
 categories: [Network,路由协议]
-tags: [network,bgp]
+tags: [network,bgp,evpn]
 ---
 
 ## 摘要

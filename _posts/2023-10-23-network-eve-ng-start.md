@@ -3,7 +3,7 @@ title: EVE-NG 使用教程
 author: fnoobt
 date: 2023-10-23 15:29:00 +0800
 categories: [Network,虚拟环境]
-tags: [network,eve-ng]
+tags: [network,eveng]
 ---
 
 EVE-NG（Emulated Virtual Environment - NextGeneration）下一代仿真虚拟环境，是一种基于软件定义网络（SDN）和网络功能处理（NFV）技术的网络模拟器和实验平台，可以模拟各大厂商（如华为、华三、思科等）的网络设备，路由器，交换机，防火墙等等，强大的模拟功能是因为三大组件：Dynamips，IOL，QEMU：

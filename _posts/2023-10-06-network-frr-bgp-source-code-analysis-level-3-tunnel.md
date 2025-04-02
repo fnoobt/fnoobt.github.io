@@ -8,7 +8,7 @@ tags: [network,bgp,frr]
 
 本文，我们分析 BGP 和层3隧道相关的命令处理
 
-```yaml
+```
 router bgp 200
 	no bgp default ipv4-unicast
 	no bgp default show-hostname
