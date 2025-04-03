@@ -12,6 +12,7 @@ tags: [network,frr,grpc]
 2. 在启动每个守护进程时，在对应的`daemon`参数中指定`-M grpc:<port>` 加载 gRPC 模块以及绑定到哪个端口
 
 编辑`/etc/frr/daemons`，在对应的daemon后面添加`-M grpc:<port>`参数，如port不填则默认为50051。
+
 ```yaml
 bgpd_options="  -A 127.0.0.1 -M grpc"
 ```
@@ -81,6 +82,7 @@ int main() {
 {: file="test.cpp" }
 
 编译和运行该程序
+
 ```bash
 # 编译C++测试程序
 g++ -o test test.cpp frr-northbound.grpc.pb.cc frr-northbound.pb.cc -lgrpc++ -lprotobuf
@@ -150,22 +152,26 @@ Interface Info:
 ### 生成 FRR 北向绑定
 
 1. 安装 python3 虚拟环境功能，例如
+
 ```bash
 sudo apt-get install python3-venv
 ```
 
 2. 为 python grpc 创建虚拟环境并激活
+
 ```bash
 python3 -m venv venv-grpc
 source venv-grpc/bin/activate
 ```
 
 3. 安装python的grpc依赖
+
 ```bash
 pip3 install grpcio grpcio-tools
 ```
 
 4. 使用`frr/grpc`目录中的`frr-northbound.proto`生成python代码
+
 ```bash
 mkdir /tmp/frr-python
 cd grpc
@@ -184,6 +190,7 @@ python3 -m grpc_tools.protoc  \
 
 ### 获取功能和接口
 下面的示例脚本，用于打印 Python 发现的功能和所有接口。这演示了从 gRPC 获得的 2 种不同的 RPC 结果，即接口状态的 `Unary (GetCapabilities)` 和 `Streaming (Get)`。
+
 ```py
 import grpc
 import frr_northbound_pb2
@@ -209,6 +216,7 @@ for r in stub.Get(request):
 ```
 
 示例输出：
+
 ```xml
 frr_version: "7.7-dev-my-manual-build"
 rollback_support: true
