@@ -183,7 +183,7 @@ python3 -m grpc_tools.protoc  \
 {: .prompt-info } 
 
 ### 获取功能和接口
-下面的示例脚本，用于打印 Python 发现的功能和所有接口。这演示了从 gRPC 获得的 2 种不同的 RPC 结果，即接口状态的 Unary (GetCapabilities) 和 Streaming (Get)。
+下面的示例脚本，用于打印 Python 发现的功能和所有接口。这演示了从 gRPC 获得的 2 种不同的 RPC 结果，即接口状态的 `Unary (GetCapabilities)` 和 `Streaming (Get)`。
 ```py
 import grpc
 import frr_northbound_pb2
