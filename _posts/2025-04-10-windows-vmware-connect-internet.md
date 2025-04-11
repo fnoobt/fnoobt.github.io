@@ -29,7 +29,7 @@ net start "VMware DHCP Service"
 {: file="重启VMware服务.bat" }
 
 ### 二、修复Ubuntu虚拟机网络配置​
-1. 重启Ubuntu网络服务
+1、重启Ubuntu网络服务
 
 重启NetworkManager服务：
 
@@ -45,7 +45,7 @@ sudo rm /var/lib/NetworkManager/NetworkManager.state
 sudo service network-manager start
 ```
 
-2. 检查IP地址分配
+2、检查IP地址分配
 
 若未获取IP，尝试释放并重新请求DHCP租约：
 
