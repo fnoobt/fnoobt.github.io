@@ -36,6 +36,8 @@ geosite:tld-!cn　包含了非中国大陆使用的顶级域名，如以 .hk（�
 
 更多域名类别，请查看 [data 目录](https://github.com/v2fly/domain-list-community/tree/master/data)
 
+如果您希望有更清晰明了的域名管理方式，那么可以试试[域名列表社区](https://github.com/v2fly/domain-list-community/blob/master/README.md)
+
 ### 域名 domain:
 
 由 domain: 开始，后面是一个域名。例如 domain:baiyunju.cc ，匹配 www.baiyunju.cc 、baiyunju.cc，以及其他baiyunju.cc主域名下的子域名。
