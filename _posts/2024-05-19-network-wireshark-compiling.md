@@ -104,6 +104,32 @@ choco install -y <your favorite Java runtime>
 choco install -y asciidoctorj xsltproc docbook-bundle
 ```
 
+可以通过以下命令搜索 Java 可用包（用于替换 <your favorite Java runtime>）：
+
+```bash
+choco search java
+```
+
+常见的 Java 发行版:
+
+| Java 发行版     | Chocolatey 包名 | 示例命令                     |
+|-----------------|-----------------|-----------------------------|
+| Oracle JDK      | oraclejdk       | choco install -y oraclejdk  |
+| OpenJDK         | openjdk         | choco install -y openjdk    |
+| Eclipse Temurin | temurin         | choco install -y Temurin     |
+| Amazon Corretto | corretto        | choco install -y correttojdk  |
+| Zulu JDK        | zulu            | choco install -y zulu      |
+
+验证Java安装:
+
+```bash
+# 检查 Java 版本
+java -version
+
+# 检查环境变量
+echo $env:JAVA_HOME
+```
+
 ### 8、安装winflexbison
 可以从 [winflexbison官方](https://sourceforge.net/projects/winflexbison/)获取 winFlexBison 安装程序并安装到默认位置。确保将包含`win_flex.exe`的目录添加到您的环境变量Path中。
 
@@ -155,8 +181,9 @@ rem Append a custom string to the package version. Optional.
 set WIRESHARK_VERSION_EXTRA=-YourExtraVersionInfo
 # YourExtraVersionInfo 可设置版本信息，比如202405191844
 ```
+{: file="env.bat" }
 
-可以将设置这些变量添加到要在打开 Visual Studio Tools 命令提示符后运行的批处理文件中，比如`env.bat`。64 位和 32 位构建需要单独的构建目录，创建并跳转到64位构建目录如下所示：
+可以将设置这些变量添加到要在打开 Visual Studio Tools 命令提示符后运行的批处理文件中。64 位和 32 位构建需要单独的构建目录，创建并跳转到64位构建目录如下所示：
 ```bash
 mkdir C:\Development\wsbuild64
 cd C:\Development\wsbuild64
@@ -170,11 +197,13 @@ CMake 用于处理源代码树中的CMakeLists.txt文件，并生成适合您系
 ```bash 
 cmake -G "Visual Studio 17 2022" -A x64 ..\wireshark
 ```
+{: file="make_2022.bat" }
 
 根据需要调整 Visual Studio 版本和Wireshark 源代码树的路径。要使用其他生成器，请修改 -G 参数。 cmake -G 列出了所有 CMake 支持的生成器，Wireshark仅支持 Visual Studio，不支持 32 位版本。比如Visual Studio 2019的命令为：
 ```bash 
 cmake -G "Visual Studio 16 2019" -A x64 ..\wireshark
 ```
+{: file="make_2019.bat" }
 
 在config的过程中，会自动下载依赖包，位于`C:\Development\wireshark-win64-libs`目录。
 
@@ -192,6 +221,7 @@ cmake -G "Visual Studio 16 2019" -A x64 ..\wireshark
 ```bash 
 msbuild /m /p:Configuration=RelWithDebInfo Wireshark.sln
 ```
+{: file="build.bat" }
 
 生成的可执行程序路径`C:\Development\wsbuild64\run\RelWithDebInfo\Wireshark.exe`，双击打开Wireshark.exe进行测试。
 
@@ -208,6 +238,7 @@ msbuild /m /p:Configuration=RelWithDebInfo Wireshark.sln
 ```bash 
 msbuild /m /p:Configuration=RelWithDebInfo docbook\all_guides.vcxproj
 ```
+{: file="guides.bat" }
 
 生成的两种文档developer-guide和user-guide位于`C:\Development\wsbuild64\docbook`目录。
 
@@ -225,6 +256,7 @@ msbuild /m /p:Configuration=RelWithDebInfo docbook\all_guides.vcxproj
 msbuild /m /p:Configuration=RelWithDebInfo wireshark_nsis_prep.vcxproj
 msbuild /m /p:Configuration=RelWithDebInfo wireshark_nsis.vcxproj
 ```
+{: file="package.bat" }
 
 构建 Wireshark 安装程序。如果对可执行文件进行签名，则应在`wireshark_nsis_prep`和`wireshark_nsis`步骤之间进行签名。若要对安装程序进行签名，应将签名批处理脚本放在路径上。它必须命名为`sign-wireshark.bat`。它应该由 CMake 自动检测，要始终需要签名，请设置 `-DENABLE_SIGNED_NSIS=On` CMake选项。
 
@@ -238,28 +270,30 @@ msbuild /m /p:Configuration=RelWithDebInfo wireshark_nsis.vcxproj
 - `/WX` 或 `是 (/WX)`：这表示所有警告都被当作错误处理。
 - `/WX-` 或 `否 (/WX-)`：这表示警告不会导致编译失败。
 
-### 打包找不到文件
-如果在打包的时候遇到以下类型的报错，找不到`androiddump.html`这个文件，但是可以找到`androiddump.exe`文件，这是因为在window中使用的是exe文件，没有html文件。
-```yaml
-File: "D:\project\wireshark\wsbuild64\run\RelWithDebInfo\androiddump.html" -> no files found.
-Usage: File [/nonfatal] [/a] ([/r] [/x filespec [...]] filespec [...] |
-/oname=outfile one_file_only)
-Error in macro InstallExtcap on macroline 3
-Error in script "wireshark.nsi" on line 1150 -- aborting creation process
+### 字符编码冲突
+如果在创建用户和开发者指南的时候遇到以下类型的报错，这是因为文档生成工具链（Asciidoctor + JRuby）在处理文件时，检测到包含非GBK字符的内容（如Unicode字符、特殊符号等），而系统默认编码设置为GBK，导致字符转换失败。
+```bash
+严重: (SyntaxError) Invalid GBK character "\xE2"
+...
+Caused by: org.jruby.exceptions.EncodingError$UndefinedConversionError: (UndefinedConversionError) "\xE2" to UTF-8 in conversion from ASCII-8BIT to UTF-8 to GBK
 ```
 
-需要将`InstallExtcap`宏定义进行修改，确保它能够正确处理传入的参数，并在指定的路径下找到相应的文件。
-```yaml
-!macro InstallExtcap EXTCAP_NAME
+修改CMake构建参数，在文档生成命令中强制指定UTF-8编码，重新进行构建。
+```bash 
+set JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF-8"
+```
+{: file="env.bat" }
 
-  SetOutPath $INSTDIR
-  #修改 File "${STAGING_DIR}\${EXTCAP_NAME}.html"
-  File "${STAGING_DIR}\${EXTCAP_NAME}.exe"
-  SetOutPath $INSTDIR\extcap\wireshark
-  File "${STAGING_DIR}\extcap\wireshark\${EXTCAP_NAME}.exe"
+### Java环境兼容性问题
+如果遇到如下的警告信息，说明Wireshark文档生成工具链依赖旧版JDK参数，与当前Java环境存在兼容性问题。
+```bash
+Java HotSpot(TM) 64-Bit Server VM warning : Options -Xverify:none and -noverify were deprecated in JDK 13
 ```
 
-重新打包
+可以通过Chocolatey安装兼容版本
+```bash 
+choco install adoptopenjdk11 -y
+```
 
 ****
 
