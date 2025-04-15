@@ -3,7 +3,7 @@ title:  Ubuntu x86系统中通过QEMU安装Ubuntu ARM系统
 author: fnoobt
 date: 2025-03-10 14:17:00 +0800
 categories: [VPS,服务搭建]
-tags: [vps,linux,quem,ubuntu]
+tags: [vps,linux,quem,ubuntu,arm]
 ---
 
 ## 环境准备
@@ -86,7 +86,7 @@ fs0:           # 进入第一个文件系统
 
 重新安装 GRUB，强制重新安装GRUB并生成正确的EFI文件路径。进入 Live 环境挂载镜像后执行
 ```bash
-sudo grub-install --target=arm64-efi --efi-directory=/boot/efi
+sudo grub-install --target=arm64-efi --efi-directory=/boot/efi --removable
 sudo update-grub
 ```
 
