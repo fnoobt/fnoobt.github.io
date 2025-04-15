@@ -74,6 +74,8 @@ qemu-system-aarch64 -m 4096 -cpu cortex-a57 -smp 4 \
   -nographic
 ```
 
+退出系统使用`Ctrl+A X`组合键，先同时按下Ctrl和A键，接着按X键。
+
 ## 常见问题解决
 ### ​启动时卡在 UEFI Shell
 这是因为未检测到有效引导分区，在 UEFI Shell 中手动引导：
@@ -82,12 +84,18 @@ fs0:           # 进入第一个文件系统
 \EFI\ubuntu\grubaa64.efi  # 执行引导文件
 ```
 
-重新安装 GRUB：进入 Live 环境挂载镜像后执行
+重新安装 GRUB，强制重新安装GRUB并生成正确的EFI文件路径。进入 Live 环境挂载镜像后执行
 ```bash
-chroot /mnt
-grub-install --target=arm64-efi --efi-directory=/boot/efi
-update-grub
-```[3](@ref)
+sudo grub-install --target=arm64-efi --efi-directory=/boot/efi
+sudo update-grub
+```
+
+在虚拟机内运行`lsblk`检查磁盘分区，确保EFI分区（通常为vda1或vda2）已挂载到`/boot/efi`
+
+若EFI分区未挂载，手动挂载并更新`/etc/fstab`：
+```bash
+sudo mount /dev/vda1 /boot/efi
+echo "/dev/vda1 /boot/efi vfat defaults 0 1" | sudo tee -a /etc/fstab
 ```
 
 ### 网络无法连接
