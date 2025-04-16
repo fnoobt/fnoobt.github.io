@@ -84,7 +84,7 @@ fs0:           # 进入第一个文件系统
 \EFI\ubuntu\grubaa64.efi  # 执行引导文件
 ```
 
-重新安装 GRUB，强制重新安装GRUB并生成正确的EFI文件路径。进入 Live 环境挂载镜像后执行
+强制重新安装GRUB并生成正确的EFI文件路径，进入系统后执行
 ```bash
 sudo grub-install --target=arm64-efi --efi-directory=/boot/efi --removable
 sudo update-grub

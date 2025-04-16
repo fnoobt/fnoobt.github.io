@@ -8,106 +8,7 @@ tags: [network,frr,cross-compiling]
 
 FRR 能够交叉编译到许多不同的架构。只要有了足够的工具链，这个过程就相当简单，但在尝试编译 FRR 或其依赖项之前，必须小心谨慎地验证此工具链的正确性。要注意的是构建工具的构建过程中的小疏忽可能会导致问题，会导致这些问题变得难以诊断。
 
-## 简单版本
-### 1. “构建（build）”机器
-```bash
-# 1.安装aarch64交叉编译工具链
-sudo apt update
-sudo apt-get upgrade
-sudo apt install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
-
-# 2.安装 Ubuntu 的构建依赖项
-sudo apt-get install -y git autoconf automake libtool make texinfo \
-    pkg-config bison flex python3 python3-distutils libcap-dev \
-    libelf-dev libunwind-dev cmake libpcre2-dev
-sudo apt-get install \
-            git autoconf automake libtool make libreadline-dev texinfo \
-            pkg-config libpam0g-dev libjson-c-dev bison flex \
-            libc-ares-dev python3-dev python3-sphinx \
-            install-info build-essential libsnmp-dev perl \
-            libcap-dev python2 libelf-dev libunwind-dev \
-            libyang2 libyang2-dev
-
-# 3.设置交叉编译环境变量
-export CROSS_COMPILE=aarch64-linux-gnu-
-export HOST_ARCH="aarch64-linux-gnu"
-
-# 4.准备交叉编译库的目录
-mkdir -p /usr/local/${HOST_ARCH}
-export PREFIX=/usr/local/${HOST_ARCH}
-
-# 5.交叉编译并安装依赖项
-# libyang
-git clone https://github.com/CESNET/libyang.git
-cd libyang
-git checkout v2.1.128
-mkdir build; cd build
-CC=${HOST_ARCH}-gcc \
-CXX=${HOST_ARCH}-g++ \
-cmake --install-prefix $PREFIX CMAKE_INSTALL_PREFIX=$PREFIX \
-      -D CMAKE_TOOLCHAIN_FILE=../cmake/toolchain/aarch64-linux-gnu.cmake \
-      CMAKE_BUILD_TYPE:String="Release" ..
-make && sudo make install
-
-# 安装交叉编译依赖项
-sudo apt-get install -y \
-            libreadline-dev:arm64 libjson-c-dev:arm64 libpam0g-dev:arm64 \
-            libc-ares-dev:arm64 libsnmp-dev:arm64 libcap-dev:arm64 \
-            libelf-dev:arm64 libunwind-dev:arm64 libprotobuf-c-dev:arm64 \
-            libgrpc++-dev:arm64 libsqlite3-dev:arm64 libzmq3-dev:arm64 \
-            libyang2-dev:arm64 libpcre2-dev:arm64 python3-dev:arm64 \
-            protobuf-c-compiler:arm64 protobuf-compiler-grpc:arm64
-
-# 下载 FRR 源代码
-git clone https://github.com/FRRouting/frr.git
-cd frr
-
-# 运行 autoreconf 以生成 configure 文件
-./bootstrap.sh
-
-mkdir -p build
-cd build
-../configure \
-    --host=${HOST_ARCH} \
-    --prefix=/usr/kd/${HOST_ARCH} \
-    --includedir="\${prefix}/include" \
-    --bindir="\${prefix}/bin" \
-    --sbindir="\${prefix}/lib/frr" \
-    --libdir="\${prefix}/lib/frr" \
-    --libexecdir="\${prefix}/lib/frr" \
-    --with-pkg-git-version \
-    --enable-user=frr \
-    --enable-group=frr \
-    --enable-vty-group=frrvty \
-    --enable-vtysh \
-    --enable-logging \
-    --disable-doc
-
-# 根据系统的 CPU 核心数来并行编译
-make -j$(nproc)
-
-# FRR 安装到之前指定的路径
-sudo make install
-```
-
-frr configure配置：
-- `--host=aarch64-linux-gnu`: 设置交叉编译目标架构为 ARM64。
-- `--prefix`: 设置安装路径（安装到 ARM64 架构的路径）。
-- `--with-pkg-git-version`: 启用 Git 版本信息。
-- `--enable-vtysh`: 启用 vtysh。
-- `--enable-logging`: 启用日志功能。
-- `--disable-doc`: 禁用文档生成（如果不需要文档，可以禁用以加快编译速度）。
-
-### 2. “主机（host）”机器
-```bash
-# 使用 SCP 或其他文件传输工具，将编译后的文件传输到 ARM64 机器上
-scp -r /usr/kd/${HOST_ARCH} username@arm64-ip:/path/to/destination
-
-# 启动 FRR
-/path/to/destination/sbin/frr
-```
-
-> 注意：请确保所有必需的库也已经在 ARM64 机器上安装，并且环境变量设置正确。如果目标 ARM64 机器上缺少某些库，需要在 ARM64 环境中安装对应的依赖包。
+> FRR这种大型软件的依赖项很多，交叉编译的环境搭建比较复杂，选择使用[QEMU安装Ubuntu ARM系统](https://fnoobt.github.io/posts/vps-quem-ubuntu-arm/)可能是一个更好的选择。
 {: .prompt-info }
 
 ## 官方版本
@@ -138,6 +39,11 @@ sudo apt-get install -y build-essential git cmake autoconf automake libtool \
 sudo apt-get install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
 ```
 
+在[交叉编译依赖项](#交叉编译依赖项)介绍了交叉编译工具链使用**CMake**、**Autotools** 和 **Makefile** 编译包的一般说明；这三种情况适用于几乎所有的 FRR 依赖项。
+
+> 确保 C 标准库（glibc 或其他库）的版本和实现与主机和构建工具链匹配。`ldd --version` 会在这里为您提供帮助。如果它们不匹配，请升级其中一个。
+{: .prompt-warn }
+
 ### 测试工具链
 在开始任何交叉编译之前，应该通过编写、编译和链接一个简单程序来测试新的工具链。
 ```bash
@@ -160,83 +66,16 @@ file ./nothing
 如果这没有产生任何错误，则已安装的工具链可能已准备好开始编译构建依赖项并最终编译 FRR 本身。虽然可能仍然存在潜在问题，但从根本上来说，工具链可以生成二进制文件，这足以开始使用它。
 
 > 如果在上一次功能测试期间发生任何错误，请回顾并解决它们，然后再继续；因为这表明您的交叉编译工具链无法构建 FRR 或其依赖项。即使一切正常，请记住，从现在开始的许多错误可能仍与您的工具链有关（例如 libstdc++.so 或其他组件），并且这个小测试不能保证完整的工具链一致性。
-{: .prompt-info }
+{: .prompt-warn }
 
 ### 交叉编译依赖项
 编译 FRR 时，需要在构建机器上同时编译其依赖项。这样，共享库中的符号（将在运行时加载到主机上）就可以在编译时链接到 FRR 二进制文件；此外，在编译阶段需要这些库的标头才能成功构建。
-
-#### 安装arm64源
-需要将 `sources.list` 文件修改为支持 arm64 架构
-```bash
-sudo nano /etc/apt/sources.list
-```
-
-添加以下内容，以支持 arm64 架构的软件源`ubuntu-ports`：
-```md
-deb [arch=i386,amd64] https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy main restricted universe multiverse
-# deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy main restricted universe multiverse
-deb [arch=i386,amd64] https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy-updates main restricted universe multiverse
-# deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy-updates main restricted universe multiverse
-deb [arch=i386,amd64] https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy-backports main restricted universe multiverse
-# deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy-backports main restricted universe multiverse
-
-deb [arch=i386,amd64] https://security.ubuntu.com/ubuntu/ jammy-security main restricted universe multiverse
-# deb-src https://security.ubuntu.com/ubuntu/ jammy-security main restricted universe multiverse
-
-deb [arch=arm64] https://mirrors.aliyun.com/ubuntu-ports/ jammy main restricted universe multiverse
-deb [arch=arm64] https://mirrors.aliyun.com/ubuntu-ports/ jammy-security main restricted universe multiverse
-deb [arch=arm64] https://mirrors.aliyun.com/ubuntu-ports/ jammy-updates main restricted universe multiverse
-deb [arch=arm64] https://mirrors.aliyun.com/ubuntu-ports/ jammy-backports main restricted universe multiverse
-```
-{: file='/etc/apt/sources.list'}
 
 ubunut国内官方源配置网站：
 
 1. [清华源](https://mirrors.tuna.tsinghua.edu.cn/help/ubuntu/)
 2. [中科大源](https://mirrors.ustc.edu.cn/help/ubuntu)
 3. [阿里源](https://developer.aliyun.com/mirror/ubuntu)
-
-更新软件包列表，并安装
-```bash
-sudo apt-get update
-sudo apt-get upgrade
-# 安装FRR依赖的其他库的交叉编译版本（根据需要安装）
-sudo apt-get install -y \
-            libreadline-dev:arm64 libjson-c-dev:arm64 libpam0g-dev:arm64 \
-            libc-ares-dev:arm64 libsnmp-dev:arm64 libcap-dev:arm64 \
-            libelf-dev:arm64 libunwind-dev:arm64 libprotobuf-c-dev:arm64 \
-            libgrpc++-dev:arm64 libsqlite3-dev:arm64 libzmq3-dev:arm64 \
-            libyang2-dev:arm64 libpcre2-dev:arm64 python3-dev:arm64 \
-            protobuf-c-compiler:arm64 protobuf-compiler-grpc:arm64
-```
-
-- 确保安装了ARM64架构对应的开发库。如果某些库没有提供ARM64版本，可能需要手动交叉编译这些库。
-- 你也可以使用`apt-file`来查找特定库的ARM64版本：
-```bash
-sudo apt install apt-file
-sudo apt-file update
-apt-file search libssl-dev | grep aarch64
-
-# 检查特定库是否已安装：
-dpkg-query -l | grep :arm64
-```
-
-`aptitude` 是一个比 apt-get 更智能的包管理工具，能更好地解决依赖问题。
-```bash
-sudo apt-get install -y aptitude
-sudo aptitude install -y \
-            libreadline-dev:arm64 libjson-c-dev:arm64 libpam0g-dev:arm64 \
-            libc-ares-dev:arm64 libsnmp-dev:arm64 libcap-dev:arm64 \
-            libelf-dev:arm64 libunwind-dev:arm64 libprotobuf-c-dev:arm64 \
-            libgrpc++-dev:arm64 libsqlite3-dev:arm64 libzmq3-dev:arm64 \
-            libyang2-dev:arm64 libpcre2-dev:arm64 python3-dev:arm64 \
-            protobuf-c-compiler:arm64 protobuf-compiler-grpc:arm64
-```
-
-在后续的[交叉编译依赖项](#交叉编译依赖项)介绍了交叉编译工具链使用**CMake**、**Autotools** 和 **Makefile** 编译包的一般说明；这三种情况适用于几乎所有的 FRR 依赖项。
-
-> 确保 C 标准库（glibc 或其他库）的版本和实现与主机和构建工具链匹配。`ldd --version` 会在这里为您提供帮助。如果它们不匹配，请升级其中一个。
-{: .prompt-info }
 
 #### Sysroot概述
 所有构建依赖项都应安装到构建计算机上的“根”目录中，以下称为“sysroot”。在构建过程中搜索必需的库和标头时，此目录将作为路径的前缀。通常，这可以在构建依赖包时通过`--prefix`标志进行设置，这意味着`make install`会将编译的库复制到（例如） `/usr/${HOST_ARCH}/usr` 。
@@ -404,6 +243,97 @@ C 标准库的版本和实现必须在主机和构建工具链上匹配。与此
 ```
 
 请参阅之前有关防止[glibc 不匹配](https://docs.frrouting.org/projects/dev-guide/en/latest/cross-compiling.html#glibc-mismatch)的警告。
+
+## 关键流程
+### 1. “构建（build）”机器
+```bash
+# 1.安装aarch64交叉编译工具链
+sudo apt update
+sudo apt-get upgrade
+sudo apt install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
+
+# 2.安装 Ubuntu 的构建依赖项
+sudo apt-get install \
+            git autoconf automake libtool make libreadline-dev texinfo \
+            pkg-config libpam0g-dev libjson-c-dev bison flex \
+            libc-ares-dev python3-dev python3-sphinx \
+            install-info build-essential libsnmp-dev perl \
+            libcap-dev python2 libelf-dev libunwind-dev \
+            libyang2 libyang2-dev
+
+# 3.设置交叉编译环境变量
+export CROSS_COMPILE=aarch64-linux-gnu-
+export HOST_ARCH="aarch64-linux-gnu"
+
+# 4.准备交叉编译库的目录
+mkdir -p /usr/local/${HOST_ARCH}
+export PREFIX=/usr/local/${HOST_ARCH}
+
+# 5.交叉编译并安装依赖项
+# 需要交叉编译所并安装所有frr的依赖项，下面以libyang为例
+# libyang
+git clone https://github.com/CESNET/libyang.git
+cd libyang
+git checkout v2.1.128
+mkdir build; cd build
+CC=${HOST_ARCH}-gcc \
+CXX=${HOST_ARCH}-g++ \
+cmake --install-prefix $PREFIX CMAKE_INSTALL_PREFIX=$PREFIX \
+      -D CMAKE_TOOLCHAIN_FILE=../cmake/toolchain/aarch64-linux-gnu.cmake \
+      CMAKE_BUILD_TYPE:String="Release" ..
+make && sudo make install
+
+# 下载 FRR 源代码
+git clone https://github.com/FRRouting/frr.git
+cd frr
+
+# 运行 autoreconf 以生成 configure 文件
+./bootstrap.sh
+
+mkdir -p build
+cd build
+../configure \
+    --host=${HOST_ARCH} \
+    --prefix=/usr/kd/${HOST_ARCH} \
+    --includedir="\${prefix}/include" \
+    --bindir="\${prefix}/bin" \
+    --sbindir="\${prefix}/lib/frr" \
+    --libdir="\${prefix}/lib/frr" \
+    --libexecdir="\${prefix}/lib/frr" \
+    --with-pkg-git-version \
+    --enable-user=frr \
+    --enable-group=frr \
+    --enable-vty-group=frrvty \
+    --enable-vtysh \
+    --enable-logging \
+    --disable-doc
+
+# 根据系统的 CPU 核心数来并行编译
+make -j$(nproc)
+
+# FRR 安装到之前指定的路径
+sudo make install
+```
+
+frr configure配置：
+- `--host=aarch64-linux-gnu`: 设置交叉编译目标架构为 ARM64。
+- `--prefix`: 设置安装路径（安装到 ARM64 架构的路径）。
+- `--with-pkg-git-version`: 启用 Git 版本信息。
+- `--enable-vtysh`: 启用 vtysh。
+- `--enable-logging`: 启用日志功能。
+- `--disable-doc`: 禁用文档生成（如果不需要文档，可以禁用以加快编译速度）。
+
+### 2. “主机（host）”机器
+```bash
+# 使用 SCP 或其他文件传输工具，将编译后的文件传输到 ARM64 机器上
+scp -r /usr/kd/${HOST_ARCH} username@arm64-ip:/path/to/destination
+
+# 启动 FRR
+/path/to/destination/sbin/frr
+```
+
+> 注意：请确保所有必需的库也已经在 ARM64 机器上安装，并且环境变量设置正确。如果目标 ARM64 机器上缺少某些库，需要在 ARM64 环境中安装对应的依赖包。
+{: .prompt-info }
 
 ****
 
