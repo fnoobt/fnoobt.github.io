@@ -2,8 +2,8 @@
 title: KMS 激活 Windows/Office
 author: fnoobt
 date: 2024-06-09 12:24:00 +0800
-categories: [Linux,Linux教程]
-tags: [linux,kms]
+categories: [Windows,软件教程]
+tags: [windows,kms,office]
 ---
 
 ## 什么是KMS？跟其他激活方式有什么不同？
