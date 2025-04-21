@@ -22,7 +22,7 @@ math: true
         <td>0.5</td>
     </tr>
     <tr> 
-        <td rowspan=2>>5</td>
+        <td rowspan=2>$$ >5 $$</td>
         <td>家居用</td>
         <td>0.7</td>
     </tr>
