@@ -14,7 +14,7 @@ math: true
 
 <table>
     <tr>
-        <td colspan=2>额定功率（W）</td>
+        <td colspan=2>额定功率（$$ W $$）</td>
         <td>功率因素限值</td>
     </tr>
     <tr> 
