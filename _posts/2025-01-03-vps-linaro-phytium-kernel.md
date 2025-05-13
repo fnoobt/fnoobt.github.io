@@ -204,7 +204,8 @@ qemu-system-aarch64 -M virt -cpu cortex-a57 -m 1024 -nographic \
 sudo qemu-system-aarch64 -M virt-4.0 -m 1G -cpu cortex-a57 -nographic \
     -kernel zImage \
     -initrd openeuler-image-qemu-aarch64-*.rootfs.cpio.gz \
-    -netdev bridge,br=br_qemu,id=net0 -device virtio-net-pci,netdev=net0 \
+    -netdev bridge,br=br_qemu,id=net0 \
+    -device virtio-net-pci,netdev=net0 \
     -device virtio-9p-device,fsdev=fs1,mount_tag=host \
     -fsdev local,security_model=passthrough,id=fs1,path=/home/protocol/project 
 ```

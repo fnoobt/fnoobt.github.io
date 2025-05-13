@@ -107,6 +107,28 @@ echo "/dev/vda1 /boot/efi vfat defaults 0 1" | sudo tee -a /etc/fstab
 检查 `-netdev user` 参数是否正确映射端口
 在虚拟机内执行 `dhclient eth0` 手动获取 IP
 
+### 传输文件
+当 QEMU 网络模式为用户模式 (User Mode)，也称为 SLiRP，QEMU 在宿主机上模拟了一个简单的 NAT 网络。虚拟机的 IP 地址（例如 10.0.2.15）是在这个由 QEMU 模拟的私有网络内部的。宿主机不会在这个 10.0.2.0/24 网段拥有 IP 地址，因此您无法直接从宿主机通过 10.0.2.15 这个 IP 地址访问虚拟机，可以通过使用 SSH 和端口转发实现文件传输。
+
+1、 从宿主机向虚拟机传输文件：
+
+```bash
+# 上传文件到虚拟机
+scp -P 2222 /path/to/your/local/file username@localhost:/path/on/vm/
+
+# 从虚拟机下载文件
+scp -P 2222 username@localhost:/path/on/vm/file /path/to/your/local/
+```
+
+2、 从虚拟机向宿主机传输文件：
+
+虚拟机可以直接访问宿主机。宿主机的 IP 地址通常是 10.0.2.2（QEMU 模拟的网关）。
+```bash
+scp /path/on/vm/file yourhostusername@10.0.2.2:/path/on/host/
+```
+
+如果要传递文件夹，可以使用`scp` 的`-r`参数，递归传输目录及子文件。
+
 ****
 
 本文参考
