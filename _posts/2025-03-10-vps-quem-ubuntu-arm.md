@@ -46,7 +46,8 @@ qemu-system-aarch64 -m 4096 -cpu cortex-a57 -smp 4 \
   -drive file=ubuntu-24.04-live-server-arm64.iso,media=cdrom,format=raw \
   -drive file=ubuntu.img,format=qcow2,if=virtio \
   -device virtio-scsi-device \
-  -netdev user,id=net0 -device virtio-net-device,netdev=net0 \
+  -netdev user,id=net0 \
+  -device virtio-net-pci,netdev=net0 \
   -nographic
 ```
 
@@ -54,8 +55,8 @@ qemu-system-aarch64 -m 4096 -cpu cortex-a57 -smp 4 \
 - `-M virt`：模拟ARM的“virt”通用平台，适用于 AArch64 架构。
 - `-bios`：BIOS文件，指定ARM64 UEFI 固件路径
 - `-cpu cortex-a57`：指定ARM处理器类型。
-- `-netdev user`：配置用户模式网络（支持虚拟机联网）
-- `-device virtio-scsi-device`：确保磁盘设备可被 UEFI 识别
+- `-netdev user`：配置用户模式网络，`user` 模式模拟一个 NAT 网络，通过`id`命名。
+- `-device virtio-scsi-device`：添加一个 `virtio-scsi` 控制器，确保磁盘设备可被 UEFI 识别。
 - `-nographic`：文本模式安装（若需图形界面则替换为 -vnc :1）
 - `-m 4096`：分配 4096 MB 内存给虚拟机。
 - `-smp 4`：核心数4个。
@@ -70,9 +71,13 @@ qemu-system-aarch64 -m 4096 -cpu cortex-a57 -smp 4 \
   -drive file=ubuntu.img,format=qcow2,if=virtio \
   -device virtio-scsi-device \
   -netdev user,id=net0,hostfwd=tcp::2222-:22 \
-  -device virtio-net-device,netdev=net0 \
+  -device virtio-net-pci,netdev=net0 \
   -nographic
 ```
+
+参数说明：
+- `-netdev user,id=net0,hostfwd=tcp::2222-:22`：定义网络后端，`hostfwd`将宿主机上的端口流量转发到虚拟机内部的端口。
+- `-device virtio-net-pci,netdev=net0`：定义一个标准的 `virtio-net-pci` 网络设备，连接到 `net0` 后端。`virtio-net-device` 是 `virtio-net-pci` 的一个别名
 
 退出系统使用`Ctrl+A X`组合键，先同时按下Ctrl和A键，接着按X键。
 
