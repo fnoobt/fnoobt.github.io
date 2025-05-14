@@ -44,22 +44,25 @@ qemu-img info ubuntu.img
 qemu-system-aarch64 -m 4096 -cpu cortex-a57 -smp 4 \
   -M virt -bios QEMU_EFI.fd \
   -drive file=ubuntu-24.04-live-server-arm64.iso,media=cdrom,format=raw \
-  -drive file=ubuntu.img,format=qcow2,if=virtio \
-  -device virtio-scsi-device \
+  -drive file=ubuntu.img,format=qcow2,if=none,id=hd0 \
+  -device virtio-blk-pci,drive=hd0 \
   -netdev user,id=net0 \
   -device virtio-net-pci,netdev=net0 \
   -nographic
 ```
 
 ​参数说明：
-- `-M virt`：模拟ARM的“virt”通用平台，适用于 AArch64 架构。
-- `-bios`：BIOS文件，指定ARM64 UEFI 固件路径
-- `-cpu cortex-a57`：指定ARM处理器类型。
-- `-netdev user`：配置用户模式网络，`user` 模式模拟一个 NAT 网络，通过`id`命名。
-- `-device virtio-scsi-device`：添加一个 `virtio-scsi` 控制器，确保磁盘设备可被 UEFI 识别。
-- `-nographic`：文本模式安装（若需图形界面则替换为 -vnc :1）
 - `-m 4096`：分配 4096 MB 内存给虚拟机。
-- `-smp 4`：核心数4个。
+- `-cpu cortex-a57`：指定ARM处理器类型。
+- `-smp 4`：分配CPU核心数4个。
+- `-M virt`：模拟ARM的`virt`通用平台，适用于 AArch64 架构。
+- `-bios`：BIOS文件，指定ARM64 UEFI 固件路径。
+- `-drive media=cdrom`：定义 CD-ROM 或 DVD 驱动器，加载安装 ISO。
+- `-drive if=none,id=hd0`：定义磁盘，通过`id`命名。
+- `-device virtio-blk-pci`：定义 virtio-blk 设备，并连接到指定ID的驱动器。
+- `-netdev user`：定义用户模式网络，`user` 模式模拟一个 NAT 网络，通过`id`命名。
+- `-device virtio-net-pci`：定义一个标准的 `virtio-net-pci` 网络设备，连接到 `net0` 网络后端。
+- `-nographic`：文本模式安装（若需图形界面则替换为 `-vnc :1`）
   
 > 注意：​必须创建 EFI 系统分区​（类型 EF00，建议 512MB），文件系统推荐使用 ext4 格式，引导安装位置`/dev/vda`（对应 virtio 设备）。
 {: .prompt-info }  
@@ -68,8 +71,8 @@ qemu-system-aarch64 -m 4096 -cpu cortex-a57 -smp 4 \
 ```bash
 qemu-system-aarch64 -m 4096 -cpu cortex-a57 -smp 4 \
   -M virt -bios QEMU_EFI.fd \
-  -drive file=ubuntu.img,format=qcow2,if=virtio \
-  -device virtio-scsi-device \
+  -drive file=ubuntu.img,format=qcow2,if=none,id=hd0 \
+  -device virtio-blk-pci,drive=hd0 \
   -netdev user,id=net0,hostfwd=tcp::2222-:22 \
   -device virtio-net-pci,netdev=net0 \
   -nographic
@@ -77,7 +80,6 @@ qemu-system-aarch64 -m 4096 -cpu cortex-a57 -smp 4 \
 
 参数说明：
 - `-netdev user,id=net0,hostfwd=tcp::2222-:22`：定义网络后端，`hostfwd`将宿主机上的端口流量转发到虚拟机内部的端口。
-- `-device virtio-net-pci,netdev=net0`：定义一个标准的 `virtio-net-pci` 网络设备，连接到 `net0` 后端。`virtio-net-device` 是 `virtio-net-pci` 的一个别名
 
 退出系统使用`Ctrl+A X`组合键，先同时按下Ctrl和A键，接着按X键。
 
