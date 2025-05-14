@@ -106,8 +106,9 @@ echo "/dev/vda1 /boot/efi vfat defaults 0 1" | sudo tee -a /etc/fstab
 ```
 
 ### 网络无法连接
-检查 `-netdev user` 参数是否正确映射端口
-在虚拟机内执行 `dhclient eth0` 手动获取 IP
+首先检查 `-netdev user` 参数是否正确映射端口，其次在虚拟机内执行 `dhclient eth0` 手动获取 IP。
+
+当没有网络端口时，可以尝试将`-drive file=ubuntu.img,format=qcow2,if=none,id=hd0`替换为`-drive file=ubuntu.img,format=qcow2,if=virtio`，并删除`-device virtio-blk-pci,drive=hd0`，使用 `if=virtio` 作为一个快捷方式来定义一个使用 Virtio 块设备的驱动器。QEMU 会自动为这个驱动器创建一个 virtio-blk 设备并连接它。
 
 ### 传输文件
 当 QEMU 网络模式为用户模式 (User Mode)，也称为 SLiRP，QEMU 在宿主机上模拟了一个简单的 NAT 网络。虚拟机的 IP 地址（例如 10.0.2.15）是在这个由 QEMU 模拟的私有网络内部的。宿主机不会在这个 10.0.2.0/24 网段拥有 IP 地址，因此您无法直接从宿主机通过 10.0.2.15 这个 IP 地址访问虚拟机，可以通过使用 SSH 和端口转发实现文件传输。
